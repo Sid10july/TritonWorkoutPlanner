@@ -1,24 +1,22 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Route, Routes } from "react-router-dom";
+import { ExerciseLibrary } from './components/ExerciseLibrary';
+import { Navbar } from "./navbar";
+import { WorkoutPlanner } from './components/WorkoutPlanner';
+import { BuildYourOwn } from './components/BuildYourOwn';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar />
+        <Routes>
+          <Route path="/" element={<h1>Triton Workout Planner</h1>} />
+          <Route path="/workout-planner" element={<WorkoutPlanner/>} />
+          <Route path="/build-your-own" element={<BuildYourOwn/>} />
+          <Route path="/exercise-library" element={<ExerciseLibrary />} />
+          <Route path="/generate-workout" element={<h1>Generate Workout Page</h1>} />
+        </Routes>
     </div>
   );
 }
