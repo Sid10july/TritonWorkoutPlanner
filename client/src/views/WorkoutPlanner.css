@@ -1,0 +1,36 @@
+.workout-planner-main {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.planner-link {
+  color: white;
+  margin: 20px;
+  font-size: 23px;
+  width: 200px;
+  height: 70px;
+  align-items: center;
+  justify-content: center;
+  word-wrap: break-word;
+  display: flex;
+  border: none;
+  padding: 10px 10px;
+  text-decoration: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #88c0cf, #5e81acb2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.planner-link:hover {
+  background: linear-gradient(135deg, #5e81acb2, #88c0cf);
+  box-shadow: 0 6px 12px rgba(76, 86, 106, 0.4);
+  transform: translateY(-3px);
+}
+
+.planner-link:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 8px rgba(76, 86, 106, 0.25);
+}

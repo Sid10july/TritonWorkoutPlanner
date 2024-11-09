@@ -4,3 +4,15 @@ body {
   background-color: #b3b4bd;
   font-family: "Inter", serif;
 }
+
+.App {
+  display: flex;
+}
+
+.App-views {
+  text-align: center;
+  width: 75%;
+  padding: 20px;
+  background-color: #eceff4;
+  min-height: 100vh;
+}
