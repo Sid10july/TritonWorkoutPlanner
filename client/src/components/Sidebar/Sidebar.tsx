@@ -1,4 +1,4 @@
-import { SidebarProps } from "../types/types";
+import { SidebarProps } from "../../types/types";
 import { SidebarOption } from "./SidebarOption";
 import "./Sidebar.css";
 
