@@ -1,4 +1,4 @@
-import {MongoClient, Db} from "mongodb";
+import {MongoClient} from "mongodb";
 
 export async function initializeDatabase() {
     const client = new MongoClient("mongodb://localhost:27017");
