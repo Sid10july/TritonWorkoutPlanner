@@ -8,7 +8,7 @@ export const ExerciseLibrary = () => {
       <div className="exercises-list">
         {dummyExercisesList.map((exercise) => (
           <div key={exercise.id} className="exercise-item">
-            <h3>{exercise.name}</h3>
+            <p>{exercise.name}</p>
           </div>
         ))}
       </div>

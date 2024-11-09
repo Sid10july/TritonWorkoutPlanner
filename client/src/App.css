@@ -7,11 +7,16 @@ body {
 
 .App {
   display: flex;
+  flex-direction: column;
+  height: 100vh;
+  flex: 1;
+  overflow: hidden;
 }
 
 .App-views {
   text-align: center;
   width: 75%;
+  margin-left: 25%;
   padding: 20px;
   background-color: #eceff4;
   min-height: 100vh;

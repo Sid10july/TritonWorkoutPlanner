@@ -3,6 +3,7 @@
   height: 100vh;
   background-color: #e0e0e0;
   border-right: thin solid #555555;
+  position: fixed;
 }
 
 .sidebar-container {
