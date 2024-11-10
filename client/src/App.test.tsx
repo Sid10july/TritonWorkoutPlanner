@@ -34,7 +34,8 @@ describe("Customize Workout Plan Tests", () => {
     fireEvent.click(fridayCheckbox);
 
     //checkbox for Friday should go back to being unchecked
-    expect(fridayCheckbox).not.toBeChecked();
+    // NOTE: Should be .not.toBeChecked() but we are testing the CI/CD pipeline
+    expect(fridayCheckbox).toBeChecked();
   });
 
   test("Setting start and end time for a day works as intended", () => {
