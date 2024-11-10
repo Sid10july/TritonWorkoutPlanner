@@ -21,3 +21,8 @@ export const recommendedExercises = {
   strength: ["Push-Ups", "Squats", "Lunges"],
   flexibility: ["Yoga", "Stretching", "Pilates"],
 };
+
+export const dummyProfileData = {
+  username: "John",
+  streak: 3,
+};

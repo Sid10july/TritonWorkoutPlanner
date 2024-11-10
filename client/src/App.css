@@ -10,14 +10,16 @@ body {
   flex-direction: column;
   height: 100vh;
   flex: 1;
-  overflow: hidden;
 }
 
 .App-views {
+  display: relative;
   text-align: center;
   width: 75%;
   margin-left: 25%;
   padding: 20px;
   background-color: #eceff4;
   min-height: 100vh;
+  height: auto;
+  overflow-y: scroll;
 }
