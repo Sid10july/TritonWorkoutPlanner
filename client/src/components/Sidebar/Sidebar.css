@@ -31,7 +31,7 @@
 }
 
 .sidebar-account img {
-  height: 80%;
+  height: 70%;
   object-fit: contain;
 }
 
@@ -42,6 +42,7 @@
 
 .sidebar-dropdown_icon {
   margin-left: auto;
+  padding-right: 1%;
 }
 
 .sidebar-logout {

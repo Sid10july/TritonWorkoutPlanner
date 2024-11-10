@@ -17,9 +17,37 @@ body {
   text-align: center;
   width: 75%;
   margin-left: 25%;
-  padding: 20px;
-  background-color: #eceff4;
+  padding: 3vh;
   min-height: 100vh;
   height: auto;
   overflow-y: scroll;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 10vh;
+  margin: 0 auto;
+  margin-bottom: 2vh;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-weight: normal;
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 82vh;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex: 1;
 }

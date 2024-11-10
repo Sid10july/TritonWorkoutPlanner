@@ -21,13 +21,26 @@ function App() {
       <Sidebar pageIndex={pageIndex} sidebarClickHandler={handleSidebarClick} />
       <div className="App-views">
         <Routes>
-          <Route path="/" element={<h1>Triton Workout Planner</h1>} />
+          <Route
+            path="/"
+            element={
+              <div>
+                <h1 className="title-container">Triton Workout Planner</h1>
+                <div className="content-container"></div>
+              </div>
+            }
+          />
           <Route path="/workout-planner" element={<WorkoutPlanner />} />
           <Route path="/build-your-own" element={<BuildYourOwn />} />
           <Route path="/exercise-library" element={<ExerciseLibrary />} />
           <Route
             path="/generate-workout"
-            element={<h1>Generate Workout Page</h1>}
+            element={
+              <div>
+                <h1 className="title-container">Generate Workout Page</h1>
+                <div className="content-container"></div>
+              </div>
+            }
           />
         </Routes>
       </div>

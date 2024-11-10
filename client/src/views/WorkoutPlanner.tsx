@@ -8,8 +8,8 @@ export const WorkoutPlanner = () => {
   // back buttons. Users may also get confused.
   return (
     <div className="workout-planner-main">
-      <h1>Choose a Plan</h1>
-      <div className="workout-planner-options">
+      <h1 className="title-container">Choose a Plan</h1>
+      <div className="workout-planner-options content-container">
         <Link to="/build-your-own" className="planner-link">
           Customize Your Own
         </Link>

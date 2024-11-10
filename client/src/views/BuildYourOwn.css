@@ -24,25 +24,6 @@ select {
   display: center;
 }
 
-.build-your-own {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: full;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.build-your-own h1,
-h3 {
-  color: #2c3e50;
-  margin-bottom: 20px;
-}
-
 .day-selection {
   display: flex;
   align-items: center;

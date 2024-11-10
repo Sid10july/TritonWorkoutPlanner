@@ -71,72 +71,76 @@ export const BuildYourOwn = () => {
 
   return (
     <div className="build-your-own">
-      <div className="customize-plan">
-        <h1>Customize Your Plan</h1>
-        <h3>Select Days, Exercises, and Times</h3>
-        <div className="days-selection">
-          {daysOfWeek.map(
-            (
-              day //iterate through days of the week
-            ) => (
-              <div key={day} className="day-selection">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={selectedDays[day]}
-                    onChange={() => handleDaySelection(day)}
-                  />
-                  {day}
-                </label>
-                <div className="workout-details">
-                  <label htmlFor={`${day}-focus`}>{day} Focus:</label>
-                  <Dropdown
-                    id={`${day}-focus`}
-                    options={Object.keys(recommendedExercises)}
-                    value={focusCategory[day]}
-                    onChange={(e) => handleFocusChange(day, e)}
-                    placeholder="Select a focus"
-                  />
-                  <label htmlFor={`${day}-exercise`}>Exercise:</label>
-                  <Dropdown
-                    id={`${day}-exercise`}
-                    options={
-                      focusCategory[day]
-                        ? recommendedExercises[
-                            focusCategory[
-                              day
-                            ] as keyof typeof recommendedExercises
-                          ]
-                        : []
-                    }
-                    value={weeklyPlan[day]}
-                    onChange={(e) => handleExerciseChange(day, e.target.value)}
-                    placeholder="Select an exercise"
-                  />
-                  <label htmlFor={`${day}-start-time`}>Start Time:</label>
-                  <input
-                    type="time"
-                    id={`${day}-start-time`}
-                    value={startTimes[day]}
-                    onChange={(e) =>
-                      handleTimeChange(day, "start", e.target.value)
-                    }
-                  />
-                  <label htmlFor={`${day}-end-time`}>End Time:</label>
-                  <input
-                    type="time"
-                    id={`${day}-end-time`}
-                    value={endTimes[day]}
-                    onChange={(e) =>
-                      handleTimeChange(day, "end", e.target.value)
-                    }
-                  />
+      <h1 className="title-container">Customize Your Plan</h1>
+      <div className="content-container">
+        <div className="customize-plan">
+          <h3>Select Days, Exercises, and Times</h3>
+          <div className="days-selection">
+            {daysOfWeek.map(
+              (
+                day //iterate through days of the week
+              ) => (
+                <div key={day} className="day-selection">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={selectedDays[day]}
+                      onChange={() => handleDaySelection(day)}
+                    />
+                    {day}
+                  </label>
+                  <div className="workout-details">
+                    <label htmlFor={`${day}-focus`}>{day} Focus:</label>
+                    <Dropdown
+                      id={`${day}-focus`}
+                      options={Object.keys(recommendedExercises)}
+                      value={focusCategory[day]}
+                      onChange={(e) => handleFocusChange(day, e)}
+                      placeholder="Select a focus"
+                    />
+                    <label htmlFor={`${day}-exercise`}>Exercise:</label>
+                    <Dropdown
+                      id={`${day}-exercise`}
+                      options={
+                        focusCategory[day]
+                          ? recommendedExercises[
+                              focusCategory[
+                                day
+                              ] as keyof typeof recommendedExercises
+                            ]
+                          : []
+                      }
+                      value={weeklyPlan[day]}
+                      onChange={(e) =>
+                        handleExerciseChange(day, e.target.value)
+                      }
+                      placeholder="Select an exercise"
+                    />
+                    <label htmlFor={`${day}-start-time`}>Start Time:</label>
+                    <input
+                      type="time"
+                      id={`${day}-start-time`}
+                      value={startTimes[day]}
+                      onChange={(e) =>
+                        handleTimeChange(day, "start", e.target.value)
+                      }
+                    />
+                    <label htmlFor={`${day}-end-time`}>End Time:</label>
+                    <input
+                      type="time"
+                      id={`${day}-end-time`}
+                      value={endTimes[day]}
+                      onChange={(e) =>
+                        handleTimeChange(day, "end", e.target.value)
+                      }
+                    />
+                  </div>
                 </div>
-              </div>
-            )
-          )}
+              )
+            )}
+          </div>
+          <button>Submit</button>
         </div>
-        <button>Submit</button>
       </div>
     </div>
   );
