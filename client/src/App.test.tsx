@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
 // COMPONENTS
 import App from "./App";
 import { BuildYourOwn } from "./views/BuildYourOwn";
@@ -71,5 +72,39 @@ describe("Customize Workout Plan Tests", () => {
 
     //ensure focus category state is updated
     expect(focusDropdown).toHaveValue(focus);
+  });
+});
+
+describe("Sidebar Tests", () => {
+  test("Clicking a tab on the sidebar directs you to the specified page", () => {
+    render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    );
+
+    // Click on exercise library button
+    const exerciseLibraryButton = screen.getByText("Exercise Library");
+    fireEvent.click(exerciseLibraryButton);
+
+    // Expect to see "Exercise Library" twice (first in the sidebar, and second as a page header)
+    const exerciseLibraryTitle = screen.getAllByText("Exercise Library");
+    expect(exerciseLibraryTitle.length).toBe(2);
+  });
+
+  test("Click on the sidebar's account info button to see the log out option", () => {
+    render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    );
+
+    // Click on account info button
+    const accountButton = screen.getByText("Streak", { exact: false });
+    fireEvent.click(accountButton);
+
+    // Should now be able to see the "Log Out" option
+    const logOutButton = screen.getByText("Log Out");
+    expect(logOutButton).toBeInTheDocument();
   });
 });
