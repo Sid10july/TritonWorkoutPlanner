@@ -2,6 +2,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import userRoutes from './routes/users';
+import workoutPlanRoutes from './routes/workoutPlans';
+
 
 const app = express();
 
@@ -10,6 +12,8 @@ app.use(express.json());
 
 // Use user routes
 app.use('/users', userRoutes);
+app.use('/workoutPlans', workoutPlanRoutes);
+
 
 // Connect to MongoDB
 mongoose
