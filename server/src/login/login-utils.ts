@@ -4,12 +4,13 @@ import { Request, Response } from "express";
  * Creates a user on the backend. A POST function
  */
 export async function createUser(req: Request, res: Response, db: any) {
+    console.log(`createUser called`);
     const { username, email, password } = req.body as { username: string, email: string, password: string };
 
     if (!username || !email || !password) {
         return res.status(400).send({ message: "All fields are required" });
     }
-
+    //To DO: Validate the email
     try {
         // If the email already exists - reroute to login page on client
         const existingEmail = await db.findOne({ email });
