@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
 
+function validateEmail(email: string) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
 /**
  * Creates a user on the backend. A POST function
  */
@@ -11,6 +15,9 @@ export async function createUser(req: Request, res: Response, db: any) {
         return res.status(400).send({ message: "All fields are required" });
     }
     //To DO: Validate the email
+    if(!validateEmail(email)){
+        return res.status(400).send({ message: "Invalid Email Address" });
+    }
     try {
         // If the email already exists - reroute to login page on client
         const existingEmail = await db.findOne({ email });
