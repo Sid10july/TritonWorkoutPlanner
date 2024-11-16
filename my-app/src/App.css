@@ -1,0 +1,14 @@
+.wkdays {
+  display: flex;
+  justify-content: space-between;  
+  align-items: center;           
+  width: 100%;                     
+  padding: 20px;                   
+  box-sizing: border-box;       
+}
+.day-label {
+  padding: 10px 20px;
+  background-color: #d3d3d3;
+  border-radius: 5px;
+  text-align: center;
+}

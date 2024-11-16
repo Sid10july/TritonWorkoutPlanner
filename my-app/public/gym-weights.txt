@@ -1,0 +1,20 @@
+Deadlift
+Squat
+Bench Press
+Overhead Press
+Pull-up
+Lat Pulldown
+Bicep Curl
+Tricep Pushdown
+Leg Press
+Lunges
+Romanian Deadlift
+Leg Curl
+Chest Fly
+Dumbbell Rows
+Barbell Rows
+Seated Shoulder Press
+Cable Row
+Barbell Shrugs
+Kettlebell Swing
+Triceps Dips

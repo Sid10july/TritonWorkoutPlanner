@@ -1,0 +1,18 @@
+Soccer
+Basketball
+Baseball
+Football
+Rugby
+Volleyball
+Hockey
+Pickle ball
+Handball
+Lacrosse
+Softball
+Water Polo
+Ultimate Frisbee
+Netball
+Rowing 
+Tennis
+Badminton
+Ice Skating
