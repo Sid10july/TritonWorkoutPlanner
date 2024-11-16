@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
 import './App.css';
 
 function EditPage({ dayFocus, setDayFocus }) {
@@ -8,11 +8,15 @@ function EditPage({ dayFocus, setDayFocus }) {
     const updatedDayFocus = { ...dayFocus, [day]: event.target.value };
     setDayFocus(updatedDayFocus);
   };
+  /** display each day of wk with isolated dropdown (dropdowns are unique to dayofwk)
+   * allow user to change dropdown selection and update realtime
+   * when done editing, can view wkly workout by navigating to genPg
+   */
   return (
     <div className="editPg">
       <h1>Customize Workouts</h1>
       <p>Edit your workout plan here.</p>
-      <div className="wkdays">
+      <div className="wkdays"> 
         {wkdays.map((day) => (
           <span key={day} className="day">
             <div className="day-label">{day}</div>
@@ -71,6 +75,11 @@ function GenPage({ dayFocus }) {
     };
     fetchData();
   }, [dayFocus]); 
+  /** displays generated workout based on editPg
+   * access files with same name as dropdown options (eventually do thro API) exist with corresponding exercises
+   * display specific exercises based on selected focus 
+   * update display real time when focus is changed
+  */
   return (
     <div className="genPg">
       <h1>Generated plan</h1>
@@ -96,7 +105,7 @@ function GenPage({ dayFocus }) {
 }
 
 function App() {
-  const [dayFocus, setDayFocus] = useState({ // initialize focus
+  const [dayFocus, setDayFocus] = useState({ // initialize obj: binds wkday to a focus
     Monday: "(unselected)",
     Tuesday: "(unselected)",
     Wednesday: "(unselected)",
@@ -106,10 +115,12 @@ function App() {
     Sunday: "(unselected)",
   });
 
+  /** start on customize workout pg, and navigate btwn generated plan and edit page */
   return (
     <Router>
       <div className="App">
         <Routes>
+          <Route path="/" element={<Navigate to="/editPg" />} />
           <Route path="/editPg" element={<EditPage dayFocus={dayFocus} setDayFocus={setDayFocus} />} />
           <Route path="/genPg" element={<GenPage dayFocus={dayFocus} />} />
         </Routes>
