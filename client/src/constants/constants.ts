@@ -7,7 +7,7 @@ export const dummyExercisesList = [
 ];
 
 // Last time user worked out
-export const dummyLastWorkout = [11, 15, 2024];
+export const dummyLastWorkout = [11, 16, 2024];
 
 export const dummyWorkoutPlans = [
   {
@@ -103,3 +103,9 @@ export const dummyProfileData = {
   username: "John",
   streak: 3,
 };
+
+export const dummyExerciseGoals = [
+  { id: 0, goalString: "Weight", targetValue: 150 },
+  { id: 1, goalString: "One rep max bench", targetValue: 210 },
+  { id: 2, goalString: "Pull-ups", targetValue: 25 },
+];

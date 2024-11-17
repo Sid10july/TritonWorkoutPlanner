@@ -8,8 +8,14 @@
   flex: 1;
 }
 
+.exercise-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 .exercise-button {
   margin-top: auto;
   align-self: center;
-  width: 30%;
+  min-width: 15vw;
 }

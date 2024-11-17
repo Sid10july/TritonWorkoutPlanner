@@ -1,15 +1,18 @@
 import { useState } from "react";
+import { InputField } from "../components/InputField";
 import { WorkoutPlan } from "../types/types";
 import {
   dummyLastWorkout,
   dummyWorkoutPlans,
+  dummyProfileData,
+  dummyExerciseGoals,
   daysOfWeekJS,
 } from "../constants/constants";
 import "./StartWorkout.css";
 
 export const StartWorkout = () => {
   // FOR BACKEND INTEGRATION
-  // Use database to import dummyLastWorkout and dummyWorkoutPlans
+  // Use database to import dummyLastWorkout, dummyWorkoutPlans, dummyProfileData, dummyExerciseGoals
   // Increment and reset streak in the database
   // Log workout goals in the database
   // When finished working out, log current date as last workout time in database
@@ -18,10 +21,10 @@ export const StartWorkout = () => {
 
   // Get current time
   const currentTime = new Date();
-  const day = currentTime.getDay();
+  // const day = currentTime.getDay();
 
   // Dummy time
-  // const day = 2;
+  const day = 2;
 
   const daysMissed = currentTime.getDate() - lastWorkout[1];
   let streakStatus = "unbroken";
@@ -92,7 +95,7 @@ export const StartWorkout = () => {
           <p className="fs-3">New streak 🔥: 0</p>
         </div>
       );
-    } else if (streakStatus === "pending") {
+    } else if (streakStatus === "pending" && workoutPlan) {
       return (
         <Workout
           exerciseNum={exerciseNum}
@@ -114,6 +117,7 @@ export const StartWorkout = () => {
     }
   };
 
+  // Display workout and goal setting information
   const Workout = (props: {
     exerciseNum: number;
     numExercises: number;
@@ -152,20 +156,65 @@ export const StartWorkout = () => {
           >
             {props.exerciseNum < props.numExercises - 1
               ? "Next Exercise"
-              : "Finish Exercise"}
+              : "Finish Workout"}
           </div>
         </div>
       );
     }
     // Workout is finished
+    // BACKEND: Increment streak to database
     else {
-      //
-      setLastWorkout([
-        currentTime.getMonth(),
-        currentTime.getDate(),
-        currentTime.getFullYear(),
-      ]);
-      return null;
+      let goals = dummyExerciseGoals.map((e) => ({
+        id: e.id,
+        currentValue: 0,
+      }));
+
+      const handleGoalChange = (id: number, value: number) => {
+        if (isNaN(value)) value = 0;
+        goals = goals.map((e) => {
+          if (id === e.id) return { id: e.id, currentValue: value };
+          else return { id: e.id, currentValue: e.currentValue };
+        });
+      };
+
+      return (
+        <div className="exercise-container">
+          <p className="workoutIndicator-title mb-0">Workout finished!</p>
+          <p className="fs-4 mb-5">
+            New streak 🔥: {dummyProfileData.streak + 1}
+          </p>
+          <p className="fs-2 mb-5">Progress Tracker:</p>
+          <form
+            className="exercise-form"
+            onSubmit={(e) => {
+              // BACKEND INTEGRATION NEEDED
+              // Update backend with last workout time
+              // Add "goals" variable to database
+              setLastWorkout([
+                currentTime.getMonth(),
+                currentTime.getDate(),
+                currentTime.getFullYear(),
+              ]);
+            }}
+          >
+            {dummyExerciseGoals.map((e) => (
+              <InputField
+                key={e.id}
+                id={e.id}
+                goalString={e.goalString}
+                targetValue={e.targetValue}
+                inputChangeHandler={handleGoalChange}
+              />
+            ))}
+            <button
+              type="submit"
+              className="btn btn-primary fs-3 exercise-button"
+            >
+              Done
+            </button>
+          </form>
+        </div>
+      );
     }
   };
 

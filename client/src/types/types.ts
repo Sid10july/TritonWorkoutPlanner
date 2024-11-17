@@ -8,6 +8,13 @@ export type SidebarOptionProps = {
   isCurrentPage: boolean;
 };
 
+export type InputFieldProps = {
+  id: number;
+  goalString: string;
+  targetValue: number;
+  inputChangeHandler: (id: number, value: number) => void;
+};
+
 export type WorkoutPlan = {
   day: number;
   time: string;
