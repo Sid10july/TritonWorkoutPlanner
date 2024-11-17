@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { SidebarProps } from "../../types/types";
 import { SidebarOption } from "./SidebarOption";
+import { SidebarProps } from "../../types/types";
 import { dummyProfileData } from "../../constants/constants";
 import "./Sidebar.css";
 

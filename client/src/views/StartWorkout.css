@@ -1,3 +1,15 @@
 .workoutIndicator-title {
-  font-size: 50px;
+  font-size: 45px;
+}
+
+.exercise-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.exercise-button {
+  margin-top: auto;
+  align-self: center;
+  width: 30%;
 }

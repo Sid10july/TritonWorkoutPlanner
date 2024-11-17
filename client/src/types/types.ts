@@ -8,6 +8,18 @@ export type SidebarOptionProps = {
   isCurrentPage: boolean;
 };
 
-export type TitleProps = {
-  titleString: string;
+export type WorkoutPlan = {
+  day: number;
+  time: string;
+  am: boolean;
+  exercises: Exercise[];
+};
+
+export type Exercise = {
+  name: string;
+  type: string;
+  muscle: string;
+  equipment: string;
+  difficulty: string;
+  instructions: string;
 };

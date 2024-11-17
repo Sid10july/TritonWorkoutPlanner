@@ -6,7 +6,7 @@ export const dummyExercisesList = [
   { id: 5, name: "Pushup" },
 ];
 
-// Last time user worked out was on November 13, 2024
+// Last time user worked out
 export const dummyLastWorkout = [11, 15, 2024];
 
 export const dummyWorkoutPlans = [
