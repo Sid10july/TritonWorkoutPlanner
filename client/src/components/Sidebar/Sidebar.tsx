@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { SidebarProps } from "../../types/types";
 import { SidebarOption } from "./SidebarOption";
+import { SidebarProps } from "../../types/types";
 import { dummyProfileData } from "../../constants/constants";
 import "./Sidebar.css";
 
@@ -47,7 +47,7 @@ export const Sidebar = (props: SidebarProps) => {
             className="sidebar-profile_icon"
           ></img>
           <p className="mb-0">
-            {dummyProfileData.username} (Streak 🔥: {dummyProfileData.streak})
+            {dummyProfileData.username} 🔥: {dummyProfileData.streak}
           </p>
           <img
             src="/arrow_drop_up.png"
