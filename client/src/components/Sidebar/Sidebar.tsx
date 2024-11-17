@@ -47,7 +47,7 @@ export const Sidebar = (props: SidebarProps) => {
             className="sidebar-profile_icon"
           ></img>
           <p className="mb-0">
-            {dummyProfileData.username} (Streak 🔥: {dummyProfileData.streak})
+            {dummyProfileData.username} 🔥: {dummyProfileData.streak}
           </p>
           <img
             src="/arrow_drop_up.png"
