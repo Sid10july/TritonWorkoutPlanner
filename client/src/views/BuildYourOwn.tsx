@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { daysOfWeek, recommendedExercises } from "../constants/constants";
 import { Dropdown } from "../components/Dropdown";
-import ExerciseCheckbox from "../components/ExerciseCheckbox";
+import ExerciseDropdown from "../components/ExerciseDropdown";
 import "./BuildYourOwn.css";
 
 export const BuildYourOwn = () => {
@@ -14,130 +14,144 @@ export const BuildYourOwn = () => {
   const [endTimes, setEndTimes] = useState<{ [day: string]: string }>({});
   //tracking selection of days
   const [selectedDays, setSelectedDays] = useState<{ [day: string]: boolean}>({
-      //initialize all days as false/unchecked
-      Monday: false,
-      Tuesday: false,
-      Wednesday: false,
-      Thursday: false,
-      Friday: false,
-      Saturday: false,
-      Sunday: false,
+    //initialize all days as false/unchecked
+    Monday: false,
+    Tuesday: false,
+    Wednesday: false,
+    Thursday: false,
+    Friday: false,
+    Saturday: false,
+    Sunday: false,
   });
 
   // handles toggling the state of the day checkbox
   const handleDaySelection = (day: string) => {
-      setSelectedDays(prevDays => ({
-          ...prevDays,
-          //selecting a day is marked as true, deselecting marks it as false
-          [day]: !prevDays[day],
-      }));
+    setSelectedDays(prevDays => ({
+      ...prevDays,
+      //selecting a day is marked as true, deselecting marks it as false
+      [day]: !prevDays[day],
+    }));
   };
   
   // updates focus category based on selection using Dropdown component
   const handleFocusChange = (day: string, event: React.ChangeEvent<HTMLSelectElement>) => {
-      setFocusCategory(prevFocus => ({
-          ...prevFocus,
-          [day]: event.target.value, //selected value from dropdown
-      }));
-      setWeeklyPlan(prevPlan => ({
-          ...prevPlan,
-          [day]: [], //exercises for the day are cleared when focus is changed
-      }));
+    setFocusCategory(prevFocus => ({
+      ...prevFocus,
+      [day]: event.target.value, //selected value from dropdown
+    }));
+    setWeeklyPlan(prevPlan => ({
+      ...prevPlan,
+      [day]: [], //exercises for the day are cleared when focus is changed
+    }));
   };
 
-  //function adds or removes exercise for specified day when exercise checkbox is toggled
-  const handleExerciseChange = (day: string, exercise: string) => {
-      setWeeklyPlan(prevPlan => {
-          //retrieve list of exercises currently selected for the day
-          const currentExercises = prevPlan[day];  
-          const updatedExercises = currentExercises.includes(exercise)
-              // if exercise is in the list of current exercises, remove it
-              ? currentExercises.filter(e => e !== exercise)
-              // otherwise, add it to the current list of exercises
-              : [...currentExercises, exercise];
-          return {
-              ...prevPlan,
-              // updates the day's exercises with the new list
-              [day]: updatedExercises,
-          };
-      });
+  //updates the selected exercises list for the given day
+  const handleExerciseSelect = (day: string, selectedExercises: string[]) => {
+    setWeeklyPlan((prevPlan) => ({
+      ...prevPlan,
+      [day]: selectedExercises, //update the list of selected exercises for the day
+    }));
+  };
+
+  //reorders exercises when user wants to move them up or down
+  const handleReorder = (day: string, sourceIndex: number, destinationIndex: number) => {
+    //do nothing if the destination index and the source are the same
+    if(destinationIndex === sourceIndex) return;
+    setWeeklyPlan((prevPlan) => {
+      //make a copy of the previous plan containing user's selected exercises
+      const updatedPlan = [...(prevPlan[day] || [])];
+      //remove the item that's being moved from the list of exercises
+      const [movedItem] = updatedPlan.splice(sourceIndex, 1);
+      //insert the item at the new index
+      updatedPlan.splice(destinationIndex, 0, movedItem);
+      // return updated weekly plan with the reordered exercises for the day
+      return {
+        ...prevPlan,
+        [day]: updatedPlan, //update the plan for the day
+      };
+    });
   };
 
   // sets start or end times for a specific day
   const handleTimeChange = (day: string, timeType: 'start' | 'end', timeValue: string) => {
-      if (timeType === 'start') {
-          setStartTimes(prevTimes => ({
-              ...prevTimes,
-              [day]: timeValue,
-          }));
-      } else { //time type is 'end'
-          setEndTimes(prevTimes => ({
-              ...prevTimes,
-              [day]: timeValue,
-          }));
-      }
+    if (timeType === 'start') {
+      setStartTimes(prevTimes => ({
+        ...prevTimes,
+        [day]: timeValue,
+      }));
+    } else { //time type is 'end'
+      setEndTimes(prevTimes => ({
+        ...prevTimes,
+        [day]: timeValue,
+      }));
+    }
   };
 
   return (
-      <div className="build-your-own">
-          <div className="customize-plan">
-              <h1>Customize Your Plan</h1>
-              <h3>Select Days, Exercises, and Times</h3>
-              <div className="days-selection">
-                  {daysOfWeek.map(day => ( //iterate through days of the week
-                      <div key={day} className="day-selection" data-testid={`${day}-plan`}>
-                          <label>
-                              <input type="checkbox" checked={selectedDays[day]} onChange={() => handleDaySelection(day)} />
-                              {day}
-                          </label>
-                          <div className="workout-details">
-                              <label htmlFor={`${day}-focus`}>{day} Focus:</label> 
-                              <Dropdown
-                                  id={`${day}-focus`}
-                                  options={Object.keys(recommendedExercises)} // focus categories from dummy recommended exercises
-                                  value={focusCategory[day]} //set to currently selected focus
-                                  onChange={(e) => handleFocusChange(day, e)} //update focus category on change
-                                  placeholder="Select a focus"
-                              />
-                              <label htmlFor={`${day}-exercise`}> {day} Exercises:</label>
-                              {/* Displays checkboxes for exercises based on the user's selected focus category.
-                                  User must first select a focus category to see the list of exercises. */}
-                              {
-                                  focusCategory[day] && 
-                                  recommendedExercises[
-                                      focusCategory[day] as keyof typeof recommendedExercises
-                                  ].map(exercise => (
-                                      <ExerciseCheckbox
-                                          key={exercise}
-                                          day={day}
-                                          exercise={exercise}
-                                          /* isChecked is true if exercise is present in exercise list for the specified day.
-                                              Otherwise false. */
-                                          isChecked={weeklyPlan[day].includes(exercise)}
-                                          onToggle={(e) => handleExerciseChange(day, e)} //updates exercise list on toggle 
-                                      />)
-                                  )
-                              }
-                              <label htmlFor={`${day}-start-time`}>Start Time:</label>
-                              <input
-                                  type="time"
-                                  id={`${day}-start-time`}
-                                  value={startTimes[day]} //currently selected start time
-                                  onChange={(e) => handleTimeChange(day, 'start', e.target.value)}
-                              />
-                              <label htmlFor={`${day}-end-time`}>End Time:</label>
-                              <input
-                                  type="time"
-                                  id={`${day}-end-time`}
-                                  value={endTimes[day]} //currently selected end time
-                                  onChange={(e) => handleTimeChange(day, 'end', e.target.value)}
-                              />
-                          </div>
-                      </div>
-                  ))}
+    <div className="build-your-own">
+      <div className="customize-plan">
+        <h1>Customize Your Plan</h1>
+        <h3>Select Days, Exercises, and Times</h3>
+        <div className="days-selection">
+          {daysOfWeek.map(day => ( //iterate through days of the week
+            <div key={day} className="day-selection" data-testid={`${day}-plan`}>
+              <label>
+                <input type="checkbox" checked={selectedDays[day]} onChange={() => handleDaySelection(day)} />
+                {day}
+              </label>
+              <div className="workout-details">
+                <div className="details-section">
+                  <label htmlFor={`${day}-focus`}>{day} Focus:</label> 
+                  <Dropdown
+                    id={`${day}-focus`}
+                    options={Object.keys(recommendedExercises)} // focus categories from dummy recommended exercises
+                    value={focusCategory[day]} //set to currently selected focus
+                    onChange={(e) => handleFocusChange(day, e)} //update focus category on change
+                    placeholder="Select a focus"
+                  />
+                </div>
+                <div className="exercise-section">
+                  {/* Displays dropdown for exercises based on the user's selected focus category.
+                    User must first select a focus category to see the list of exercises.
+                    Can reorder exercises and set reps count. */}
+                  {
+                    <ExerciseDropdown
+                      day={day} //pass name of the day
+                      options={
+                        focusCategory[day] 
+                          // display exercise list for the selected focus category 
+                          ? recommendedExercises[focusCategory[day] as keyof typeof recommendedExercises]
+                          : [] // empty array of exercises if no focus category is selected
+                      }
+                      selectedExercises={weeklyPlan[day] || []} //list of selected exercises for the day
+                      onSelect={handleExerciseSelect} //handles adding or removing exercises for the day
+                      onReorder={handleReorder} //handles reordering exercises 
+                      noFocusPlaceholder="Please select a focus first" //displayed when no focus category is selected
+                    />
+                  }
+                </div>
+                <div className="times-section">
+                  <label htmlFor={`${day}-start-time`}>Start Time:</label>
+                  <input
+                    type="time"
+                    id={`${day}-start-time`}
+                    value={startTimes[day]} //currently selected start time
+                    onChange={(e) => handleTimeChange(day, 'start', e.target.value)}
+                  />
+                  <label htmlFor={`${day}-end-time`}>End Time:</label>
+                  <input
+                    type="time"
+                    id={`${day}-end-time`}
+                    value={endTimes[day]} //currently selected end time
+                    onChange={(e) => handleTimeChange(day, 'end', e.target.value)}
+                  />
+                </div>
               </div>
-              <button>Submit</button>
-          </div>
+            </div>
+          ))}
+        </div>
+        <button>Submit</button>
       </div>
+    </div>
   );
 };
