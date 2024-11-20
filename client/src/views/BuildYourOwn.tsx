@@ -96,7 +96,11 @@ export const BuildYourOwn = () => {
           {daysOfWeek.map(day => ( //iterate through days of the week
             <div key={day} className="day-selection" data-testid={`${day}-plan`}>
               <label>
-                <input type="checkbox" checked={selectedDays[day]} onChange={() => handleDaySelection(day)} />
+                <input
+                  type="checkbox"
+                  data-testid={`${day}-checkbox`}
+                  checked={selectedDays[day]}
+                  onChange={() => handleDaySelection(day)} />
                 {day}
               </label>
               <div className="workout-details">
@@ -108,6 +112,7 @@ export const BuildYourOwn = () => {
                     value={focusCategory[day]} //set to currently selected focus
                     onChange={(e) => handleFocusChange(day, e)} //update focus category on change
                     placeholder="Select a focus"
+                    disabled={!selectedDays[day]} // can't edit dropdown if day isn't selected
                   />
                 </div>
                 <div className="exercise-section">
@@ -127,6 +132,7 @@ export const BuildYourOwn = () => {
                       onSelect={handleExerciseSelect} //handles adding or removing exercises for the day
                       onReorder={handleReorder} //handles reordering exercises 
                       noFocusPlaceholder="Please select a focus first" //displayed when no focus category is selected
+                      disabled={!selectedDays[day]} //can't edit dropdown when the day isn't selected
                     />
                   }
                 </div>
@@ -135,15 +141,19 @@ export const BuildYourOwn = () => {
                   <input
                     type="time"
                     id={`${day}-start-time`}
+                    data-testid={`${day}-start-time`}
                     value={startTimes[day]} //currently selected start time
                     onChange={(e) => handleTimeChange(day, 'start', e.target.value)}
+                    disabled={!selectedDays[day]} //can't update time if day isn't selected
                   />
                   <label htmlFor={`${day}-end-time`}>End Time:</label>
                   <input
                     type="time"
                     id={`${day}-end-time`}
+                    data-testid={`${day}-end-time`}
                     value={endTimes[day]} //currently selected end time
                     onChange={(e) => handleTimeChange(day, 'end', e.target.value)}
+                    disabled={!selectedDays[day]} //can't update time if day isn't selected
                   />
                 </div>
               </div>

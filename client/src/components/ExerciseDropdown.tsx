@@ -11,6 +11,7 @@ interface ExerciseDropdownProps {
 	onReorder: (day: string, sourceIndex: number, destinationIndex: number) => void;
     //placeholder text for the dropdown when there's no focus selected
 	noFocusPlaceholder: string; // Placeholder text when no focus is selected
+	disabled?: boolean, // whether the dropdown is disabled (optional)
 }
 
 const ExerciseDropdown: React.FC<ExerciseDropdownProps> = ({
@@ -19,7 +20,8 @@ const ExerciseDropdown: React.FC<ExerciseDropdownProps> = ({
 	selectedExercises,
 	onSelect,
 	onReorder,
-	noFocusPlaceholder = "Add an exercise" // default placeholder text
+	noFocusPlaceholder = "Add an exercise", // default placeholder text
+	disabled = false, //default disabled value is false
 }) => {
     //state that keeps track of the number of repetitions of each exercises
 	const [exerciseReps, setExerciseReps] = useState<{
@@ -61,7 +63,8 @@ const ExerciseDropdown: React.FC<ExerciseDropdownProps> = ({
                 // call handleAddExercise function on selection
 				onChange={(e) => handleAddExercise(e.target.value)}
 				value="" //dropdown value reset to the default after an exercise is added
-				disabled={options.length === 0} // disables dropdown if there's no options available
+				//disable select if options are empty or dropdown is explicitly set to disable
+				disabled={disabled || options.length === 0} 
 			>
                 {/* placeholder option */}
 				<option value="" disabled>
@@ -89,6 +92,7 @@ const ExerciseDropdown: React.FC<ExerciseDropdownProps> = ({
 								className="remove-button"
 								type="button"
 								onClick={() => handleRemoveExercise(exercise)}
+								disabled={disabled} 
 							>
 								Remove
 							</button>
@@ -98,7 +102,7 @@ const ExerciseDropdown: React.FC<ExerciseDropdownProps> = ({
                                 //decrease index by 1 to move upwards
 								onClick={() => onReorder(day, index, index - 1)}
                                 //disable the button if exercise is already at top of list
-								disabled={index === 0}
+								disabled={index === 0 || disabled}
 							>
 								↑
 							</button>
@@ -108,7 +112,7 @@ const ExerciseDropdown: React.FC<ExerciseDropdownProps> = ({
                                 //increment index by 1 to move downwards
 								onClick={() => onReorder(day, index, index + 1)}
                                 //disable button if the exercise is already at the bottom of the list
-								disabled={index === selectedExercises.length - 1}
+								disabled={index === selectedExercises.length - 1 || disabled}
 							>
 								↓
 							</button>
@@ -121,6 +125,7 @@ const ExerciseDropdown: React.FC<ExerciseDropdownProps> = ({
                                     //update reps count
 									handleRepsChange(exercise, newReps)
 								}
+								disabled={disabled}
 							/>
 						</div>
 					</li>

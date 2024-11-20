@@ -2,9 +2,10 @@ interface RepsTrackerProps {
 	exercise: string; //exercise name
 	reps: number; //amount of reps for the exercise
 	onRepsChange: (newReps: number) => void; //handle changes to the number of repetitions
+	disabled?: boolean;
 }
 
-const RepsTracker: React.FC<RepsTrackerProps> = ({exercise, reps, onRepsChange}) => {
+const RepsTracker: React.FC<RepsTrackerProps> = ({exercise, reps, onRepsChange, disabled=false}) => {
     //handles any changes that occur to the reps input box
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         // converts the inputted value from string to a number
@@ -25,6 +26,7 @@ const RepsTracker: React.FC<RepsTrackerProps> = ({exercise, reps, onRepsChange})
 				onChange={handleInputChange} // handles input change when user inputs a value
 				min={0} //minimum value for reps is 0
 				className="reps-input"
+				disabled={disabled}
 			/>
 		</div>
 	);

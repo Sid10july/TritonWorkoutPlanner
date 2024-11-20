@@ -3,7 +3,6 @@ import { BrowserRouter } from "react-router-dom";
 // COMPONENTS
 import App from "./App";
 import { BuildYourOwn } from "./views/BuildYourOwn";
-import ExerciseCheckbox from "./components/ExerciseDropdown";
 // CONSTANTS
 import { daysOfWeek, recommendedExercises } from "./constants/constants";
 
@@ -102,6 +101,10 @@ describe("Customize Workout Plan Tests", () => {
     const day = daysOfWeek[0]; // set day to be Monday
     //retrieve Monday's focus category dropdown
     const focusDropdown = screen.getByLabelText(`${day} Focus:`);
+    //select day first
+    const dayCheckbox = screen.getByTestId(`${day}-checkbox`);
+    fireEvent.click(dayCheckbox);
+
     const focus = Object.keys(recommendedExercises)[0]; // set focus to first category (cardio)
 
     // set the focus category to be cardio
@@ -130,6 +133,10 @@ describe("Customize Workout Plan Tests", () => {
     render(<BuildYourOwn />); //render component
 
     const day = daysOfWeek[0]; // set the day to be Monday
+    //select day first
+    const dayCheckbox = screen.getByTestId(`${day}-checkbox`);
+    fireEvent.click(dayCheckbox);
+
     //retrieve Monday's focus category dropdown
     const focusDropdown = screen.getByLabelText(`${day} Focus:`);
     // set the focus category to the first category (cardio)
@@ -161,6 +168,9 @@ describe("Customize Workout Plan Tests", () => {
     render(<BuildYourOwn />); 
 
     const day = daysOfWeek[0]; // set the day to be Monday
+    //select day first
+    const dayCheckbox = screen.getByTestId(`${day}-checkbox`);
+    fireEvent.click(dayCheckbox);
     //retrieve Monday's focus category dropdown
     const focusDropdown = screen.getByLabelText(`${day} Focus:`);
     // set focus to first category (cardio)
@@ -181,6 +191,56 @@ describe("Customize Workout Plan Tests", () => {
 
     // ensure that the value of reps has been changed to 15
     expect(repsInput).toHaveValue(15);
+  });
+
+  test("focus dropdown should be disabled until the day is selected", () => {
+    render(<BuildYourOwn />);
+
+    const day = daysOfWeek[0]; // select day to be monday
+    //retrieve Monday's focus dropdown
+    const focusDropdown = screen.getByLabelText(`${day} Focus:`);
+
+    // ensure that the dropdown is disabled since Monday has yet been selected
+    expect(focusDropdown).toBeDisabled();
+
+    // select the checkbox for Monday
+    const dayCheckbox = screen.getByTestId(`${day}-checkbox`);
+    fireEvent.click(dayCheckbox);
+
+    // ensure the dropdown is now enabled after Monday is selected
+    expect(focusDropdown).not.toBeDisabled();
+  });
+
+  test("exercise dropdown and state/end times are disabled until a day is selected", () => {
+    render(<BuildYourOwn />);
+
+    const day = daysOfWeek[0]; // select day to be Monday
+    //retrieve the exercise dropdown for Monday
+    const exerciseDropdown = screen.getByTestId(`${day}-exercise-dropdown`);
+    //retrieve start and end times for Monday
+    const startTimeInput = screen.getByTestId(`${day}-start-time`);
+    const endTimeInput = screen.getByTestId(`${day}-end-time`);
+
+    // make sure exercise dropdown and time inputs are disabled before day selection
+    expect(exerciseDropdown).toBeDisabled();
+    expect(startTimeInput).toBeDisabled();
+    expect(endTimeInput).toBeDisabled();
+
+    // select the checkbox for Monday
+    const dayCheckbox = screen.getByTestId(`${day}-checkbox`);
+    fireEvent.click(dayCheckbox);
+    //retrieve Monday's focus dropdown
+    const focusDropdown = screen.getByLabelText(`${day} Focus:`);
+    // set the focus category to the first category (cardio)
+    const focus = Object.keys(recommendedExercises)[0];
+
+    // set the focus category to be cardio
+    fireEvent.change(focusDropdown, { target: { value: focus } });
+
+    // make sure exercise dropdown and time inputs are no longer disabled after day and focus selection
+    expect(exerciseDropdown).not.toBeDisabled();
+    expect(startTimeInput).not.toBeDisabled();
+    expect(endTimeInput).not.toBeDisabled();
   });
 });
 
