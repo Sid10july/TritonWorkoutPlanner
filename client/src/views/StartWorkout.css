@@ -19,3 +19,11 @@
   align-self: center;
   min-width: 15vw;
 }
+
+.exercise-link {
+  color: #007bff;
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-top: -15px;
+  margin-bottom: 25px;
+}

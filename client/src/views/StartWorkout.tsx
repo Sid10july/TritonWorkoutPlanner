@@ -148,8 +148,16 @@ export const StartWorkout = () => {
           <p className="fs-4 mb-0">Muscle Group: {eMuscle}</p>
           <p className="fs-4 mb-5">Equipment: {eEquipment}</p>
           <p className="fs-3 exercise-instructions mb-5">
-            Instructions: {exercise.instructions}
+            <h3>Instructions:</h3> {exercise.instructions}
           </p>
+          <a
+            href={`https://www.google.com/search?q=${exercise.name} exercise instructions`}
+            target="_blank" //opens link in new tab
+            rel="noopener noreferrer"
+            className="exercise-link"
+          >
+            Learn more about {exercise.name}
+          </a>
           <div
             onClick={() => props.workoutClickHandler(props.exerciseNum + 1)}
             className="btn btn-primary fs-3 exercise-button"
