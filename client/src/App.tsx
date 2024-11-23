@@ -6,6 +6,7 @@ import { StartWorkout } from "./views/StartWorkout";
 import { WorkoutPlanner } from "./views/WorkoutPlanner";
 import { ExerciseLibrary } from "./views/ExerciseLibrary";
 import { BuildYourOwn } from "./views/BuildYourOwn";
+import { DayPlanner } from "./views/DayPlanner";
 // STYLES
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -26,6 +27,7 @@ function App() {
           <Route path="/workout-planner" element={<WorkoutPlanner />} />
           <Route path="/build-your-own" element={<BuildYourOwn />} />
           <Route path="/exercise-library" element={<ExerciseLibrary />} />
+          <Route path="build-your-own/:day" element={<DayPlanner />}/>
           <Route
             path="/generate-workout"
             element={

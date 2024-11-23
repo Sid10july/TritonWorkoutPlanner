@@ -2,8 +2,11 @@ import { useState } from "react";
 import { daysOfWeek, recommendedExercises } from "../constants/constants";
 import { Dropdown } from "../components/Dropdown";
 import "./BuildYourOwn.css";
+import { useNavigate } from "react-router-dom";
 
 export const BuildYourOwn = () => {
+
+  const navigate = useNavigate();
   const [focusCategory, setFocusCategory] = useState<{ [day: string]: string }>(
     {}
   );
@@ -21,13 +24,22 @@ export const BuildYourOwn = () => {
     Sunday: false,
   });
 
-  const handleDaySelection = (day: string) => {
-    setSelectedDays((prevDays) => ({
-      ...prevDays,
-      //selecting a day is marked as true, deselecting marks it as false
-      [day]: !prevDays[day],
-    }));
-  };
+//   const handleDaySelection = (day: string) => {
+//     setSelectedDays((prevDays) => ({
+//       ...prevDays,
+//       //selecting a day is marked as true, deselecting marks it as false
+//       [day]: !prevDays[day],
+//     }));
+//   };
+
+/**
+ * Route to a new page where the user can select workout plans from the backend
+ * @param day - day of the week that is selected
+ */
+  const handleDaySelection = (day: string) =>{
+    
+    navigate(`/build-your-own/${day}`);
+  }
 
   const handleFocusChange = (
     day: string,
