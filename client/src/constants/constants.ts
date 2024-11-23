@@ -109,3 +109,5 @@ export const dummyExerciseGoals = [
   { id: 1, goalString: "One rep max bench", targetValue: 210 },
   { id: 2, goalString: "Pull-ups", targetValue: 25 },
 ];
+
+export const SERVER_URL = "http://localhost:8080"

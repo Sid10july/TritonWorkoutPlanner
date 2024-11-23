@@ -20,7 +20,7 @@ app.use('/workoutPlans', workoutPlanRoutes);
 
 // app.use('/users', userRoutes);
 
-const PORT = 3000;
+const PORT = 8080;
 
 // Start the server
 export const server = app.listen(PORT, () => {
