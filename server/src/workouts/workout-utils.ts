@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import axios from 'axios';
 
 const apiUrl = 'https://api.api-ninjas.com/v1/exercises';
-const apiKey = '';
+const apiKey = process.env.API_NINJA_KEY;
 
 interface Exercise {
     name: string;
@@ -36,6 +36,7 @@ export async function getWorkouts(req: Request, res: Response){
           },
         });
         // Send the workout plans as a JSON response
+        console.log(response.data);
         res.status(201).json(response.data);
       } catch (error) {
         console.error('Error fetching workout plans:', error);

@@ -1,6 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { muscles,difficultyLevels,exerciesTypes } from '../constants/constants';
+import { fetchWorkouts } from '../utils/workout-utils';
+import { Exercise } from '../types/types';
 
 export function DayPlanner(){
     const {day} = useParams();
@@ -23,8 +25,15 @@ function QueryForm(){
  * On form submission. Send the values of muscle, type and difficulty to fetchWorkouts function with these values.
  * @param event - Form submission event
  */
-    function onSubmit(event: React.FormEvent<HTMLFormElement>){
-
+    async function onSubmit(event: React.FormEvent<HTMLFormElement>){
+        event.preventDefault();
+        const params = {'type': type, 'muscle': muscle, 'difficulty': difficulty};
+        try{
+            const workouts: Exercise[]= await fetchWorkouts(params);
+            console.log(`Workouts:${workouts}`);
+        } catch(error){
+            console.log(error);
+        }
     }
     return (
         <form onSubmit={(event) => onSubmit(event)}>
