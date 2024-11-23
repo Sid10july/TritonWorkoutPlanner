@@ -3,20 +3,43 @@ import { useState } from 'react';
 import { muscles,difficultyLevels,exerciesTypes } from '../constants/constants';
 import { fetchWorkouts } from '../utils/workout-utils';
 import { Exercise } from '../types/types';
+import { WorkoutCard } from '../components/WorkoutCard';
 
 export function DayPlanner(){
     const {day} = useParams();
+    const [workouts,setWorkouts] = useState<Exercise[]>([]); // State that keeps track of the workouts on a specific day.
     return (
         <div>
             <h1>This is the {`${day}`} planner</h1>
-            <QueryForm/>
+            <QueryForm setWorkouts={setWorkouts}/> 
+            <WorkoutCards workouts={workouts}/>
         </div>
         
     );
 }
 
+/**
+ * 
+ * @param param0 : workoouts is a list of Exercises. This is a parent state and is passed down to this component.
+ *  On every render this function renders the workout cards.
+ * @returns A list of workout cards
+ */
+function WorkoutCards({workouts}:{workouts:Exercise[]}){
+    return (
+        <div className='cards'>
+            {workouts.map((workout,index) => (
+                <WorkoutCard key={index} workout={workout}/>
+            ))}
+        </div>
+    );
+}
 
-function QueryForm(){
+/**
+ * 
+ * @param param0 : setWorkouts to set the workouts of the parent component
+ * @returns A query form that on submission sends the parameters to request and gets the response(Exercies[])
+ */
+function QueryForm({setWorkouts}:{setWorkouts: React.Dispatch<React.SetStateAction<Exercise[]>>}){
     const [type,setType] = useState('');
     const [muscle,setMuscle] = useState('');
     const [difficulty,setDifficulty] = useState('');
@@ -30,7 +53,7 @@ function QueryForm(){
         const params = {'type': type, 'muscle': muscle, 'difficulty': difficulty};
         try{
             const workouts: Exercise[]= await fetchWorkouts(params);
-            console.log(`Workouts:${workouts}`);
+            setWorkouts(workouts);
         } catch(error){
             console.log(error);
         }
