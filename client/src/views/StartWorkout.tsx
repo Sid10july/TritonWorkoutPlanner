@@ -19,27 +19,17 @@ export const StartWorkout = () => {
 
   const [lastWorkout, setLastWorkout] = useState(dummyLastWorkout);
 
-  // Get current time
-  const currentTime = new Date();
-  // const day = currentTime.getDay();
-
+  // Get current time (disregard hours/minutes/seconds)
+  let currentTime = new Date();
+  currentTime = new Date(
+    currentTime.getFullYear(),
+    currentTime.getMonth(),
+    currentTime.getDate()
+  );
   // Dummy time for testing
-  const day = 2;
+  // currentTime = new Date(2024, 11 - 1, 19);
 
-  const daysMissed = currentTime.getDate() - lastWorkout[1];
-  let streakStatus = "unbroken";
-  // If the user misses more than a day of working out, break streak
-  if (daysMissed > 1) {
-    streakStatus = "broken";
-  }
-  // If the user misses exactly a day, that means they haven't worked out yet
-  else if (daysMissed === 1) {
-    streakStatus = "pending";
-  }
-  // If the user misses no days, they already worked out
-  else if (daysMissed === 0) {
-    streakStatus = "unbroken";
-  }
+  const day = currentTime.getDay();
 
   // Get today's workout
   let workoutPlan: WorkoutPlan = {
@@ -63,13 +53,53 @@ export const StartWorkout = () => {
   if (dummyWorkoutPlans.length) {
     for (let i = 1; i < 7; i++) {
       const findNextPlan = dummyWorkoutPlans.filter(
-        (e) => e["day"] === (i + day) % 7
+        (e) => e["day"] === (day + i) % 7
       )[0];
       if (findNextPlan) {
         nextWorkoutPlan = findNextPlan;
         break;
       }
     }
+  }
+  // Determine previous workout day
+  let lastWorkoutDay = day;
+  if (dummyWorkoutPlans.length) {
+    for (let i = 1; i < 7; i++) {
+      const findPrevPlan = dummyWorkoutPlans.filter(
+        // Handles negative modulo
+        (e) => e["day"] === (((day - i) % 7) + 7) % 7
+      )[0];
+      if (findPrevPlan) {
+        lastWorkoutDay = (((day - i) % 7) + 7) % 7;
+        break;
+      }
+    }
+  }
+
+  const lastWorkoutDate = new Date(
+    lastWorkout[2],
+    lastWorkout[0] - 1, // monthIndex maps 0-11 to January - December
+    lastWorkout[1]
+  );
+  // Using the previous workout day, calculate Date object
+  let expectedLastWorkoutDate = new Date(currentTime);
+  for (let i = 1; i < 8; i++) {
+    const findLastDate = new Date(
+      expectedLastWorkoutDate.getTime() - i * 24 * 60 * 60 * 1000
+    );
+    if (findLastDate.getDay() === lastWorkoutDay) {
+      expectedLastWorkoutDate = findLastDate;
+      break;
+    }
+  }
+  let streakStatus = "pending";
+  // If the user has a workout plan today and has worked out, streak is unbroken
+  if (workoutPlan && lastWorkoutDate.getTime() == currentTime.getTime()) {
+    streakStatus = "unbroken";
+  }
+  // If the last time the user worked out is not the expectedLastWorkoutDate, they have broken their streak
+  else if (lastWorkoutDate.getTime() !== expectedLastWorkoutDate.getTime()) {
+    streakStatus = "broken";
   }
 
   // Display different information based on the streak status
