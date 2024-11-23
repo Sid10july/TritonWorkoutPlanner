@@ -27,7 +27,7 @@ export const StartWorkout = () => {
     currentTime.getDate()
   );
   // Dummy time for testing
-  // currentTime = new Date(2024, 11 - 1, 19);
+  currentTime = new Date(2024, 11 - 1, 23);
 
   const day = currentTime.getDay();
 
@@ -97,8 +97,8 @@ export const StartWorkout = () => {
   if (workoutPlan && lastWorkoutDate.getTime() == currentTime.getTime()) {
     streakStatus = "unbroken";
   }
-  // If the last time the user worked out is not the expectedLastWorkoutDate, they have broken their streak
-  else if (lastWorkoutDate.getTime() !== expectedLastWorkoutDate.getTime()) {
+  // If the last time the user worked out is earlier than the expectedLastWorkoutDate, they have broken their streak
+  else if (lastWorkoutDate.getTime() < expectedLastWorkoutDate.getTime()) {
     streakStatus = "broken";
   }
 
@@ -119,10 +119,25 @@ export const StartWorkout = () => {
         </div>
       );
     if (streakStatus === "broken") {
+      // BACKEND: Set streak value to 0
       return (
-        <div>
+        <div className="exercise-container">
           <p className="workoutIndicator-title mb-0">You broke your streak!</p>
           <p className="fs-3">New streak 🔥: 0</p>
+          {workoutPlan ? (
+            <div
+              onClick={() =>
+                setLastWorkout([
+                  expectedLastWorkoutDate.getMonth() + 1, // monthIndex maps 0-11 to January - December, so readjust by adding 1
+                  expectedLastWorkoutDate.getDate(),
+                  expectedLastWorkoutDate.getFullYear(),
+                ])
+              }
+              className="btn btn-primary fs-3 exercise-button"
+            >
+              Continue to Today's Exercise
+            </div>
+          ) : null}
         </div>
       );
     } else if (streakStatus === "pending" && workoutPlan) {
@@ -133,6 +148,7 @@ export const StartWorkout = () => {
           workoutClickHandler={handleExerciseNumClick}
         />
       );
+      // If streak is unbroken, OR if streak is pending but there is no workout today
     } else {
       return (
         <div>
@@ -237,7 +253,7 @@ export const StartWorkout = () => {
               // Update backend with last workout time
               // Add "goals" variable to database
               setLastWorkout([
-                currentTime.getMonth(),
+                currentTime.getMonth() + 1, // monthIndex maps 0-11 to January - December, so readjust by adding 1
                 currentTime.getDate(),
                 currentTime.getFullYear(),
               ]);
