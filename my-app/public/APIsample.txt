@@ -1,0 +1,80 @@
+[
+  {
+    "name": "Machine Chest Press",
+    "type": "gym-weights",
+    "muscle": "chest",
+    "difficulty": "beginner"
+  },
+  {
+    "name": "Dumbbell Chest Press",
+    "type": "gym-weights",
+    "muscle": "chest",
+    "difficulty": "beginner"
+  },
+  {
+    "name": "Chest Fly",
+    "type": "gym-weights",
+    "muscle": "chest",
+    "difficulty": "beginner"
+  },
+  {
+    "name": "Seated Chest Press",
+    "type": "gym-weights",
+    "muscle": "chest",
+    "difficulty": "beginner"
+  },
+  {
+    "name": "Dumbbell Chest Fly",
+    "type": "gym-weights",
+    "muscle": "chest",
+    "difficulty": "beginner"
+  },
+  {
+    "name": "Barbell Bench Press",
+    "type": "gym-weights",
+    "muscle": "chest",
+    "difficulty": "beginner"
+  },
+  {
+    "name": "Incline Dumbbell Chest Press",
+    "type": "gym-weights",
+    "muscle": "chest",
+    "difficulty": "beginner"
+  },
+  {
+    "name": "Jogging",
+    "type": "cardio",
+    "muscle": "legs",
+    "difficulty": "intermediate"
+  },
+  {
+    "name": "Stair Climbing",
+    "type": "cardio",
+    "muscle": "legs",
+    "difficulty": "intermediate"
+  },
+  {
+    "name": "Cycling",
+    "type": "cardio",
+    "muscle": "legs",
+    "difficulty": "intermediate"
+  },
+  {
+    "name": "Box Jumps",
+    "type": "cardio",
+    "muscle": "legs",
+    "difficulty": "intermediate"
+  },
+  {
+    "name": "Running Intervals",
+    "type": "cardio",
+    "muscle": "legs",
+    "difficulty": "intermediate"
+  },
+  {
+    "name": "Lunges",
+    "type": "cardio",
+    "muscle": "legs",
+    "difficulty": "intermediate"
+  }
+]
