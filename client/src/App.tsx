@@ -20,7 +20,7 @@ function App() {
   return (
     <div className="App">
       <Sidebar pageIndex={pageIndex} sidebarClickHandler={handleSidebarClick} />
-      <div className="App-views">
+      <div className="App-views" id="App-view">
         <Routes>
           <Route path="/" element={<StartWorkout />} />
           <Route path="/workout-planner" element={<WorkoutPlanner />} />

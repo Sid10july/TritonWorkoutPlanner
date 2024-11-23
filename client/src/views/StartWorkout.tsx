@@ -23,7 +23,7 @@ export const StartWorkout = () => {
   const currentTime = new Date();
   // const day = currentTime.getDay();
 
-  // Dummy time
+  // Dummy time for testing
   const day = 2;
 
   const daysMissed = currentTime.getDate() - lastWorkout[1];
@@ -159,7 +159,15 @@ export const StartWorkout = () => {
             Learn more about {exercise.name}
           </a>
           <div
-            onClick={() => props.workoutClickHandler(props.exerciseNum + 1)}
+            onClick={() => {
+              const view = document.getElementById("App-view");
+              if (view) {
+                view.scrollTo({
+                  top: 0,
+                });
+              }
+              props.workoutClickHandler(props.exerciseNum + 1);
+            }}
             className="btn btn-primary fs-3 exercise-button"
           >
             {props.exerciseNum < props.numExercises - 1
