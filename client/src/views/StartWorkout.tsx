@@ -27,7 +27,7 @@ export const StartWorkout = () => {
     currentTime.getDate()
   );
   // Dummy time for testing
-  currentTime = new Date(2024, 11 - 1, 23);
+  // currentTime = new Date(2024, 11 - 1, 23);
 
   const day = currentTime.getDay();
 
@@ -94,7 +94,7 @@ export const StartWorkout = () => {
   }
   let streakStatus = "pending";
   // If the user has a workout plan today and has worked out, streak is unbroken
-  if (workoutPlan && lastWorkoutDate.getTime() == currentTime.getTime()) {
+  if (workoutPlan && lastWorkoutDate.getTime() === currentTime.getTime()) {
     streakStatus = "unbroken";
   }
   // If the last time the user worked out is earlier than the expectedLastWorkoutDate, they have broken their streak

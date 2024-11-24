@@ -1,0 +1,27 @@
+.workout-container {
+  background-color: white;
+  width: 95%;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.workout-title {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-icon {
+  margin-left: auto;
+  padding: 0;
+  width: 7%;
+  object-fit: contain;
+  rotate: 90deg;
+}
+
+.dropdown-icon-rotate {
+  margin-left: auto;
+  padding: 0;
+  width: 7%;
+  object-fit: contain;
+  rotate: -180deg;
+}
