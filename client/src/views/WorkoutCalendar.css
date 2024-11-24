@@ -1,0 +1,118 @@
+.calendar-container {
+  text-align: center;
+  width: 100%;
+}
+
+.fc-daygrid-event {
+  display:block;
+  white-space: normal;
+  padding: 5px;
+  border-radius: 6px;
+  background-color:#7cb9e8;
+  word-break: break-word;
+  color: #ffffff;
+}
+
+.fc-daygrid-event .fc-event-title {
+  display: block;
+  font-weight: bold;
+  margin-top: 3px;
+}
+
+.fc-daygrid-event .fc-event-time {
+  display: block;
+  margin-top: -12px;
+  margin-left: 20px;
+  margin-bottom: 3px;
+  font-size: 0.75rem;
+  color: #ffffff;
+}
+
+.fc-daygrid-event:hover {
+  background-color: #6ba1d1;
+  color: #fff;
+  cursor:pointer;
+}
+
+.fc-timegrid-event {
+  display: block;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  padding: 2px;
+  margin: -1px;
+  border-radius: 6px;
+  background-color: #7cb9e8;
+  color: #ffffff;
+  line-height: 1.05;
+  height: 100%; 
+}
+
+.fc-timegrid-event .fc-event-title {
+  display: block;
+  font-weight: bold;
+  margin-top: 3px;
+}
+
+.fc-timegrid-event:hover {
+  background-color: #6ba1d1; 
+  color: #fff;
+  cursor: pointer;
+}
+
+
+.fc-daygrid-day-number {
+  color: #000000; 
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.fc {
+  background-color: #ffffff; 
+  border-radius: 15px; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 10px; 
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  border: none;
+  margin: 0 auto;
+}
+  
+
+.fc-daygrid-day {
+  border: 1px solid #ddd;
+  border-radius: 5px; 
+}
+  
+.fc-toolbar {
+  border-bottom: 1px solid #ccc; 
+  padding-bottom: 10px; 
+}
+  
+.export-button {
+  margin-top: 20px;
+  padding: 10px 24px;
+  font-size: 18px; 
+  font-weight: bold;
+  color: #007bff; 
+  background-color: white;
+  border: 2px solid #007bff;
+  border-radius: 10px; 
+  cursor: pointer; 
+  text-align: center; 
+  transition: all 0.3s ease;
+}
+  
+.export-button:hover {
+  background-color: #007bff;
+  color: #fff;
+  transform: translateY(-1px); 
+}
+  
+.export-button:active {
+  background-color: #0056b3; 
+  color: #fff; 
+  transform: translateY(1px); 
+}
+  

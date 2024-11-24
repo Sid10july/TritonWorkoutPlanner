@@ -6,6 +6,7 @@ import { StartWorkout } from "./views/StartWorkout";
 import { WorkoutPlanner } from "./views/WorkoutPlanner";
 import { ExerciseLibrary } from "./views/ExerciseLibrary";
 import { BuildYourOwn } from "./views/BuildYourOwn";
+import { WorkoutCalendar } from "./views/WorkoutCalender";
 import { TrackProgress } from "./views/TrackProgress";
 // STYLES
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -37,6 +38,7 @@ function App() {
               </div>
             }
           />
+          <Route path="/workout-calendar" element={<WorkoutCalendar />} />
         </Routes>
       </div>
     </div>
