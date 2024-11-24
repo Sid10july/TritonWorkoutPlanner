@@ -270,7 +270,7 @@ describe("Sidebar Tests", () => {
     );
 
     // Click on account info button
-    const accountButton = screen.getByText("Streak", { exact: false });
+    const accountButton = screen.getByText("🔥", { exact: false });
     fireEvent.click(accountButton);
 
     // Should now be able to see the "Log Out" option
