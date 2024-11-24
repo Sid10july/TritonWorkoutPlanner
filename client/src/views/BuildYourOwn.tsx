@@ -29,29 +29,29 @@ export const BuildYourOwn = () => {
   });
 
   // handles toggling the state of the day checkbox
-  const handleDaySelection = (day: string) => {
-    setSelectedDays((prevDays) => ({
-      ...prevDays,
-      //selecting a day is marked as true, deselecting marks it as false
-      [day]: !prevDays[day],
-    }));
-  };
-//   const handleDaySelection = (day: string) => {
-//     setSelectedDays((prevDays) => ({
-//       ...prevDays,
-//       //selecting a day is marked as true, deselecting marks it as false
-//       [day]: !prevDays[day],
-//     }));
-//   };
+  // IMPORTANT: THERE ARE TWO IMPLEMENTATIONS OF WORKOUT CUSTOMIZATION. THE ONE USING THE API IS THE ONE CURRENTLY ACTIVE. THESE FUNCTIONS SHOULD BE MERGED
+  // const handleDaySelection = (day: string) => {
+  //   setSelectedDays((prevDays) => ({
+  //     ...prevDays,
+  //     //selecting a day is marked as true, deselecting marks it as false
+  //     [day]: !prevDays[day],
+  //   }));
+  // };
+  //   const handleDaySelection = (day: string) => {
+  //     setSelectedDays((prevDays) => ({
+  //       ...prevDays,
+  //       //selecting a day is marked as true, deselecting marks it as false
+  //       [day]: !prevDays[day],
+  //     }));
+  //   };
 
-/**
- * Route to a new page where the user can select workout plans from the backend
- * @param day - day of the week that is selected
- */
-  const handleDaySelection = (day: string) =>{
-    
+  /**
+   * Route to a new page where the user can select workout plans from the backend
+   * @param day - day of the week that is selected
+   */
+  const handleDaySelection = (day: string) => {
     navigate(`/build-your-own/${day}`);
-  }
+  };
 
   // updates focus category based on selection using Dropdown component
   const handleFocusChange = (
