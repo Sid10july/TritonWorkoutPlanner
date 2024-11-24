@@ -11,8 +11,15 @@ export type SidebarOptionProps = {
 export type InputFieldProps = {
   id: number;
   goalString: string;
+  goalMet: boolean;
   targetValue: number;
   inputChangeHandler: (id: number, value: number) => void;
+};
+
+export type Goal = {
+  id: number;
+  goalString: string;
+  targetValue: number;
 };
 
 export type WorkoutPlan = {

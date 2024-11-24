@@ -1,89 +1,339 @@
-select {
-  width: 200px;
-  padding: 10px;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  background-color: #f8f8f8;
-  transition: border-color 0.3s ease;
-}
-
-.day-selection {
-  margin-bottom: 16px;
-  white-space: nowrap;
-}
-
-.day-selection label {
-  margin-right: 10px;
-  white-space: nowrap;
-}
-
 .customize-plan {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  display: center;
+  padding: 10px 5px;
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 100%;
 }
 
 .day-selection {
+  margin-bottom: 24px;
   display: flex;
   align-items: center;
-  padding: 10px 0;
+  justify-content: space-between;
   border-bottom: 1px solid #e1e1e1;
+  padding: 16px 0;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .day-selection label {
-  font-weight: bold;
-  flex: 1;
+  font-weight: 600;
+  color: #333;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  flex: 1;
+  margin-right: 25px;
 }
 
 .day-selection input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
   accent-color: #3498db;
+  transition: transform 0.2s ease;
+}
+
+.day-selection input[type="checkbox"]:hover {
+  transform: scale(1.05);
 }
 
 .workout-details {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 10px;
-  margin-left: 20px;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 21px;
+  margin-bottom: 15px;
   background-color: #f7f9fc;
-  padding: 15px;
-  border-radius: 6px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 80%;
+  overflow: auto;
 }
 
-.workout-details input[type="time"] {
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  width: 200px;
+.workout-details .details-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.workout-details .details-section label {
+  font-weight: 600;
   color: #333;
 }
 
-.workout-details input[type="time"]:focus {
+.workout-details .details-section select {
+  width: 200px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.workout-details .details-section select:disabled {
+  cursor: not-allowed;
+}
+
+.workout-details .exercise-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 2;
+}
+
+.workout-details .exercise-section select {
+  width: 210px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.workout-details label {
+  display: block;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+  margin-left: 5px;
+}
+
+.workout-details .times-section label {
+  margin-bottom: 10px;
+}
+
+.workout-details .times-section input[type="time"] {
+  align-items: center;
+  padding: 10px;
+  margin-left: -15px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #333;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.workout-details .times-section input[type="time"]:focus {
   outline: none;
   border-color: #3498db;
   box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
 }
 
+.workout-details .times-section input[type="time"]:disabled {
+  cursor: not-allowed;
+}
+
+.workout-details .times-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .build-your-own button {
-  margin-top: 20px;
-  padding: 12px 20px;
+  margin-top: 30px;
+  padding: 14px 30px;
   font-size: 16px;
   font-weight: bold;
   color: #fff;
   background-color: #3498db;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .build-your-own button:hover {
   background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.build-your-own .submit-button {
+  margin-top: -20px;
+  margin-bottom: 10px;
+  padding: 14px 30px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #3498db;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.build-your-own button:active {
+  transform: translateY(2px);
+}
+
+h1,
+h2 {
+  margin-bottom: -10px;
+}
+
+.reps-tracker {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.reps-tracker label {
+  font-weight: 500;
+  font-size: 13px;
+  margin-bottom: -8px;
+  color: #7e7e7e;
+  margin-right: 5px;
+  text-align: center;
+}
+
+.reps-tracker input {
+  width: 55px;
+  align-items: center;
+  padding: 4px 6px;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  text-align: center;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.reps-tracker input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+}
+
+.reps-tracker input:disabled {
+  cursor: not-allowed;
+}
+
+.exercise-dropdown {
+  display: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 250px;
+}
+
+.exercise-dropdown select {
+  display: center;
+  width: 65%;
+  padding: 12px 14px;
+  font-size: 14px;
+  margin: 12px 0;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.exercise-dropdown select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+}
+
+.exercise-dropdown select:disabled {
+  cursor: not-allowed;
+}
+
+.exercise-dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.exercise-dropdown ul li {
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 5px;
+  background-color: #f8f8f8;
+  border-radius: 6px;
+  border: 1px solid #e1e1e1;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.exercise-dropdown ul li span {
+  flex-grow: 1;
+  font-weight: 500;
+  font-size: 14px;
+  color: #333;
+}
+
+.exercise-dropdown ul li button {
+  background-color: #3498db;
+  color: #fff;
+  font-size: 12px;
+  padding: 5px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.exercise-dropdown ul li button:hover {
+  background-color: #2980b9;
+  transform: translateY(-1px);
+}
+
+.exercise-dropdown ul li button:disabled {
+  background-color: #ccc;
+  transform: none;
+  cursor: not-allowed;
+}
+
+.exercise-dropdown ul li button:active {
+  transform: translateY(1px);
+}
+
+.exercise-dropdown ul li button:disabled:active {
+  transform: none;
+}
+
+.exercise-dropdown ul li .button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: -16px;
+  margin-bottom: 10px;
+}
+
+.exercise-dropdown .remove-button {
+  background-color: rgb(233, 116, 116);
+}
+
+.exercise-dropdown .remove-button:hover {
+  background-color: rgb(213, 94, 94);
+  transform: translateY(-1px);
+}
+
+.exercise-dropdown .remove-button:disabled:hover {
+  background-color: #ccc;
+  transform: none;
+  cursor: not-allowed;
 }

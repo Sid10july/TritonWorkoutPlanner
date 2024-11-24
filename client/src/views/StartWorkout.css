@@ -19,3 +19,28 @@
   align-self: center;
   min-width: 15vw;
 }
+
+.exercise-link {
+  color: #007bff;
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-top: -15px;
+  margin-bottom: 25px;
+}
+
+.progress-container {
+  display: grid;
+  width: 50vw;
+  grid-template-columns: 60% 40%;
+  align-self: center;
+}
+
+.progress-bar {
+  align-self: center;
+}
+
+.tracker-container {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+}

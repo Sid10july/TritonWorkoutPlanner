@@ -105,7 +105,52 @@ export const dummyProfileData = {
 };
 
 export const dummyExerciseGoals = [
-  { id: 0, goalString: "Weight", targetValue: 150 },
+  { id: 0, goalString: "One rep max squat", targetValue: 150 },
   { id: 1, goalString: "One rep max bench", targetValue: 210 },
   { id: 2, goalString: "Pull-ups", targetValue: 25 },
+];
+
+export const dummyWorkoutData = [
+  {
+    date: "2024-11-22",
+    goals: [
+      { id: 0, progressValue: 125 },
+      { id: 1, progressValue: 190 },
+      { id: 2, progressValue: 12 },
+    ],
+  },
+  {
+    date: "2024-10-19",
+    goals: [
+      { id: 0, progressValue: 115 },
+      { id: 1, progressValue: 170 },
+      { id: 2, progressValue: 17 },
+    ],
+  },
+  {
+    date: "2024-10-11",
+    goals: [
+      { id: 0, progressValue: 135 },
+      { id: 1, progressValue: 200 },
+      { id: 2, progressValue: 14 },
+    ],
+  },
+];
+
+export const dummySchedule = [
+  {
+    title: "Morning Cardio",
+    start: "2024-11-20T07:00:00",
+    end: "2024-11-20T08:00:00",
+  },
+  {
+    title: "Strength Training",
+    start: "2024-11-21T17:00:00", 
+    end: "2024-11-21T18:30:00",
+  },
+  {
+    title: "Yoga Session",
+    start: "2024-11-22T06:30:00", 
+    end: "2024-11-22T07:30:00",
+  },
 ];
