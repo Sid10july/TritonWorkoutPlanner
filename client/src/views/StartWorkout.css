@@ -27,3 +27,14 @@
   margin-top: -15px;
   margin-bottom: 25px;
 }
+
+.progress-container {
+  display: grid;
+  width: 40vw;
+  grid-template-columns: 70% 30%;
+  align-self: center;
+}
+
+.progress-bar {
+  align-self: center;
+}

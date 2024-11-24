@@ -51,7 +51,7 @@ export const TrackProgress = () => {
             {Object.keys(props.goals).map((e) => {
               // Filter goals for progress value
               const progressValue = props.goals.filter(
-                (g) => g.id == parseInt(e)
+                (g) => g.id === parseInt(e)
               )[0].progressValue;
               console.log(progressValue);
               return (

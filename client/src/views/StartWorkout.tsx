@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { InputField } from "../components/InputField";
+import ProgressBar from "@ramonak/react-progress-bar";
 import { WorkoutPlan } from "../types/types";
 import {
   dummyLastWorkout,
@@ -163,6 +164,12 @@ export const StartWorkout = () => {
     }
   };
 
+  // Goals will be passed to database after exercise completion
+  let goals = dummyExerciseGoals.map((e) => ({
+    id: e.id,
+    progressValue: 0,
+  }));
+
   // Display workout and goal setting information
   const Workout = (props: {
     exerciseNum: number;
@@ -193,8 +200,9 @@ export const StartWorkout = () => {
           <p className="fs-4 mb-0">Type: {eType}</p>
           <p className="fs-4 mb-0">Muscle Group: {eMuscle}</p>
           <p className="fs-4 mb-5">Equipment: {eEquipment}</p>
+          <p className="fs-2 exercise-instructions mb-0">Instructions:</p>
           <p className="fs-3 exercise-instructions mb-5">
-            <h3>Instructions:</h3> {exercise.instructions}
+            {exercise.instructions}
           </p>
           <a
             href={`https://www.google.com/search?q=${exercise.name} exercise instructions`}
@@ -226,60 +234,105 @@ export const StartWorkout = () => {
     // Workout is finished
     // BACKEND: Increment streak to database
     else {
-      let goals = dummyExerciseGoals.map((e) => ({
-        id: e.id,
-        currentValue: 0,
-      }));
-
       const handleGoalChange = (id: number, value: number) => {
         if (isNaN(value)) value = 0;
         goals = goals.map((e) => {
-          if (id === e.id) return { id: e.id, currentValue: value };
-          else return { id: e.id, currentValue: e.currentValue };
+          if (id === e.id) return { id: e.id, progressValue: value };
+          else return { id: e.id, progressValue: e.progressValue };
         });
       };
-
-      return (
-        <div className="exercise-container">
-          <p className="workoutIndicator-title mb-0">Workout finished!</p>
-          <p className="fs-4 mb-5">
-            New streak 🔥: {dummyProfileData.streak + 1}
-          </p>
-          <p className="fs-2 mb-5">Progress Tracker:</p>
-          <form
-            className="exercise-form"
-            onSubmit={(e) => {
-              // BACKEND INTEGRATION NEEDED
-              // Update backend with last workout time
-              // Add "goals" variable to database
-              setLastWorkout([
-                currentTime.getMonth() + 1, // monthIndex maps 0-11 to January - December, so readjust by adding 1
-                currentTime.getDate(),
-                currentTime.getFullYear(),
-              ]);
-            }}
-          >
-            {dummyExerciseGoals.map((e) => (
-              <InputField
-                key={e.id}
-                id={e.id}
-                goalString={e.goalString}
-                targetValue={e.targetValue}
-                inputChangeHandler={handleGoalChange}
-              />
-            ))}
-            <button
-              type="submit"
-              className="btn btn-primary fs-3 exercise-button"
+      // Track goals
+      if (props.exerciseNum == props.numExercises) {
+        return (
+          <div className="exercise-container">
+            <p className="workoutIndicator-title mb-0">Workout finished!</p>
+            <p className="fs-4 mb-5">
+              New streak 🔥: {dummyProfileData.streak + 1}
+            </p>
+            <p className="fs-2 mb-5">Progress Tracker:</p>
+            <form
+              className="exercise-form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                props.workoutClickHandler(props.exerciseNum + 1);
+              }}
             >
-              Done
-            </button>
-          </form>
-        </div>
-      );
+              {dummyExerciseGoals.map((e) => (
+                <InputField
+                  key={e.id}
+                  id={e.id}
+                  goalString={e.goalString}
+                  targetValue={e.targetValue}
+                  inputChangeHandler={handleGoalChange}
+                />
+              ))}
+              <button
+                type="submit"
+                className="btn btn-primary fs-3 exercise-button"
+              >
+                Done
+              </button>
+            </form>
+          </div>
+        );
+      }
+      // Display progress and modify goals if they are met
+      else {
+        return (
+          <div className="exercise-container">
+            <p className="workoutIndicator-title mb-0">Workout finished!</p>
+            <p className="fs-4 mb-5">
+              New streak 🔥: {dummyProfileData.streak + 1}
+            </p>
+            <p className="fs-2 mb-5">Progress Tracker:</p>
+            <form
+              onSubmit={(e) => {
+                // BACKEND INTEGRATION NEEDED
+                // Update backend with last workout time
+                // Add "goals" variable as a new workout entry in database
+                // Replace user goals with newGoals in database
+                setLastWorkout([
+                  currentTime.getMonth() + 1, // monthIndex maps 0-11 to January - December, so readjust by adding 1
+                  currentTime.getDate(),
+                  currentTime.getFullYear(),
+                ]);
+              }}
+              className="exercise-form"
+            >
+              {dummyExerciseGoals.map((e) => {
+                const goalFilter = goals.filter((g) => g.id === e.id)[0];
+                const percentage = Math.round(
+                  (goalFilter.progressValue / e.targetValue) * 100
+                );
+                return (
+                  <div key={e.id} className="progress-container mb-3">
+                    <p className="text-start fs-3 mb-0 p-1">
+                      {e.goalString} ({percentage}%):
+                    </p>
+                    <ProgressBar
+                      className="progress-bar"
+                      key={e.id}
+                      bgColor="#0d6efd"
+                      baseBgColor="#b3b4bd"
+                      completed={percentage}
+                      isLabelVisible={false}
+                      animateOnRender={true}
+                    />
+                  </div>
+                );
+              })}
+              <button
+                type="submit"
+                className="btn btn-primary fs-3 exercise-button"
+              >
+                Done
+              </button>
+            </form>
+          </div>
+        );
+      }
     }
   };
-
   return (
     <div>
       <h1 className="title-container">{titleString}</h1>
