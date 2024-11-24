@@ -154,3 +154,13 @@ export const dummySchedule = [
     end: "2024-11-22T07:30:00",
   },
 ];
+
+export const SERVER_URL = "http://localhost:8080"
+
+export const muscles: string[] = 
+['abdominals','abductors','adductors','biceps','calves','chest','forearms','glutes','hamstrings',
+    'lats','lower_back','middle_back','neck','quadriceps','traps','triceps'];
+
+export const exerciesTypes: string[] = ['cardio','olympic_weightlifting','plyometrics','powerlifting','strength','stretching','strongman'];
+
+export const difficultyLevels: string[] = ['beginner','intermediate','expert'];

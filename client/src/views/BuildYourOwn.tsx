@@ -3,9 +3,11 @@ import { daysOfWeek, recommendedExercises } from "../constants/constants";
 import { Dropdown } from "../components/Dropdown";
 import ExerciseDropdown from "../components/ExerciseDropdown";
 import "./BuildYourOwn.css";
+import { useNavigate } from "react-router-dom";
 
 export const BuildYourOwn = () => {
   // state storing focus category for each day
+  const navigate = useNavigate();
   const [focusCategory, setFocusCategory] = useState<{ [day: string]: string }>(
     {}
   );
@@ -34,6 +36,22 @@ export const BuildYourOwn = () => {
       [day]: !prevDays[day],
     }));
   };
+//   const handleDaySelection = (day: string) => {
+//     setSelectedDays((prevDays) => ({
+//       ...prevDays,
+//       //selecting a day is marked as true, deselecting marks it as false
+//       [day]: !prevDays[day],
+//     }));
+//   };
+
+/**
+ * Route to a new page where the user can select workout plans from the backend
+ * @param day - day of the week that is selected
+ */
+  const handleDaySelection = (day: string) =>{
+    
+    navigate(`/build-your-own/${day}`);
+  }
 
   // updates focus category based on selection using Dropdown component
   const handleFocusChange = (

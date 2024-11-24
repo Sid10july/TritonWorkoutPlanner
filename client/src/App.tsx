@@ -8,6 +8,7 @@ import { ExerciseLibrary } from "./views/ExerciseLibrary";
 import { BuildYourOwn } from "./views/BuildYourOwn";
 import { WorkoutCalendar } from "./views/WorkoutCalender";
 import { TrackProgress } from "./views/TrackProgress";
+import { DayPlanner } from "./views/DayPlanner";
 // STYLES
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -29,6 +30,7 @@ function App() {
           <Route path="/build-your-own" element={<BuildYourOwn />} />
           <Route path="/exercise-library" element={<ExerciseLibrary />} />
           <Route path="/track-progress" element={<TrackProgress />} />
+          <Route path="build-your-own/:day" element={<DayPlanner />}/>
           <Route
             path="/generate-workout"
             element={
