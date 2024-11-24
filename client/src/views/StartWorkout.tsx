@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { InputField } from "../components/InputField";
 import ProgressBar from "@ramonak/react-progress-bar";
-import { WorkoutPlan } from "../types/types";
+import { WorkoutPlan, Goal } from "../types/types";
 import {
   dummyLastWorkout,
   dummyWorkoutPlans,
@@ -164,11 +164,13 @@ export const StartWorkout = () => {
     }
   };
 
-  // Goals will be passed to database after exercise completion
-  let goals = dummyExerciseGoals.map((e) => ({
+  // Progress and goals will be passed to database after exercise completion
+  let progress = dummyExerciseGoals.map((e) => ({
     id: e.id,
     progressValue: 0,
   }));
+
+  let goals: Goal[] = dummyExerciseGoals;
 
   // Display workout and goal setting information
   const Workout = (props: {
@@ -234,15 +236,25 @@ export const StartWorkout = () => {
     // Workout is finished
     // BACKEND: Increment streak to database
     else {
-      const handleGoalChange = (id: number, value: number) => {
+      const handleProgressChange = (id: number, value: number) => {
         if (isNaN(value)) value = 0;
-        goals = goals.map((e) => {
+        progress = progress.map((e) => {
           if (id === e.id) return { id: e.id, progressValue: value };
           else return { id: e.id, progressValue: e.progressValue };
         });
       };
+
+      const handleGoalChange = (id: number, value: number) => {
+        if (isNaN(value)) value = 0;
+        goals = goals.map((e: Goal) => {
+          if (id === e.id)
+            return { id: e.id, goalString: e.goalString, targetValue: value };
+          else return { ...e };
+        });
+      };
+
       // Track goals
-      if (props.exerciseNum == props.numExercises) {
+      if (props.exerciseNum === props.numExercises) {
         return (
           <div className="exercise-container">
             <p className="workoutIndicator-title mb-0">Workout finished!</p>
@@ -261,9 +273,10 @@ export const StartWorkout = () => {
                 <InputField
                   key={e.id}
                   id={e.id}
-                  goalString={e.goalString}
+                  goalString={`${e.goalString}:`}
+                  goalMet={false}
                   targetValue={e.targetValue}
-                  inputChangeHandler={handleGoalChange}
+                  inputChangeHandler={handleProgressChange}
                 />
               ))}
               <button
@@ -278,19 +291,31 @@ export const StartWorkout = () => {
       }
       // Display progress and modify goals if they are met
       else {
+        let isGoalMet = false;
+        dummyExerciseGoals.forEach((e) => {
+          const progressFilter = progress.filter((g) => g.id === e.id)[0];
+          if (progressFilter.progressValue >= e.targetValue) {
+            isGoalMet = true;
+          }
+        });
+
         return (
           <div className="exercise-container">
             <p className="workoutIndicator-title mb-0">Workout finished!</p>
             <p className="fs-4 mb-5">
               New streak 🔥: {dummyProfileData.streak + 1}
             </p>
-            <p className="fs-2 mb-5">Progress Tracker:</p>
+            <p className="fs-2 mb-5">
+              {isGoalMet
+                ? "Progress Tracker (Goal(s) met! Set new goals?)"
+                : "Progress Tracker:"}
+            </p>
             <form
               onSubmit={(e) => {
                 // BACKEND INTEGRATION NEEDED
                 // Update backend with last workout time
-                // Add "goals" variable as a new workout entry in database
-                // Replace user goals with newGoals in database
+                // Add "progress" variable as a new workout entry in database
+                // Replace user goals with "goals" in database
                 setLastWorkout([
                   currentTime.getMonth() + 1, // monthIndex maps 0-11 to January - December, so readjust by adding 1
                   currentTime.getDate(),
@@ -300,25 +325,64 @@ export const StartWorkout = () => {
               className="exercise-form"
             >
               {dummyExerciseGoals.map((e) => {
-                const goalFilter = goals.filter((g) => g.id === e.id)[0];
-                const percentage = Math.round(
-                  (goalFilter.progressValue / e.targetValue) * 100
+                const progressFilter = progress.filter((g) => g.id === e.id)[0];
+                const percentage = Math.min(
+                  Math.floor(
+                    (progressFilter.progressValue / e.targetValue) * 100
+                  ),
+                  100
                 );
+
                 return (
-                  <div key={e.id} className="progress-container mb-3">
-                    <p className="text-start fs-3 mb-0 p-1">
-                      {e.goalString} ({percentage}%):
-                    </p>
-                    <ProgressBar
-                      className="progress-bar"
-                      key={e.id}
-                      bgColor="#0d6efd"
-                      baseBgColor="#b3b4bd"
-                      completed={percentage}
-                      isLabelVisible={false}
-                      animateOnRender={true}
-                    />
+                  <div className="tracker-container" key={e.id}>
+                    {percentage !== 100 ? (
+                      <div className="progress-container mb-3">
+                        <p className="text-start fs-3 mb-0 p-1">
+                          {e.goalString} ({percentage}%):
+                        </p>
+                        <ProgressBar
+                          className="progress-bar"
+                          bgColor="#0d6efd"
+                          baseBgColor="#b3b4bd"
+                          completed={percentage}
+                          isLabelVisible={false}
+                          animateOnRender={true}
+                        />
+                      </div>
+                    ) : (
+                      <InputField
+                        id={e.id}
+                        goalString={`${e.goalString} (100%):`}
+                        goalMet={true}
+                        targetValue={e.targetValue}
+                        inputChangeHandler={handleGoalChange}
+                      />
+                    )}
                   </div>
+
+                  // <div key={e.id} className="progress-container mb-3">
+                  //   <p className="text-start fs-3 mb-0 p-1">
+                  //     {e.goalString} ({percentage}%):
+                  //   </p>
+                  //   {percentage !== 100 ? (
+                  //     <ProgressBar
+                  //       className="progress-bar"
+                  //       key={e.id}
+                  //       bgColor="#0d6efd"
+                  //       baseBgColor="#b3b4bd"
+                  //       completed={percentage}
+                  //       isLabelVisible={false}
+                  //       animateOnRender={true}
+                  //     />
+                  //   ) : (
+                  //     <InputField
+                  //       id={e.id}
+                  //       goalString={`${e.goalString}:`}
+                  //       targetValue={e.targetValue}
+                  //       inputChangeHandler={handleGoalChange}
+                  //     />
+                  //   )}
+                  // </div>
                 );
               })}
               <button
