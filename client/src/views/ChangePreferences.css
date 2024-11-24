@@ -1,0 +1,109 @@
+.change-preferences {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .title-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    padding: 10px 0;
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .goals-container {
+    width: 80%;
+    max-width: 600px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .goals-container h2 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 10px;
+  }
+  
+  .goals-list {
+    margin-bottom: 20px;
+  }
+  
+  .goal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .goal-input {
+    flex: 1;
+    margin-right: 10px;
+    padding: 5px;
+    border: none;
+    background-color: transparent;
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .goal-input:read-only {
+    border-bottom: 1px dashed #ccc;
+  }
+  
+  .delete-button {
+    background-color: #ff5c5c;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  
+  .delete-button:hover {
+    background-color: #e64545;
+  }
+  
+  .add-goal {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .add-goal input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .add-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .add-button:hover {
+    background-color: #0056b3;
+  }
