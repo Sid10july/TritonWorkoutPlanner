@@ -26,3 +26,21 @@ export const dummyProfileData = {
   username: "John",
   streak: 3,
 };
+
+export const dummySchedule = [
+  {
+    title: "Morning Cardio",
+    start: "2024-11-20T07:00:00",
+    end: "2024-11-20T08:00:00",
+  },
+  {
+    title: "Strength Training",
+    start: "2024-11-21T17:00:00", 
+    end: "2024-11-21T18:30:00",
+  },
+  {
+    title: "Yoga Session",
+    start: "2024-11-22T06:30:00", 
+    end: "2024-11-22T07:30:00",
+  },
+];

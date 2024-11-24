@@ -5,6 +5,7 @@ import { Sidebar } from "./components/Sidebar/Sidebar";
 import { WorkoutPlanner } from "./views/WorkoutPlanner";
 import { ExerciseLibrary } from "./views/ExerciseLibrary";
 import { BuildYourOwn } from "./views/BuildYourOwn";
+import { WorkoutCalendar } from "./views/WorkoutCalender";
 // STYLES
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -42,6 +43,7 @@ function App() {
               </div>
             }
           />
+          <Route path="/workout-calendar" element={<WorkoutCalendar />} />
         </Routes>
       </div>
     </div>

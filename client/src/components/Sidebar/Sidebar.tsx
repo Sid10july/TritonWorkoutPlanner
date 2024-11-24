@@ -11,6 +11,7 @@ const optionStrings = [
   { str: "Exercise Library", path: "/exercise-library" },
   { str: "Track Progress", path: "/" },
   { str: "Change Preferences", path: "/" },
+  { str: "Workout Calendar", path: "/workout-calendar"}
 ];
 
 export const Sidebar = (props: SidebarProps) => {
