@@ -3,19 +3,19 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 10px 5px; 
-  margin: 0 auto; 
-  max-width: 1200px; 
+  padding: 10px 5px;
+  margin: 0 auto;
+  max-width: 1200px;
   width: 100%;
 }
 
 .day-selection {
-  margin-bottom: 24px; 
+  margin-bottom: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #e1e1e1;
-  padding: 16px 0; 
+  padding: 16px 0;
   width: 100%;
   max-width: 1200px;
 }
@@ -25,46 +25,44 @@
   color: #333;
   display: flex;
   align-items: center;
-  gap: 12px; 
+  gap: 12px;
   flex: 1;
   margin-right: 25px;
 }
 
 .day-selection input[type="checkbox"] {
   width: 24px;
-  height: 24px; 
+  height: 24px;
   accent-color: #3498db;
   transition: transform 0.2s ease;
 }
 
 .day-selection input[type="checkbox"]:hover {
-  transform: scale(1.05); 
+  transform: scale(1.05);
 }
 
 .workout-details {
   display: flex;
-  flex-direction: row; 
-  align-items: flex-start ;
-  justify-content: center; 
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
   gap: 21px;
   margin-bottom: 15px;
   background-color: #f7f9fc;
-  padding: 20px; 
+  padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  width: 90%; 
   text-align: center;
-  max-width: 800px;
+  max-width: 80%;
   overflow: auto;
 }
-
 
 .workout-details .details-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px; 
-  flex: 1; 
+  gap: 10px;
+  flex: 1;
 }
 
 .workout-details .details-section label {
@@ -89,7 +87,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  flex: 2; 
+  flex: 2;
 }
 
 .workout-details .exercise-section select {
@@ -137,15 +135,15 @@
 
 .workout-details .times-section {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
-  justify-content: space-between; 
-  width: 100%; 
+  justify-content: space-between;
+  width: 100%;
 }
 
 .build-your-own button {
-  margin-top: 30px; 
+  margin-top: 30px;
   padding: 14px 30px;
   font-size: 16px;
   font-weight: bold;
@@ -159,7 +157,7 @@
 
 .build-your-own button:hover {
   background-color: #2980b9;
-  transform: translateY(-2px); 
+  transform: translateY(-2px);
 }
 
 .build-your-own .submit-button {
@@ -180,7 +178,8 @@
   transform: translateY(2px);
 }
 
-h1, h2 {
+h1,
+h2 {
   margin-bottom: -10px;
 }
 
@@ -270,7 +269,7 @@ h1, h2 {
   align-items: stretch;
   flex-direction: column;
   justify-content: space-between;
-  padding: 8px;
+  padding: 5px;
   background-color: #f8f8f8;
   border-radius: 6px;
   border: 1px solid #e1e1e1;
@@ -316,10 +315,10 @@ h1, h2 {
 
 .exercise-dropdown ul li .button-container {
   display: flex;
-  flex-direction: row; 
-  justify-content: center; 
-  align-items: center; 
-  gap: 8px; 
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
   margin-top: -16px;
   margin-bottom: 10px;
 }
@@ -335,6 +334,6 @@ h1, h2 {
 
 .exercise-dropdown .remove-button:disabled:hover {
   background-color: #ccc;
-  transform: none; 
+  transform: none;
   cursor: not-allowed;
 }

@@ -104,24 +104,6 @@ export const dummyProfileData = {
   streak: 3,
 };
 
-export const dummySchedule = [
-  {
-    title: "Morning Cardio",
-    start: "2024-11-20T07:00:00",
-    end: "2024-11-20T08:00:00",
-  },
-  {
-    title: "Strength Training",
-    start: "2024-11-21T17:00:00", 
-    end: "2024-11-21T18:30:00",
-  },
-  {
-    title: "Yoga Session",
-    start: "2024-11-22T06:30:00", 
-    end: "2024-11-22T07:30:00",
-  },
-];
-
 export const dummyExerciseGoals = [
   { id: 0, goalString: "One rep max squat", targetValue: 150 },
   { id: 1, goalString: "One rep max bench", targetValue: 210 },
@@ -152,5 +134,23 @@ export const dummyWorkoutData = [
       { id: 1, progressValue: 200 },
       { id: 2, progressValue: 14 },
     ],
+  },
+];
+
+export const dummySchedule = [
+  {
+    title: "Morning Cardio",
+    start: "2024-11-20T07:00:00",
+    end: "2024-11-20T08:00:00",
+  },
+  {
+    title: "Strength Training",
+    start: "2024-11-21T17:00:00", 
+    end: "2024-11-21T18:30:00",
+  },
+  {
+    title: "Yoga Session",
+    start: "2024-11-22T06:30:00", 
+    end: "2024-11-22T07:30:00",
   },
 ];
