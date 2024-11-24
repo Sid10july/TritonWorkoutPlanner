@@ -6,6 +6,8 @@ import { StartWorkout } from "./views/StartWorkout";
 import { WorkoutPlanner } from "./views/WorkoutPlanner";
 import { ExerciseLibrary } from "./views/ExerciseLibrary";
 import { BuildYourOwn } from "./views/BuildYourOwn";
+import { WorkoutCalendar } from "./views/WorkoutCalender";
+import { TrackProgress } from "./views/TrackProgress";
 import { DayPlanner } from "./views/DayPlanner";
 // STYLES
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -21,12 +23,13 @@ function App() {
   return (
     <div className="App">
       <Sidebar pageIndex={pageIndex} sidebarClickHandler={handleSidebarClick} />
-      <div className="App-views">
+      <div className="App-views" id="App-view">
         <Routes>
           <Route path="/" element={<StartWorkout />} />
           <Route path="/workout-planner" element={<WorkoutPlanner />} />
           <Route path="/build-your-own" element={<BuildYourOwn />} />
           <Route path="/exercise-library" element={<ExerciseLibrary />} />
+          <Route path="/track-progress" element={<TrackProgress />} />
           <Route path="build-your-own/:day" element={<DayPlanner />}/>
           <Route
             path="/generate-workout"
@@ -37,6 +40,7 @@ function App() {
               </div>
             }
           />
+          <Route path="/workout-calendar" element={<WorkoutCalendar />} />
         </Routes>
       </div>
     </div>

@@ -1,7 +1,7 @@
 .inputField-container {
   display: grid;
   grid-template-columns: 60% 40%;
-  width: 70%;
+  width: 50vw;
   align-self: center;
 }
 

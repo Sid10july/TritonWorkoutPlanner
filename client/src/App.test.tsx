@@ -1,10 +1,11 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, within } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 // COMPONENTS
 import App from "./App";
 import { BuildYourOwn } from "./views/BuildYourOwn";
+import { WorkoutCalendar } from "./views/WorkoutCalender";
 // CONSTANTS
-import { daysOfWeek, recommendedExercises } from "./constants/constants";
+import { daysOfWeek, recommendedExercises, dummySchedule } from "./constants/constants";
 
 describe("Customize Workout Plan Tests", () => {
   test("all days initialized as unchecked", () => {
@@ -73,6 +74,175 @@ describe("Customize Workout Plan Tests", () => {
     //ensure focus category state is updated
     expect(focusDropdown).toHaveValue(focus);
   });
+
+  test("selected exercises display properly", () => {
+    render(<BuildYourOwn />); //render component
+
+    const day = daysOfWeek[0]; // day set to Monday
+    //retrieve Monday's focus category dropdown
+    const focusDropdown = screen.getByLabelText(`${day} Focus:`);
+    const focus = Object.keys(recommendedExercises)[0]; // set focus to first category ('cardio')
+
+    // set the focus category to cardio
+    fireEvent.change(focusDropdown, { target: { value: focus } });
+
+    // add first exercise from the cardio focus
+    const exerciseDropdown = screen.getByTestId(`${day}-exercise-dropdown`);
+    fireEvent.change(exerciseDropdown, {
+      target: { value: recommendedExercises[focus as keyof typeof recommendedExercises][0] },
+    });
+
+    // ensure that the selected exercise is displayed to the user
+    expect(screen.getByText(recommendedExercises[focus as keyof typeof recommendedExercises][0])).toBeInTheDocument();
+  });
+
+  test("removing an exercise from the selected exercises updates user's list of selected exercises", () => {
+    render(<BuildYourOwn />); //render componenet
+
+    const day = daysOfWeek[0]; // set day to be Monday
+    //retrieve Monday's focus category dropdown
+    const focusDropdown = screen.getByLabelText(`${day} Focus:`);
+    //select day first
+    const dayCheckbox = screen.getByTestId(`${day}-checkbox`);
+    fireEvent.click(dayCheckbox);
+
+    const focus = Object.keys(recommendedExercises)[0]; // set focus to first category (cardio)
+
+    // set the focus category to be cardio
+    fireEvent.change(focusDropdown, { target: { value: focus } });
+
+    // add the first exercise from dropdown to the selected exercises list
+    const exerciseDropdown = screen.getByTestId(`${day}-exercise-dropdown`);
+    const exercise = recommendedExercises[focus as keyof typeof recommendedExercises][0];
+    fireEvent.change(exerciseDropdown, { target: { value: exercise } });
+
+    // the exercise should be displayed in the selected exercises list
+    const exerciseList = screen.getByTestId(`${day}-exercise-list`);
+    expect(screen.getByText(exercise)).toBeInTheDocument();
+
+    // remove the exercise from the selected exercises list
+    const removeButton = screen.getByText("Remove");
+    fireEvent.click(removeButton);
+
+    // ensure that the exercise isn't in selected exercises list
+    expect(within(exerciseList).queryByText(exercise)).not.toBeInTheDocument();
+    //exercise should return to the dropdown as an option of exercises to add
+    expect(screen.getByRole("option", { name: exercise })).toBeInTheDocument();
+  });
+
+  test("reordering the exercises works as intended", ()=> {
+    render(<BuildYourOwn />); //render component
+
+    const day = daysOfWeek[0]; // set the day to be Monday
+    //select day first
+    const dayCheckbox = screen.getByTestId(`${day}-checkbox`);
+    fireEvent.click(dayCheckbox);
+
+    //retrieve Monday's focus category dropdown
+    const focusDropdown = screen.getByLabelText(`${day} Focus:`);
+    // set the focus category to the first category (cardio)
+    const focus = Object.keys(recommendedExercises)[0];
+
+    // set the focus category to be cardio
+    fireEvent.change(focusDropdown, { target: { value: focus } });
+
+    // add two exercises to the list of selected exercises
+    const exerciseDropdown = screen.getByTestId(`${day}-exercise-dropdown`);
+    //'Running'
+    const exercise1 = recommendedExercises[focus as keyof typeof recommendedExercises][0];
+    //'Cycling'
+    const exercise2 = recommendedExercises[focus as keyof typeof recommendedExercises][1];
+    fireEvent.change(exerciseDropdown, { target: { value: exercise1 } });
+    fireEvent.change(exerciseDropdown, { target: { value: exercise2 } });
+
+    // move the second exercise to the top of the list
+    const upButton = screen.getAllByText("↑")[1];
+    fireEvent.click(upButton);
+
+    // check that the order is as expected
+    const exerciseItems = screen.getAllByRole("listitem");
+    expect(exerciseItems[0]).toHaveTextContent(exercise2);
+    expect(exerciseItems[1]).toHaveTextContent(exercise1);
+  });
+
+  test("amount of reps inputted by the user is updated and displayed as expected", () => {
+    render(<BuildYourOwn />); 
+
+    const day = daysOfWeek[0]; // set the day to be Monday
+    //select day first
+    const dayCheckbox = screen.getByTestId(`${day}-checkbox`);
+    fireEvent.click(dayCheckbox);
+    //retrieve Monday's focus category dropdown
+    const focusDropdown = screen.getByLabelText(`${day} Focus:`);
+    // set focus to first category (cardio)
+    const focus = Object.keys(recommendedExercises)[0]; 
+
+    // set the focus category to cardio
+    fireEvent.change(focusDropdown, { target: { value: focus } });
+
+    // add an exercise to list of selected exercises
+    const exerciseDropdown = screen.getByTestId(`${day}-exercise-dropdown`);
+    //retrieve the first exercise from the list
+    const exercise = recommendedExercises[focus as keyof typeof recommendedExercises][0];
+    fireEvent.change(exerciseDropdown, { target: { value: exercise } });
+
+    // update the number of repetitions to 15
+    const repsInput = screen.getByLabelText("Reps:");
+    fireEvent.change(repsInput, { target: { value: "15" } });
+
+    // ensure that the value of reps has been changed to 15
+    expect(repsInput).toHaveValue(15);
+  });
+
+  test("focus dropdown should be disabled until the day is selected", () => {
+    render(<BuildYourOwn />);
+
+    const day = daysOfWeek[0]; // select day to be monday
+    //retrieve Monday's focus dropdown
+    const focusDropdown = screen.getByLabelText(`${day} Focus:`);
+
+    // ensure that the dropdown is disabled since Monday has yet been selected
+    expect(focusDropdown).toBeDisabled();
+
+    // select the checkbox for Monday
+    const dayCheckbox = screen.getByTestId(`${day}-checkbox`);
+    fireEvent.click(dayCheckbox);
+
+    // ensure the dropdown is now enabled after Monday is selected
+    expect(focusDropdown).not.toBeDisabled();
+  });
+
+  test("exercise dropdown and state/end times are disabled until a day is selected", () => {
+    render(<BuildYourOwn />);
+
+    const day = daysOfWeek[0]; // select day to be Monday
+    //retrieve the exercise dropdown for Monday
+    const exerciseDropdown = screen.getByTestId(`${day}-exercise-dropdown`);
+    //retrieve start and end times for Monday
+    const startTimeInput = screen.getByTestId(`${day}-start-time`);
+    const endTimeInput = screen.getByTestId(`${day}-end-time`);
+
+    // make sure exercise dropdown and time inputs are disabled before day selection
+    expect(exerciseDropdown).toBeDisabled();
+    expect(startTimeInput).toBeDisabled();
+    expect(endTimeInput).toBeDisabled();
+
+    // select the checkbox for Monday
+    const dayCheckbox = screen.getByTestId(`${day}-checkbox`);
+    fireEvent.click(dayCheckbox);
+    //retrieve Monday's focus dropdown
+    const focusDropdown = screen.getByLabelText(`${day} Focus:`);
+    // set the focus category to the first category (cardio)
+    const focus = Object.keys(recommendedExercises)[0];
+
+    // set the focus category to be cardio
+    fireEvent.change(focusDropdown, { target: { value: focus } });
+
+    // make sure exercise dropdown and time inputs are no longer disabled after day and focus selection
+    expect(exerciseDropdown).not.toBeDisabled();
+    expect(startTimeInput).not.toBeDisabled();
+    expect(endTimeInput).not.toBeDisabled();
+  });
 });
 
 describe("Sidebar Tests", () => {
@@ -106,5 +276,47 @@ describe("Sidebar Tests", () => {
     // Should now be able to see the "Log Out" option
     const logOutButton = screen.getByText("Log Out");
     expect(logOutButton).toBeInTheDocument();
+  });
+});
+
+describe("WorkoutCalendar Tests", () => {
+  test("WorkoutCalendar renders title and button as expected", () => {
+    render(<WorkoutCalendar />);
+    const title = "Workout Calendar"
+  
+    // title displays as expected 
+    expect(screen.getByText(title)).toBeInTheDocument();
+  
+    // ensure export button is rendered on the screen
+    const exportButton = screen.getByText("Export to Google Calendar");
+    expect(exportButton).toBeInTheDocument();
+  });
+
+  test("WorkoutCalendar renders the events in the dummy schedule as expected", () => {
+    render(<WorkoutCalendar />);
+
+    // make sure the event titles in the dummy schedule are displayed in the calendar
+    dummySchedule.forEach((workout) => {
+      expect(screen.getByText(workout.title)).toBeInTheDocument();
+    });
+  });
+
+  test("ensure that the alert message shows when an event is clicked", () => {
+    render(<WorkoutCalendar />);
+
+    window.alert = jest.fn();
+
+    // get the title, start, and end time for the first event in dummy schedule
+    const eventTitle = dummySchedule[0].title; 
+    const eventStart = dummySchedule[0].start; 
+    const eventEnd = dummySchedule[0].end; 
+
+    // click on the event
+    fireEvent.click(screen.getByText(eventTitle));
+
+    //ensure that the alert was called with the expected details for that event
+    expect(window.alert).toHaveBeenCalledWith(
+      `Event: ${eventTitle}\nStart: ${new Date(eventStart).toString()}\nEnd: ${new Date(eventEnd).toString()}`
+    );
   });
 });

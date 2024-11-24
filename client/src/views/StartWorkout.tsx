@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { InputField } from "../components/InputField";
-import { WorkoutPlan } from "../types/types";
+import ProgressBar from "@ramonak/react-progress-bar";
+import { WorkoutPlan, Goal } from "../types/types";
 import {
   dummyLastWorkout,
   dummyWorkoutPlans,
@@ -19,27 +20,17 @@ export const StartWorkout = () => {
 
   const [lastWorkout, setLastWorkout] = useState(dummyLastWorkout);
 
-  // Get current time
-  const currentTime = new Date();
-  // const day = currentTime.getDay();
+  // Get current time (disregard hours/minutes/seconds)
+  let currentTime = new Date();
+  currentTime = new Date(
+    currentTime.getFullYear(),
+    currentTime.getMonth(),
+    currentTime.getDate()
+  );
+  // Dummy time for testing
+  // currentTime = new Date(2024, 11 - 1, 23);
 
-  // Dummy time
-  const day = 2;
-
-  const daysMissed = currentTime.getDate() - lastWorkout[1];
-  let streakStatus = "unbroken";
-  // If the user misses more than a day of working out, break streak
-  if (daysMissed > 1) {
-    streakStatus = "broken";
-  }
-  // If the user misses exactly a day, that means they haven't worked out yet
-  else if (daysMissed === 1) {
-    streakStatus = "pending";
-  }
-  // If the user misses no days, they already worked out
-  else if (daysMissed === 0) {
-    streakStatus = "unbroken";
-  }
+  const day = currentTime.getDay();
 
   // Get today's workout
   let workoutPlan: WorkoutPlan = {
@@ -63,13 +54,53 @@ export const StartWorkout = () => {
   if (dummyWorkoutPlans.length) {
     for (let i = 1; i < 7; i++) {
       const findNextPlan = dummyWorkoutPlans.filter(
-        (e) => e["day"] === (i + day) % 7
+        (e) => e["day"] === (day + i) % 7
       )[0];
       if (findNextPlan) {
         nextWorkoutPlan = findNextPlan;
         break;
       }
     }
+  }
+  // Determine previous workout day
+  let lastWorkoutDay = day;
+  if (dummyWorkoutPlans.length) {
+    for (let i = 1; i < 7; i++) {
+      const findPrevPlan = dummyWorkoutPlans.filter(
+        // Handles negative modulo
+        (e) => e["day"] === (((day - i) % 7) + 7) % 7
+      )[0];
+      if (findPrevPlan) {
+        lastWorkoutDay = (((day - i) % 7) + 7) % 7;
+        break;
+      }
+    }
+  }
+
+  const lastWorkoutDate = new Date(
+    lastWorkout[2],
+    lastWorkout[0] - 1, // monthIndex maps 0-11 to January - December
+    lastWorkout[1]
+  );
+  // Using the previous workout day, calculate Date object
+  let expectedLastWorkoutDate = new Date(currentTime);
+  for (let i = 1; i < 8; i++) {
+    const findLastDate = new Date(
+      expectedLastWorkoutDate.getTime() - i * 24 * 60 * 60 * 1000
+    );
+    if (findLastDate.getDay() === lastWorkoutDay) {
+      expectedLastWorkoutDate = findLastDate;
+      break;
+    }
+  }
+  let streakStatus = "pending";
+  // If the user has a workout plan today and has worked out, streak is unbroken
+  if (workoutPlan && lastWorkoutDate.getTime() === currentTime.getTime()) {
+    streakStatus = "unbroken";
+  }
+  // If the last time the user worked out is earlier than the expectedLastWorkoutDate, they have broken their streak
+  else if (lastWorkoutDate.getTime() < expectedLastWorkoutDate.getTime()) {
+    streakStatus = "broken";
   }
 
   // Display different information based on the streak status
@@ -89,10 +120,25 @@ export const StartWorkout = () => {
         </div>
       );
     if (streakStatus === "broken") {
+      // BACKEND: Set streak value to 0
       return (
-        <div>
+        <div className="exercise-container">
           <p className="workoutIndicator-title mb-0">You broke your streak!</p>
           <p className="fs-3">New streak 🔥: 0</p>
+          {workoutPlan ? (
+            <div
+              onClick={() =>
+                setLastWorkout([
+                  expectedLastWorkoutDate.getMonth() + 1, // monthIndex maps 0-11 to January - December, so readjust by adding 1
+                  expectedLastWorkoutDate.getDate(),
+                  expectedLastWorkoutDate.getFullYear(),
+                ])
+              }
+              className="btn btn-primary fs-3 exercise-button"
+            >
+              Continue to Today's Exercise
+            </div>
+          ) : null}
         </div>
       );
     } else if (streakStatus === "pending" && workoutPlan) {
@@ -103,6 +149,7 @@ export const StartWorkout = () => {
           workoutClickHandler={handleExerciseNumClick}
         />
       );
+      // If streak is unbroken, OR if streak is pending but there is no workout today
     } else {
       return (
         <div>
@@ -116,6 +163,14 @@ export const StartWorkout = () => {
       );
     }
   };
+
+  // Progress and goals will be passed to database after exercise completion
+  let progress = dummyExerciseGoals.map((e) => ({
+    id: e.id,
+    progressValue: 0,
+  }));
+
+  let goals: Goal[] = dummyExerciseGoals;
 
   // Display workout and goal setting information
   const Workout = (props: {
@@ -147,11 +202,28 @@ export const StartWorkout = () => {
           <p className="fs-4 mb-0">Type: {eType}</p>
           <p className="fs-4 mb-0">Muscle Group: {eMuscle}</p>
           <p className="fs-4 mb-5">Equipment: {eEquipment}</p>
+          <p className="fs-2 exercise-instructions mb-0">Instructions:</p>
           <p className="fs-3 exercise-instructions mb-5">
-            Instructions: {exercise.instructions}
+            {exercise.instructions}
           </p>
+          <a
+            href={`https://www.google.com/search?q=${exercise.name} exercise instructions`}
+            target="_blank" //opens link in new tab
+            rel="noopener noreferrer"
+            className="exercise-link"
+          >
+            Learn more about {exercise.name}
+          </a>
           <div
-            onClick={() => props.workoutClickHandler(props.exerciseNum + 1)}
+            onClick={() => {
+              const view = document.getElementById("App-view");
+              if (view) {
+                view.scrollTo({
+                  top: 0,
+                });
+              }
+              props.workoutClickHandler(props.exerciseNum + 1);
+            }}
             className="btn btn-primary fs-3 exercise-button"
           >
             {props.exerciseNum < props.numExercises - 1
@@ -164,60 +236,167 @@ export const StartWorkout = () => {
     // Workout is finished
     // BACKEND: Increment streak to database
     else {
-      let goals = dummyExerciseGoals.map((e) => ({
-        id: e.id,
-        currentValue: 0,
-      }));
-
-      const handleGoalChange = (id: number, value: number) => {
+      const handleProgressChange = (id: number, value: number) => {
         if (isNaN(value)) value = 0;
-        goals = goals.map((e) => {
-          if (id === e.id) return { id: e.id, currentValue: value };
-          else return { id: e.id, currentValue: e.currentValue };
+        progress = progress.map((e) => {
+          if (id === e.id) return { id: e.id, progressValue: value };
+          else return { id: e.id, progressValue: e.progressValue };
         });
       };
 
-      return (
-        <div className="exercise-container">
-          <p className="workoutIndicator-title mb-0">Workout finished!</p>
-          <p className="fs-4 mb-5">
-            New streak 🔥: {dummyProfileData.streak + 1}
-          </p>
-          <p className="fs-2 mb-5">Progress Tracker:</p>
-          <form
-            className="exercise-form"
-            onSubmit={(e) => {
-              // BACKEND INTEGRATION NEEDED
-              // Update backend with last workout time
-              // Add "goals" variable to database
-              setLastWorkout([
-                currentTime.getMonth(),
-                currentTime.getDate(),
-                currentTime.getFullYear(),
-              ]);
-            }}
-          >
-            {dummyExerciseGoals.map((e) => (
-              <InputField
-                key={e.id}
-                id={e.id}
-                goalString={e.goalString}
-                targetValue={e.targetValue}
-                inputChangeHandler={handleGoalChange}
-              />
-            ))}
-            <button
-              type="submit"
-              className="btn btn-primary fs-3 exercise-button"
+      const handleGoalChange = (id: number, value: number) => {
+        if (isNaN(value)) value = 0;
+        goals = goals.map((e: Goal) => {
+          if (id === e.id)
+            return { id: e.id, goalString: e.goalString, targetValue: value };
+          else return { ...e };
+        });
+      };
+
+      // Track goals
+      if (props.exerciseNum === props.numExercises) {
+        return (
+          <div className="exercise-container">
+            <p className="workoutIndicator-title mb-0">Workout finished!</p>
+            <p className="fs-4 mb-5">
+              New streak 🔥: {dummyProfileData.streak + 1}
+            </p>
+            <p className="fs-2 mb-5">Progress Tracker:</p>
+            <form
+              className="exercise-form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                props.workoutClickHandler(props.exerciseNum + 1);
+              }}
             >
-              Done
-            </button>
-          </form>
-        </div>
-      );
+              {dummyExerciseGoals.map((e) => (
+                <InputField
+                  key={e.id}
+                  id={e.id}
+                  goalString={`${e.goalString}:`}
+                  goalMet={false}
+                  targetValue={e.targetValue}
+                  inputChangeHandler={handleProgressChange}
+                />
+              ))}
+              <button
+                type="submit"
+                className="btn btn-primary fs-3 exercise-button"
+              >
+                Done
+              </button>
+            </form>
+          </div>
+        );
+      }
+      // Display progress and modify goals if they are met
+      else {
+        let isGoalMet = false;
+        dummyExerciseGoals.forEach((e) => {
+          const progressFilter = progress.filter((g) => g.id === e.id)[0];
+          if (progressFilter.progressValue >= e.targetValue) {
+            isGoalMet = true;
+          }
+        });
+
+        return (
+          <div className="exercise-container">
+            <p className="workoutIndicator-title mb-0">Workout finished!</p>
+            <p className="fs-4 mb-5">
+              New streak 🔥: {dummyProfileData.streak + 1}
+            </p>
+            <p className="fs-2 mb-5">
+              {isGoalMet
+                ? "Progress Tracker (Goal(s) met! Set new goals?)"
+                : "Progress Tracker:"}
+            </p>
+            <form
+              onSubmit={(e) => {
+                // BACKEND INTEGRATION NEEDED
+                // Update backend with last workout time
+                // Add "progress" variable as a new workout entry in database
+                // Replace user goals with "goals" in database
+                setLastWorkout([
+                  currentTime.getMonth() + 1, // monthIndex maps 0-11 to January - December, so readjust by adding 1
+                  currentTime.getDate(),
+                  currentTime.getFullYear(),
+                ]);
+              }}
+              className="exercise-form"
+            >
+              {dummyExerciseGoals.map((e) => {
+                const progressFilter = progress.filter((g) => g.id === e.id)[0];
+                const percentage = Math.min(
+                  Math.floor(
+                    (progressFilter.progressValue / e.targetValue) * 100
+                  ),
+                  100
+                );
+
+                return (
+                  <div className="tracker-container" key={e.id}>
+                    {percentage !== 100 ? (
+                      <div className="progress-container mb-3">
+                        <p className="text-start fs-3 mb-0 p-1">
+                          {e.goalString} ({percentage}%):
+                        </p>
+                        <ProgressBar
+                          className="progress-bar"
+                          bgColor="#0d6efd"
+                          baseBgColor="#b3b4bd"
+                          completed={percentage}
+                          isLabelVisible={false}
+                          animateOnRender={true}
+                        />
+                      </div>
+                    ) : (
+                      <InputField
+                        id={e.id}
+                        goalString={`${e.goalString} (100%):`}
+                        goalMet={true}
+                        targetValue={e.targetValue}
+                        inputChangeHandler={handleGoalChange}
+                      />
+                    )}
+                  </div>
+
+                  // <div key={e.id} className="progress-container mb-3">
+                  //   <p className="text-start fs-3 mb-0 p-1">
+                  //     {e.goalString} ({percentage}%):
+                  //   </p>
+                  //   {percentage !== 100 ? (
+                  //     <ProgressBar
+                  //       className="progress-bar"
+                  //       key={e.id}
+                  //       bgColor="#0d6efd"
+                  //       baseBgColor="#b3b4bd"
+                  //       completed={percentage}
+                  //       isLabelVisible={false}
+                  //       animateOnRender={true}
+                  //     />
+                  //   ) : (
+                  //     <InputField
+                  //       id={e.id}
+                  //       goalString={`${e.goalString}:`}
+                  //       targetValue={e.targetValue}
+                  //       inputChangeHandler={handleGoalChange}
+                  //     />
+                  //   )}
+                  // </div>
+                );
+              })}
+              <button
+                type="submit"
+                className="btn btn-primary fs-3 exercise-button"
+              >
+                Done
+              </button>
+            </form>
+          </div>
+        );
+      }
     }
   };
-
   return (
     <div>
       <h1 className="title-container">{titleString}</h1>
