@@ -172,6 +172,7 @@
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  width: auto;
 }
 
 .build-your-own button:active {
