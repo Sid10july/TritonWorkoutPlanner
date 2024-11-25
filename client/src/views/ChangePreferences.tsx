@@ -82,9 +82,9 @@
 // };
 
 // export default ChangePreferences;
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './ChangePreferences.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./ChangePreferences.css";
 
 interface Goal {
   _id: string; // Match the backend MongoDB's ObjectId
@@ -98,30 +98,34 @@ interface ChangePreferencesProps {
 
 const ChangePreferences: React.FC<ChangePreferencesProps> = ({ userId }) => {
   const [goals, setGoals] = useState<Goal[]>([]); // State to hold the list of goals
-  const [newGoal, setNewGoal] = useState(''); // State for the new goal's name
-  const [newValue, setNewValue] = useState<number | ''>(''); // State for the new goal's value
+  const [newGoal, setNewGoal] = useState(""); // State for the new goal's name
+  const [newValue, setNewValue] = useState<number | "">(""); // State for the new goal's value
 
   // Fetch goals from the backend when the component mounts
   useEffect(() => {
     axios
       .get(`/api/goals/${userId}`)
       .then((response) => setGoals(response.data))
-      .catch((error) => console.error('Error fetching goals:', error));
+      .catch((error) => console.error("Error fetching goals:", error));
   }, [userId]);
 
   // Function to add a new goal
   const addGoal = () => {
-    if (!newGoal || newValue === '') return; // Ensure input is valid
-    const newGoalData = { _id: Date.now().toString(), goal: newGoal, value: Number(newValue) }; // Temporary UI goal
+    if (!newGoal || newValue === "") return; // Ensure input is valid
+    const newGoalData = {
+      _id: Date.now().toString(),
+      goal: newGoal,
+      value: Number(newValue),
+    }; // Temporary UI goal
     setGoals((prevGoals) => [...prevGoals, newGoalData]); // Add new goal to the UI
-    setNewGoal(''); // Clear input fields
-    setNewValue('');
+    setNewGoal(""); // Clear input fields
+    setNewValue("");
 
     // Send the new goal to the backend
     axios
       .post(`/api/goals/${userId}`, { goal: newGoal, value: Number(newValue) })
       .then((response) => setGoals(response.data)) // Update UI with the response from the backend
-      .catch((error) => console.error('Error adding goal:', error));
+      .catch((error) => console.error("Error adding goal:", error));
   };
 
   // Function to delete a goal
@@ -131,7 +135,7 @@ const ChangePreferences: React.FC<ChangePreferencesProps> = ({ userId }) => {
     axios
       .delete(`/api/goals/${userId}/${goalId}`)
       .then((response) => setGoals(response.data)) // Update UI with the response from the backend
-      .catch((error) => console.error('Error deleting goal:', error));
+      .catch((error) => console.error("Error deleting goal:", error));
   };
 
   return (
@@ -182,7 +186,7 @@ const ChangePreferences: React.FC<ChangePreferencesProps> = ({ userId }) => {
             placeholder="Value"
             value={newValue}
             onChange={(e) =>
-              setNewValue(e.target.value ? Number(e.target.value) : '')
+              setNewValue(e.target.value ? Number(e.target.value) : "")
             }
           />
           <button className="add-button" onClick={addGoal}>

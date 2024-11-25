@@ -238,7 +238,7 @@ const App: React.FC = () => {
               </Layout>
             }
           />
-            <Route
+          <Route
             path="/workout-calendar"
             element={
               <Layout setIsLoggedIn={setIsLoggedIn}>
