@@ -36,12 +36,12 @@ export const dummyExercisesList = [
 ];
 
 // Last time user worked out
-export const dummyLastWorkout = [11, 16, 2024];
+export const dummyLastWorkout = [11, 24, 2024];
 
 export const dummyWorkoutPlans = [
   {
     // Note: Sunday - Saturday is represented as 0 - 6
-    day: 6,
+    day: 0,
     time: "3:30",
     am: false,
     exercises: [
@@ -66,7 +66,7 @@ export const dummyWorkoutPlans = [
     ],
   },
   {
-    day: 2,
+    day: 1,
     time: "7:30",
     am: true,
     exercises: [
@@ -134,7 +134,89 @@ export const dummyProfileData = {
 };
 
 export const dummyExerciseGoals = [
-  { id: 0, goalString: "Weight", targetValue: 150 },
+  { id: 0, goalString: "One rep max squat", targetValue: 150 },
   { id: 1, goalString: "One rep max bench", targetValue: 210 },
   { id: 2, goalString: "Pull-ups", targetValue: 25 },
+];
+
+export const dummyWorkoutData = [
+  {
+    date: "2024-11-22",
+    goals: [
+      { id: 0, progressValue: 125 },
+      { id: 1, progressValue: 190 },
+      { id: 2, progressValue: 12 },
+    ],
+  },
+  {
+    date: "2024-10-19",
+    goals: [
+      { id: 0, progressValue: 115 },
+      { id: 1, progressValue: 170 },
+      { id: 2, progressValue: 17 },
+    ],
+  },
+  {
+    date: "2024-10-11",
+    goals: [
+      { id: 0, progressValue: 135 },
+      { id: 1, progressValue: 200 },
+      { id: 2, progressValue: 14 },
+    ],
+  },
+];
+
+export const dummySchedule = [
+  {
+    title: "Morning Cardio",
+    start: "2024-11-20T07:00:00",
+    end: "2024-11-20T08:00:00",
+  },
+  {
+    title: "Strength Training",
+    start: "2024-11-21T17:00:00",
+    end: "2024-11-21T18:30:00",
+  },
+  {
+    title: "Yoga Session",
+    start: "2024-11-22T06:30:00",
+    end: "2024-11-22T07:30:00",
+  },
+];
+
+export const SERVER_URL = "http://localhost:8080";
+
+export const muscles: string[] = [
+  "abdominals",
+  "abductors",
+  "adductors",
+  "biceps",
+  "calves",
+  "chest",
+  "forearms",
+  "glutes",
+  "hamstrings",
+  "lats",
+  "lower_back",
+  "middle_back",
+  "neck",
+  "quadriceps",
+  "traps",
+  "triceps",
+];
+
+export const exerciesTypes: string[] = [
+  "cardio",
+  "olympic_weightlifting",
+  "plyometrics",
+  "powerlifting",
+  "strength",
+  "stretching",
+  "strongman",
+];
+
+export const difficultyLevels: string[] = [
+  "beginner",
+  "intermediate",
+  "expert",
 ];

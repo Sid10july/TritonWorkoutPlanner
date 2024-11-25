@@ -123,6 +123,9 @@ import { WorkoutPlanner } from "./views/WorkoutPlanner";
 import { ExerciseLibrary } from "./views/ExerciseLibrary";
 import { BuildYourOwn } from "./views/BuildYourOwn";
 import ChangePreferences from "./views/ChangePreferences";
+import { WorkoutCalendar } from "./views/WorkoutCalender";
+import { TrackProgress } from "./views/TrackProgress";
+import { DayPlanner } from "./views/DayPlanner";
 // Styles
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -212,10 +215,34 @@ const App: React.FC = () => {
             }
           />
           <Route
+            path="/track-progress"
+            element={
+              <Layout setIsLoggedIn={setIsLoggedIn}>
+                <TrackProgress />
+              </Layout>
+            }
+          />
+          <Route
+            path="/build-your-own/:day"
+            element={
+              <Layout setIsLoggedIn={setIsLoggedIn}>
+                <DayPlanner />
+              </Layout>
+            }
+          />
+          <Route
             path="/change-preferences"
             element={
               <Layout setIsLoggedIn={setIsLoggedIn}>
                 <ChangePreferences userId="12345" />
+              </Layout>
+            }
+          />
+            <Route
+            path="/workout-calendar"
+            element={
+              <Layout setIsLoggedIn={setIsLoggedIn}>
+                <WorkoutCalendar />
               </Layout>
             }
           />

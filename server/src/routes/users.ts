@@ -33,7 +33,6 @@
 
 // export default router;
 
-
 // server/src/routes/users.ts
 // import express from 'express';
 // import User from '../models/User';
@@ -51,39 +50,39 @@
 // });
 
 // export default router;
-import express from 'express';
-import User from '../models/User';
+import express from "express";
+import User from "../models/User";
 
 const router = express.Router();
 
 // GET /users/:userId - Retrieve user data
-router.get('/:userId', async (req, res) => {
+router.get("/:userId", async (req, res) => {
   const { userId } = req.params;
   try {
-    const user = await User.findById(userId).select('-password'); // Exclude the password
+    const user = await User.findById(userId).select("-password"); // Exclude the password
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
     res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching user data', error });
+    res.status(500).json({ message: "Error fetching user data", error });
   }
 });
 
 // PATCH /users/:userId/goals - Update user goals
-router.patch('/:userId/goals', async (req, res) => {
+router.patch("/:userId/goals", async (req, res) => {
   const { userId } = req.params;
   const { goals } = req.body; // Expect an array of goals
   try {
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
     user.goals = goals; // Overwrite the current goals
     await user.save();
     res.status(200).json(user.goals);
   } catch (error) {
-    res.status(500).json({ message: 'Error updating goals', error });
+    res.status(500).json({ message: "Error updating goals", error });
   }
 });
 

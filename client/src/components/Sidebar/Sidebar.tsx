@@ -393,6 +393,7 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { SidebarProps } from "../../types/types"; // Ensure SidebarProps includes setIsLoggedIn
+import { Link } from "react-router-dom";
 import { SidebarOption } from "./SidebarOption";
 import { dummyProfileData } from "../../constants/constants";
 import "./Sidebar.css";
@@ -403,6 +404,7 @@ const optionStrings = [
   { str: "Exercise Library", path: "/exercise-library" },
   { str: "Track Progress", path: "/track-progress" },
   { str: "Change Preferences", path: "/change-preferences" },
+  { str: "Workout Calendar", path: "/workout-calendar"}
 ];
 
 export const Sidebar = (props: SidebarProps) => {
@@ -442,7 +444,7 @@ export const Sidebar = (props: SidebarProps) => {
             className="sidebar-profile_icon"
           />
           <p className="mb-0">
-            {dummyProfileData.username} (Streak 🔥: {dummyProfileData.streak})
+            {dummyProfileData.username} 🔥: {dummyProfileData.streak}
           </p>
           <img
             src="/arrow_drop_up.png"

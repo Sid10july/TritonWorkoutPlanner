@@ -87,7 +87,7 @@
 
 // export default mongoose.model<IUser>('User', UserSchema);
 
-import mongoose, { Document, Schema, Types } from 'mongoose';
+import mongoose, { Document, Schema, Types } from "mongoose";
 
 export interface IGoal {
   _id?: Types.ObjectId; // Explicit ObjectId
@@ -107,11 +107,14 @@ const GoalSchema: Schema = new Schema<IGoal>({
   value: { type: Number, required: true },
 });
 
-const UserSchema: Schema = new Schema<IUser>({
-  username: { type: String, required: true, unique: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  goals: { type: [GoalSchema], default: [] },
-});
+const UserSchema: Schema = new Schema<IUser>(
+  {
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    goals: { type: [GoalSchema], default: [] },
+  },
+  { timestamps: true }
+);
 
-export default mongoose.model<IUser>('User', UserSchema);
+export default mongoose.model<IUser>("User", UserSchema);
