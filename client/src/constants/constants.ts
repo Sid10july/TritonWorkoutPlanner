@@ -7,12 +7,12 @@ export const dummyExercisesList = [
 ];
 
 // Last time user worked out
-export const dummyLastWorkout = [11, 16, 2024];
+export const dummyLastWorkout = [11, 24, 2024];
 
 export const dummyWorkoutPlans = [
   {
     // Note: Sunday - Saturday is represented as 0 - 6
-    day: 6,
+    day: 0,
     time: "3:30",
     am: false,
     exercises: [
@@ -37,7 +37,7 @@ export const dummyWorkoutPlans = [
     ],
   },
   {
-    day: 2,
+    day: 1,
     time: "7:30",
     am: true,
     exercises: [
@@ -145,22 +145,49 @@ export const dummySchedule = [
   },
   {
     title: "Strength Training",
-    start: "2024-11-21T17:00:00", 
+    start: "2024-11-21T17:00:00",
     end: "2024-11-21T18:30:00",
   },
   {
     title: "Yoga Session",
-    start: "2024-11-22T06:30:00", 
+    start: "2024-11-22T06:30:00",
     end: "2024-11-22T07:30:00",
   },
 ];
 
-export const SERVER_URL = "http://localhost:8080"
+export const SERVER_URL = "http://localhost:8080";
 
-export const muscles: string[] = 
-['abdominals','abductors','adductors','biceps','calves','chest','forearms','glutes','hamstrings',
-    'lats','lower_back','middle_back','neck','quadriceps','traps','triceps'];
+export const muscles: string[] = [
+  "abdominals",
+  "abductors",
+  "adductors",
+  "biceps",
+  "calves",
+  "chest",
+  "forearms",
+  "glutes",
+  "hamstrings",
+  "lats",
+  "lower_back",
+  "middle_back",
+  "neck",
+  "quadriceps",
+  "traps",
+  "triceps",
+];
 
-export const exerciesTypes: string[] = ['cardio','olympic_weightlifting','plyometrics','powerlifting','strength','stretching','strongman'];
+export const exerciesTypes: string[] = [
+  "cardio",
+  "olympic_weightlifting",
+  "plyometrics",
+  "powerlifting",
+  "strength",
+  "stretching",
+  "strongman",
+];
 
-export const difficultyLevels: string[] = ['beginner','intermediate','expert'];
+export const difficultyLevels: string[] = [
+  "beginner",
+  "intermediate",
+  "expert",
+];
