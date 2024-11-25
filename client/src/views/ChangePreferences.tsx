@@ -141,13 +141,11 @@ const ChangePreferences: React.FC<ChangePreferencesProps> = ({ userId }) => {
   return (
     <div className="change-preferences">
       {/* Title Section with Separator */}
-      <div className="title-container">
-        <h1 className="title">Change Preferences</h1>
-      </div>
+      <h1 className="title-container">Change Preferences</h1>
 
       {/* Goals Section */}
-      <div className="goals-container">
-        <h2>My Goals</h2>
+      <div className="content-container">
+        <p className="fs-1 mb-3">My Goals</p>
         <div className="goals-list">
           {goals.map((goal) => (
             <div key={goal._id} className="goal-item">
