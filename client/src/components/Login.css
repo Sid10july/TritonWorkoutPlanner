@@ -1,0 +1,75 @@
+/* General container styling for centering */
+.login-container, .signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #e0e0e0; /* Light gray background */
+    font-family: Arial, sans-serif;
+}
+
+/* Logo styling */
+.logo {
+    width: 100px; /* Adjust size as needed */
+    margin-bottom: 20px;
+}
+
+/* Header styling */
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Form styling */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 300px;
+}
+
+/* Input field styling */
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Button styling */
+button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #4A90E2; /* Triton blue color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #357ABD; /* Darker blue for hover */
+}
+
+/* Link styling */
+p {
+    margin-top: 15px;
+}
+
+p a {
+    color: #4A90E2;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
