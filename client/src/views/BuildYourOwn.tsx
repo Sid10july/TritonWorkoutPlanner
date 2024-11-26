@@ -3,11 +3,20 @@ import { daysOfWeek, recommendedExercises } from "../constants/constants";
 import { Dropdown } from "../components/Dropdown";
 import ExerciseDropdown from "../components/ExerciseDropdown";
 import "./BuildYourOwn.css";
+import { Link } from "react-router-dom";
 
 export const BuildYourOwn = () => {
   // state storing focus category for each day
   const [focusCategory, setFocusCategory] = useState<{ [day: string]: string }>(
-    {}
+    {
+        Monday: "",
+        Tuesday: "",
+        Wednesday: "",
+        Thursday: "",
+        Friday: "",
+        Saturday: "",
+        Sunday: "",
+}
   );
   // stores exercises selected for each day as arrays
   const [weeklyPlan, setWeeklyPlan] = useState<{ [day: string]: string[] }>({});
@@ -27,12 +36,32 @@ export const BuildYourOwn = () => {
   });
 
   // handles toggling the state of the day checkbox
+  // IMPORTANT: THERE ARE TWO IMPLEMENTATIONS OF WORKOUT CUSTOMIZATION. THE ONE USING THE API IS THE ONE CURRENTLY ACTIVE. THESE FUNCTIONS SHOULD BE MERGED
+  // const handleDaySelection = (day: string) => {
+  //   setSelectedDays((prevDays) => ({
+  //     ...prevDays,
+  //     //selecting a day is marked as true, deselecting marks it as false
+  //     [day]: !prevDays[day],
+  //   }));
+  // };
+  //   const handleDaySelection = (day: string) => {
+  //     setSelectedDays((prevDays) => ({
+  //       ...prevDays,
+  //       //selecting a day is marked as true, deselecting marks it as false
+  //       [day]: !prevDays[day],
+  //     }));
+  //   };
+
+  /**
+   * Route to a new page where the user can select workout plans from the backend
+   * @param day - day of the week that is selected
+   */
   const handleDaySelection = (day: string) => {
     setSelectedDays((prevDays) => ({
-      ...prevDays,
-      //selecting a day is marked as true, deselecting marks it as false
-      [day]: !prevDays[day],
-    }));
+        ...prevDays,
+        //selecting a day is marked as true, deselecting marks it as false
+        [day]: !prevDays[day],
+      }));
   };
 
   // updates focus category based on selection using Dropdown component
@@ -117,15 +146,21 @@ export const BuildYourOwn = () => {
                   className="day-selection"
                   data-testid={`${day}-plan`}
                 >
-                  <label>
-                    <input
-                      type="checkbox"
-                      data-testid={`${day}-checkbox`}
-                      checked={selectedDays[day]}
-                      onChange={() => handleDaySelection(day)}
-                    />
-                    {day}
-                  </label>
+                    <Link 
+                        to={`/build-your-own/${day}`}
+                        key={day}
+                    >
+                        <label>Search Workouts</label>
+                    </Link>
+                        <label>
+                            <input
+                            type="checkbox"
+                            data-testid={`${day}-checkbox`}
+                            checked={selectedDays[day]}
+                            onChange={() => handleDaySelection(day)}
+                            />
+                            {day}
+                        </label>
                   <div className="workout-details">
                     <div className="details-section">
                       <label htmlFor={`${day}-focus`}>{day} Focus:</label>

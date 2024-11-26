@@ -9,7 +9,11 @@ import { daysOfWeek, recommendedExercises, dummySchedule } from "./constants/con
 
 describe("Customize Workout Plan Tests", () => {
   test("all days initialized as unchecked", () => {
-    render(<BuildYourOwn />);
+    render(
+    <BrowserRouter>
+      <BuildYourOwn />
+    </BrowserRouter>
+  );
 
     daysOfWeek.forEach((day) => {
       //iterate through days of the week
@@ -20,7 +24,11 @@ describe("Customize Workout Plan Tests", () => {
   });
 
   test("Checking a day sets it as checked, unchecking a day sets it as unchecked", () => {
-    render(<BuildYourOwn />);
+    render(
+    <BrowserRouter>
+      <BuildYourOwn />
+    </BrowserRouter>
+  );
     const fridayCheckbox = screen.getByLabelText("Friday");
 
     //should be initially unchecked
@@ -40,7 +48,11 @@ describe("Customize Workout Plan Tests", () => {
   });
 
   test("Setting start and end time for a day works as intended", () => {
-    render(<BuildYourOwn />);
+    render(
+    <BrowserRouter>
+      <BuildYourOwn />
+    </BrowserRouter>
+  );
 
     const day = daysOfWeek[0]; //day is set to Monday
 
@@ -61,7 +73,11 @@ describe("Customize Workout Plan Tests", () => {
   });
 
   test("Selecting focus category for a day updates values correctly", () => {
-    render(<BuildYourOwn />);
+    render(
+    <BrowserRouter>
+      <BuildYourOwn />
+    </BrowserRouter>
+  );
 
     const day = daysOfWeek[0]; //day is set to Monday
     const focuses = Object.keys(recommendedExercises); //get list of all focuses
@@ -76,7 +92,11 @@ describe("Customize Workout Plan Tests", () => {
   });
 
   test("selected exercises display properly", () => {
-    render(<BuildYourOwn />); //render component
+    render(
+    <BrowserRouter>
+      <BuildYourOwn />
+    </BrowserRouter>
+  ); //render component
 
     const day = daysOfWeek[0]; // day set to Monday
     //retrieve Monday's focus category dropdown
@@ -97,7 +117,11 @@ describe("Customize Workout Plan Tests", () => {
   });
 
   test("removing an exercise from the selected exercises updates user's list of selected exercises", () => {
-    render(<BuildYourOwn />); //render componenet
+    render(
+    <BrowserRouter>
+      <BuildYourOwn />
+    </BrowserRouter>
+  ); //render componenet
 
     const day = daysOfWeek[0]; // set day to be Monday
     //retrieve Monday's focus category dropdown
@@ -131,7 +155,11 @@ describe("Customize Workout Plan Tests", () => {
   });
 
   test("reordering the exercises works as intended", ()=> {
-    render(<BuildYourOwn />); //render component
+    render(
+    <BrowserRouter>
+      <BuildYourOwn />
+    </BrowserRouter>
+  ); //render component
 
     const day = daysOfWeek[0]; // set the day to be Monday
     //select day first
@@ -166,7 +194,11 @@ describe("Customize Workout Plan Tests", () => {
   });
 
   test("amount of reps inputted by the user is updated and displayed as expected", () => {
-    render(<BuildYourOwn />); 
+    render(
+    <BrowserRouter>
+      <BuildYourOwn />
+    </BrowserRouter>
+  ); 
 
     const day = daysOfWeek[0]; // set the day to be Monday
     //select day first
@@ -195,7 +227,11 @@ describe("Customize Workout Plan Tests", () => {
   });
 
   test("focus dropdown should be disabled until the day is selected", () => {
-    render(<BuildYourOwn />);
+    render(
+    <BrowserRouter>
+      <BuildYourOwn />
+    </BrowserRouter>
+  );
 
     const day = daysOfWeek[0]; // select day to be monday
     //retrieve Monday's focus dropdown
@@ -213,7 +249,11 @@ describe("Customize Workout Plan Tests", () => {
   });
 
   test("exercise dropdown and state/end times are disabled until a day is selected", () => {
-    render(<BuildYourOwn />);
+    render(
+    <BrowserRouter>
+      <BuildYourOwn />
+    </BrowserRouter>
+  );
 
     const day = daysOfWeek[0]; // select day to be Monday
     //retrieve the exercise dropdown for Monday
