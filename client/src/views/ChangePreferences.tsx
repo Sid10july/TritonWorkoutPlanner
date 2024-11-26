@@ -97,6 +97,9 @@ interface ChangePreferencesProps {
 }
 
 const ChangePreferences: React.FC<ChangePreferencesProps> = ({ userId }) => {
+  // Use axios baseURL to define the port
+  axios.defaults.baseURL = `http://localhost:${process.env.PORT || 8080}`;
+
   const [goals, setGoals] = useState<Goal[]>([]); // State to hold the list of goals
   const [newGoal, setNewGoal] = useState(""); // State for the new goal's name
   const [newValue, setNewValue] = useState<number | "">(""); // State for the new goal's value

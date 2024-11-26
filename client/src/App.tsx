@@ -1,4 +1,3 @@
-
 // // export default App;
 // import React, { useState } from "react";
 // import { Routes, Route, Navigate } from "react-router-dom";
@@ -158,9 +157,11 @@ const Layout = ({
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Authentication state
+  const [userId, setUserId] = useState("0"); // User ID
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = (id: string) => {
     setIsLoggedIn(true);
+    setUserId(id);
   };
 
   return (
@@ -234,7 +235,7 @@ const App: React.FC = () => {
             path="/change-preferences"
             element={
               <Layout setIsLoggedIn={setIsLoggedIn}>
-                <ChangePreferences userId="12345" />
+                <ChangePreferences userId={userId} />
               </Layout>
             }
           />
