@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import { InputField } from "../components/InputField";
 import ProgressBar from "@ramonak/react-progress-bar";
 import { WorkoutPlan, Goal } from "../types/types";
@@ -11,7 +12,38 @@ import {
 } from "../constants/constants";
 import "./StartWorkout.css";
 
-export const StartWorkout = () => {
+export const StartWorkout = (props: { userId: string }) => {
+  // Use axios baseURL to define the port
+  axios.defaults.baseURL = `http://localhost:${process.env.PORT || 8080}`;
+
+  const [goals, setGoals] = useState(dummyExerciseGoals);
+  let progress = useRef([] as { _id: string; value: number }[]);
+
+  // Fetch goals from the backend when the component mounts
+  useEffect(() => {
+    axios
+      .get(`/api/goals/${props.userId}`)
+      .then((response) => {
+        setGoals(response.data);
+        // Set progress template
+        progress.current = response.data.map(
+          (e: { _id: string; goal: string; value: number }) => ({
+            _id: e._id,
+            value: 0,
+          })
+        );
+      })
+      .catch((error) => console.error("Error fetching goals:", error));
+  }, [props.userId]);
+
+  // Function for updating goals
+  const updateGoal = (goalId: string, value: number) => {
+    // Send put request to the backend
+    axios
+      .put(`/api/goals/${props.userId}/${goalId}`, { value: value })
+      .catch((error) => console.error("Error updating goals:", error));
+  };
+
   // FOR BACKEND INTEGRATION
   // Use database to import dummyLastWorkout, dummyWorkoutPlans, dummyProfileData, dummyExerciseGoals
   // Increment and reset streak in the database
@@ -164,14 +196,6 @@ export const StartWorkout = () => {
     }
   };
 
-  // Progress and goals will be passed to database after exercise completion
-  let progress = dummyExerciseGoals.map((e) => ({
-    id: e.id,
-    progressValue: 0,
-  }));
-
-  let goals: Goal[] = dummyExerciseGoals;
-
   // Display workout and goal setting information
   const Workout = (props: {
     exerciseNum: number;
@@ -236,25 +260,26 @@ export const StartWorkout = () => {
     // Workout is finished
     // BACKEND: Increment streak to database
     else {
-      const handleProgressChange = (id: number, value: number) => {
+      let newGoals: any[];
+
+      const handleProgressChange = (id: string, value: number) => {
         if (isNaN(value)) value = 0;
-        progress = progress.map((e) => {
-          if (id === e.id) return { id: e.id, progressValue: value };
-          else return { id: e.id, progressValue: e.progressValue };
+        progress.current = progress.current.map((e) => {
+          if (id === e._id) return { _id: e._id, value: value };
+          else return { _id: e._id, value: e.value };
         });
       };
 
-      const handleGoalChange = (id: number, value: number) => {
+      const handleGoalChange = (id: string, value: number) => {
         if (isNaN(value)) value = 0;
-        goals = goals.map((e: Goal) => {
-          if (id === e.id)
-            return { id: e.id, goalString: e.goalString, targetValue: value };
+        newGoals = goals.map((e: Goal) => {
+          if (id === e._id) return { _id: id, goal: e.goal, value: value };
           else return { ...e };
         });
       };
 
       // Track goals
-      if (props.exerciseNum === props.numExercises) {
+      if (props.exerciseNum === props.numExercises && goals.length) {
         return (
           <div className="exercise-container">
             <p className="workoutIndicator-title mb-0">Workout finished!</p>
@@ -269,13 +294,13 @@ export const StartWorkout = () => {
                 props.workoutClickHandler(props.exerciseNum + 1);
               }}
             >
-              {dummyExerciseGoals.map((e) => (
+              {goals.map((e) => (
                 <InputField
-                  key={e.id}
-                  id={e.id}
-                  goalString={`${e.goalString}:`}
+                  key={e._id}
+                  id={e._id}
+                  goalString={`${e.goal}:`}
                   goalMet={false}
-                  targetValue={e.targetValue}
+                  targetValue={e.value}
                   inputChangeHandler={handleProgressChange}
                 />
               ))}
@@ -292,12 +317,16 @@ export const StartWorkout = () => {
       // Display progress and modify goals if they are met
       else {
         let isGoalMet = false;
-        dummyExerciseGoals.forEach((e) => {
-          const progressFilter = progress.filter((g) => g.id === e.id)[0];
-          if (progressFilter.progressValue >= e.targetValue) {
+        goals.forEach((e) => {
+          const progressFilter = progress.current.filter(
+            (g) => g._id === e._id
+          )[0];
+          if (progressFilter.value >= e.value) {
             isGoalMet = true;
           }
         });
+        let noGoalsMessage = false;
+        if (!goals.length) noGoalsMessage = true;
 
         return (
           <div className="exercise-container">
@@ -310,6 +339,12 @@ export const StartWorkout = () => {
                 ? "Progress Tracker (Goal(s) met! Set new goals?)"
                 : "Progress Tracker:"}
             </p>
+            {noGoalsMessage ? (
+              <p className="fs-3">
+                No goals. Go to Change Preferences to set goals!
+              </p>
+            ) : null}
+
             <form
               onSubmit={(e) => {
                 // BACKEND INTEGRATION NEEDED
@@ -321,24 +356,29 @@ export const StartWorkout = () => {
                   currentTime.getDate(),
                   currentTime.getFullYear(),
                 ]);
+                if (newGoals) {
+                  newGoals.forEach((g) => {
+                    updateGoal(g._id, g.value);
+                  });
+                }
               }}
               className="exercise-form"
             >
-              {dummyExerciseGoals.map((e) => {
-                const progressFilter = progress.filter((g) => g.id === e.id)[0];
+              {goals.map((e) => {
+                const progressFilter = progress.current.filter(
+                  (g) => g._id === e._id
+                )[0];
                 const percentage = Math.min(
-                  Math.floor(
-                    (progressFilter.progressValue / e.targetValue) * 100
-                  ),
+                  Math.floor((progressFilter.value / e.value) * 100),
                   100
                 );
 
                 return (
-                  <div className="tracker-container" key={e.id}>
+                  <div className="tracker-container" key={e._id}>
                     {percentage !== 100 ? (
                       <div className="progress-container mb-3">
                         <p className="text-start fs-3 mb-0 p-1">
-                          {e.goalString} ({percentage}%):
+                          {e.goal} ({percentage}%):
                         </p>
                         <ProgressBar
                           className="progress-bar"
@@ -351,38 +391,14 @@ export const StartWorkout = () => {
                       </div>
                     ) : (
                       <InputField
-                        id={e.id}
-                        goalString={`${e.goalString} (100%):`}
+                        id={e._id}
+                        goalString={`${e.goal} (100%):`}
                         goalMet={true}
-                        targetValue={e.targetValue}
+                        targetValue={e.value}
                         inputChangeHandler={handleGoalChange}
                       />
                     )}
                   </div>
-
-                  // <div key={e.id} className="progress-container mb-3">
-                  //   <p className="text-start fs-3 mb-0 p-1">
-                  //     {e.goalString} ({percentage}%):
-                  //   </p>
-                  //   {percentage !== 100 ? (
-                  //     <ProgressBar
-                  //       className="progress-bar"
-                  //       key={e.id}
-                  //       bgColor="#0d6efd"
-                  //       baseBgColor="#b3b4bd"
-                  //       completed={percentage}
-                  //       isLabelVisible={false}
-                  //       animateOnRender={true}
-                  //     />
-                  //   ) : (
-                  //     <InputField
-                  //       id={e.id}
-                  //       goalString={`${e.goalString}:`}
-                  //       targetValue={e.targetValue}
-                  //       inputChangeHandler={handleGoalChange}
-                  //     />
-                  //   )}
-                  // </div>
                 );
               })}
               <button
