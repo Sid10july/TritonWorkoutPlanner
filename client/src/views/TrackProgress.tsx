@@ -20,7 +20,7 @@ export const TrackProgress = () => {
   const exerciseGoals: exerciseGoalsType = dummyExerciseGoals.reduce(
     (ac, cur) =>
       Object.assign(ac, {
-        [cur.id]: { goalString: cur.goalString, targetValue: cur.targetValue },
+        [cur._id]: { goal: cur.goal, value: cur.value },
       }),
     {}
   );

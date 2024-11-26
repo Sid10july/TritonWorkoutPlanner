@@ -134,9 +134,9 @@ export const dummyProfileData = {
 };
 
 export const dummyExerciseGoals = [
-  { id: 0, goalString: "One rep max squat", targetValue: 150 },
-  { id: 1, goalString: "One rep max bench", targetValue: 210 },
-  { id: 2, goalString: "Pull-ups", targetValue: 25 },
+  { _id: "0", goal: "One rep max squat", value: 150 },
+  { _id: "1", goal: "One rep max bench", value: 210 },
+  { _id: "2", goal: "Pull-ups", value: 25 },
 ];
 
 export const dummyWorkoutData = [

@@ -187,7 +187,7 @@ const App: React.FC = () => {
             path="/"
             element={
               <Layout setIsLoggedIn={setIsLoggedIn}>
-                <StartWorkout />
+                <StartWorkout userId={userId} />
               </Layout>
             }
           />
