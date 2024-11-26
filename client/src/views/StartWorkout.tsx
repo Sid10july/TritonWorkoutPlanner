@@ -318,7 +318,6 @@ export const StartWorkout = (props: { userId: string }) => {
       else {
         let isGoalMet = false;
         goals.forEach((e) => {
-          console.log(progress.current);
           const progressFilter = progress.current.filter(
             (g) => g._id === e._id
           )[0];

@@ -143,25 +143,25 @@ export const dummyWorkoutData = [
   {
     date: "2024-11-22",
     goals: [
-      { id: 0, progressValue: 125 },
-      { id: 1, progressValue: 190 },
-      { id: 2, progressValue: 12 },
+      { id: "0", progressValue: 125 },
+      { id: "1", progressValue: 190 },
+      { id: "2", progressValue: 12 },
     ],
   },
   {
     date: "2024-10-19",
     goals: [
-      { id: 0, progressValue: 115 },
-      { id: 1, progressValue: 170 },
-      { id: 2, progressValue: 17 },
+      { id: "0", progressValue: 115 },
+      { id: "1", progressValue: 170 },
+      { id: "2", progressValue: 17 },
     ],
   },
   {
     date: "2024-10-11",
     goals: [
-      { id: 0, progressValue: 135 },
-      { id: 1, progressValue: 200 },
-      { id: 2, progressValue: 14 },
+      { id: "0", progressValue: 135 },
+      { id: "1", progressValue: 200 },
+      { id: "2", progressValue: 14 },
     ],
   },
 ];
