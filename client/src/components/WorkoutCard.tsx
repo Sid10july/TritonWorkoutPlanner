@@ -25,7 +25,8 @@ export function WorkoutCard({workout, handleAddWorkout, handleDeleteWorkout}: {w
                 <div className="card-body">
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                         <h5 className="card-title">{workout.name}</h5>
-                        <input type="checkbox" onChange={()=>handleCheck(workout.name)}/>
+                        {/* <input type="checkbox" onChange={()=>handleCheck(workout.name)}/> */}
+                        <button className="btn btn-primary" onClick={()=>handleCheck(workout.name)}>Add</button>
                     </div>
                     <p className="card-text">
                         <strong>Type:</strong> {workout.type}
