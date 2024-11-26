@@ -1,32 +1,3 @@
-// export const dummyExercisesList = [
-//   { id: 1, name: "Deadlift" },
-//   { id: 2, name: "Chinup" },
-//   { id: 3, name: "Swiss Ball Leg Curl" },
-//   { id: 4, name: "Burpee" },
-//   { id: 5, name: "Pushup" },
-// ];
-
-// export const daysOfWeek = [
-//   "Monday",
-//   "Tuesday",
-//   "Wednesday",
-//   "Thursday",
-//   "Friday",
-//   "Saturday",
-//   "Sunday",
-// ];
-
-// export const recommendedExercises = {
-//   cardio: ["Running", "Cycling", "Jump Rope"],
-//   strength: ["Push-Ups", "Squats", "Lunges"],
-//   flexibility: ["Yoga", "Stretching", "Pilates"],
-// };
-
-// export const dummyProfileData = {
-//   username: "John",
-//   streak: 3,
-// };
-
 export const dummyExercisesList = [
   { id: 1, name: "Deadlift" },
   { id: 2, name: "Chinup" },
@@ -36,12 +7,12 @@ export const dummyExercisesList = [
 ];
 
 // Last time user worked out
-export const dummyLastWorkout = [11, 24, 2024];
+export const dummyLastWorkout = [11, 16, 2024];
 
 export const dummyWorkoutPlans = [
   {
     // Note: Sunday - Saturday is represented as 0 - 6
-    day: 0,
+    day: 6,
     time: "3:30",
     am: false,
     exercises: [
@@ -66,7 +37,7 @@ export const dummyWorkoutPlans = [
     ],
   },
   {
-    day: 1,
+    day: 2,
     time: "7:30",
     am: true,
     exercises: [
@@ -174,49 +145,22 @@ export const dummySchedule = [
   },
   {
     title: "Strength Training",
-    start: "2024-11-21T17:00:00",
+    start: "2024-11-21T17:00:00", 
     end: "2024-11-21T18:30:00",
   },
   {
     title: "Yoga Session",
-    start: "2024-11-22T06:30:00",
+    start: "2024-11-22T06:30:00", 
     end: "2024-11-22T07:30:00",
   },
 ];
 
-export const SERVER_URL = "http://localhost:";
+export const SERVER_URL = "http://localhost:8080"
 
-export const muscles: string[] = [
-  "abdominals",
-  "abductors",
-  "adductors",
-  "biceps",
-  "calves",
-  "chest",
-  "forearms",
-  "glutes",
-  "hamstrings",
-  "lats",
-  "lower_back",
-  "middle_back",
-  "neck",
-  "quadriceps",
-  "traps",
-  "triceps",
-];
+export const muscles: string[] = 
+['abdominals','abductors','adductors','biceps','calves','chest','forearms','glutes','hamstrings',
+    'lats','lower_back','middle_back','neck','quadriceps','traps','triceps'];
 
-export const exerciesTypes: string[] = [
-  "cardio",
-  "olympic_weightlifting",
-  "plyometrics",
-  "powerlifting",
-  "strength",
-  "stretching",
-  "strongman",
-];
+export const exerciesTypes: string[] = ['cardio','olympic_weightlifting','plyometrics','powerlifting','strength','stretching','strongman'];
 
-export const difficultyLevels: string[] = [
-  "beginner",
-  "intermediate",
-  "expert",
-];
+export const difficultyLevels: string[] = ['beginner','intermediate','expert'];

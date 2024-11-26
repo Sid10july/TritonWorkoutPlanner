@@ -318,3 +318,45 @@ describe("Sidebar Tests", () => {
     expect(logOutButton).toBeInTheDocument();
   });
 });
+
+describe("WorkoutCalendar Tests", () => {
+  test("WorkoutCalendar renders title and button as expected", () => {
+    render(<WorkoutCalendar />);
+    const title = "Workout Calendar"
+  
+    // title displays as expected 
+    expect(screen.getByText(title)).toBeInTheDocument();
+  
+    // ensure export button is rendered on the screen
+    const exportButton = screen.getByText("Export to Google Calendar");
+    expect(exportButton).toBeInTheDocument();
+  });
+
+  test("WorkoutCalendar renders the events in the dummy schedule as expected", () => {
+    render(<WorkoutCalendar />);
+
+    // make sure the event titles in the dummy schedule are displayed in the calendar
+    dummySchedule.forEach((workout) => {
+      expect(screen.getByText(workout.title)).toBeInTheDocument();
+    });
+  });
+
+  test("ensure that the alert message shows when an event is clicked", () => {
+    render(<WorkoutCalendar />);
+
+    window.alert = jest.fn();
+
+    // get the title, start, and end time for the first event in dummy schedule
+    const eventTitle = dummySchedule[0].title; 
+    const eventStart = dummySchedule[0].start; 
+    const eventEnd = dummySchedule[0].end; 
+
+    // click on the event
+    fireEvent.click(screen.getByText(eventTitle));
+
+    //ensure that the alert was called with the expected details for that event
+    expect(window.alert).toHaveBeenCalledWith(
+      `Event: ${eventTitle}\nStart: ${new Date(eventStart).toString()}\nEnd: ${new Date(eventEnd).toString()}`
+    );
+  });
+});
