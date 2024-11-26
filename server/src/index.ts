@@ -2,6 +2,7 @@
 // import mongoose from 'mongoose';
 // import authRoutes from './routes/auth';
 
+<<<<<<< Updated upstream
 // const app = express();
 
 // // Middleware to parse JSON bodies
@@ -109,11 +110,22 @@ import cors from "cors";
 import { createLoginEndpoints } from "./login/login-endpoints";
 import { createWorkoutEndpoints } from "./workouts/workout-endpoints";
 import { initializeDatabase } from "./createDB";
+=======
+import express, { Request, Response } from 'express';
+import { createLoginEndpoints } from './login/login-endpoints';
+import { createWorkoutEndpoints } from './workouts/workout-endpoints'
+import { initializeDatabase } from './createDB';
+import dotenv from 'dotenv';
+>>>>>>> Stashed changes
 
 const app = express();
 
+<<<<<<< Updated upstream
 require("dotenv").config();
 
+=======
+dotenv.config();
+>>>>>>> Stashed changes
 // Middleware to parse JSON bodies
 app.use(cors());
 app.use(express.json());
@@ -147,7 +159,13 @@ mongoose
   .catch((err) => console.error("MongoDB connection error:", err));
 
 // Start the server
+<<<<<<< Updated upstream
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
+=======
+export const server = app.listen(PORT, () => {
+    console.log(`Server is running on port http://localhost:${PORT}`);
+    console.log(process.env.API_NINJA_KEY); // Should be able to see the api Key in the terminal
+>>>>>>> Stashed changes
 });

@@ -3,13 +3,20 @@ import { daysOfWeek, recommendedExercises } from "../constants/constants";
 import { Dropdown } from "../components/Dropdown";
 import ExerciseDropdown from "../components/ExerciseDropdown";
 import "./BuildYourOwn.css";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const BuildYourOwn = () => {
   // state storing focus category for each day
-  const navigate = useNavigate();
   const [focusCategory, setFocusCategory] = useState<{ [day: string]: string }>(
-    {}
+    {
+        Monday: "",
+        Tuesday: "",
+        Wednesday: "",
+        Thursday: "",
+        Friday: "",
+        Saturday: "",
+        Sunday: "",
+}
   );
   // stores exercises selected for each day as arrays
   const [weeklyPlan, setWeeklyPlan] = useState<{ [day: string]: string[] }>({});
@@ -50,7 +57,11 @@ export const BuildYourOwn = () => {
    * @param day - day of the week that is selected
    */
   const handleDaySelection = (day: string) => {
-    navigate(`/build-your-own/${day}`);
+    setSelectedDays((prevDays) => ({
+        ...prevDays,
+        //selecting a day is marked as true, deselecting marks it as false
+        [day]: !prevDays[day],
+      }));
   };
 
   // updates focus category based on selection using Dropdown component
@@ -135,15 +146,21 @@ export const BuildYourOwn = () => {
                   className="day-selection"
                   data-testid={`${day}-plan`}
                 >
-                  <label>
-                    <input
-                      type="checkbox"
-                      data-testid={`${day}-checkbox`}
-                      checked={selectedDays[day]}
-                      onChange={() => handleDaySelection(day)}
-                    />
-                    {day}
-                  </label>
+                    <Link 
+                        to={`/build-your-own/${day}`}
+                        key={day}
+                    >
+                        <label>Search Workouts</label>
+                    </Link>
+                        <label>
+                            <input
+                            type="checkbox"
+                            data-testid={`${day}-checkbox`}
+                            checked={selectedDays[day]}
+                            onChange={() => handleDaySelection(day)}
+                            />
+                            {day}
+                        </label>
                   <div className="workout-details">
                     <div className="details-section">
                       <label htmlFor={`${day}-focus`}>{day} Focus:</label>

@@ -146,12 +146,36 @@ const Layout = ({
 
   return (
     <div className="App">
+<<<<<<< Updated upstream
       <Sidebar
         pageIndex={pageIndex}
         sidebarClickHandler={handleSidebarClick}
         setIsLoggedIn={setIsLoggedIn} // Pass the setIsLoggedIn prop
       />
       <div className="App-views">{children}</div>
+=======
+      <Sidebar pageIndex={pageIndex} sidebarClickHandler={handleSidebarClick} />
+      <div className="App-views" id="App-view">
+        <Routes>
+          <Route path="/" element={<StartWorkout />} />
+          <Route path="/workout-planner" element={<WorkoutPlanner />} />
+          <Route path="/build-your-own" element={<BuildYourOwn />} />
+          <Route path="/exercise-library" element={<ExerciseLibrary />} />
+          <Route path="/track-progress" element={<TrackProgress />} />
+          <Route path="/build-your-own/:day" element={<DayPlanner />}/>
+          <Route
+            path="/generate-workout"
+            element={
+              <div>
+                <h1 className="title-container">Generate Workout Page</h1>
+                <div className="content-container"></div>
+              </div>
+            }
+          />
+          <Route path="/workout-calendar" element={<WorkoutCalendar />} />
+        </Routes>
+      </div>
+>>>>>>> Stashed changes
     </div>
   );
 };
