@@ -133,7 +133,7 @@ function QueryForm({
   return (
     <form
       onSubmit={(event) => onSubmit(event)}
-      className="p-4 border rounded shadow bg-light py-4"
+      className="p-4 border rounded bg-light py-4"
     >
       <div className="row g-3">
         {/* Type Selection */}
