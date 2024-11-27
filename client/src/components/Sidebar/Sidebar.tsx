@@ -1,9 +1,8 @@
 // Sidebar.tsx
 import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { fetchUserData } from "../../utils/user-utils";
 import { SidebarProps } from "../../types/types"; // Ensure SidebarProps includes setIsLoggedIn
-import { Link } from "react-router-dom";
 import { SidebarOption } from "./SidebarOption";
 import { dummyProfileData } from "../../constants/constants";
 import "./Sidebar.css";
@@ -22,18 +21,12 @@ export const Sidebar = (props: SidebarProps) => {
   const [userInfo, setUserInfo] = useState(dummyProfileData);
   const navigate = useNavigate();
 
-  // Use axios baseURL to define the port
-  axios.defaults.baseURL = `http://localhost:${process.env.PORT || 8080}`;
-
-  // Fetch goals from the backend when the component mounts
+  // Fetch user data from the backend when the component mounts
   useEffect(() => {
-    axios
-      .get(`/users/${props.userId}`)
-      .then((response) => {
-        setUserInfo(response.data);
-      })
-      .catch((error) => console.error("Error fetching user data:", error));
-  }, [props.userId]);
+    fetchUserData(props.userId)
+      .then((result) => setUserInfo(result))
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div className="sidebar">

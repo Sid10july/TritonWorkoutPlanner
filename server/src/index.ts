@@ -102,6 +102,7 @@ import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/users";
+import streakRoutes from "./routes/streaks";
 import workoutPlanRoutes from "./routes/workoutPlans";
 import goalsRoutes from "./routes/goals"; // Import goals route
 import cors from "cors";
@@ -124,6 +125,9 @@ app.use("/workoutPlans", workoutPlanRoutes);
 
 // Register auth routes with the /auth prefix
 app.use("/auth", authRoutes);
+
+// Register streak routes with the /streaks prefix
+app.use("/streaks", streakRoutes);
 
 // Register goals routes with the /api/goals prefix
 app.use("/api/goals", goalsRoutes);
