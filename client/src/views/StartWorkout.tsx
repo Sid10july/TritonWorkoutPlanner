@@ -260,7 +260,7 @@ export const StartWorkout = (props: { userId: string }) => {
     // Workout is finished
     // BACKEND: Increment streak to database
     else {
-      let newGoals: any[];
+      let newGoals: any[] = goals;
 
       const handleProgressChange = (id: string, value: number) => {
         if (isNaN(value)) value = 0;
@@ -272,8 +272,8 @@ export const StartWorkout = (props: { userId: string }) => {
 
       const handleGoalChange = (id: string, value: number) => {
         if (isNaN(value)) value = 0;
-        newGoals = goals.map((e: Goal) => {
-          if (id === e._id) return { _id: id, goal: e.goal, value: value };
+        newGoals = newGoals.map((e: Goal) => {
+          if (id === e._id) return { goal: e.goal, value: value, _id: id };
           else return { ...e };
         });
       };

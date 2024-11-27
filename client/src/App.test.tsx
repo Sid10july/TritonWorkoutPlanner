@@ -305,7 +305,7 @@ describe("Sidebar Tests", () => {
   test("Clicking a tab on the sidebar directs you to the specified page", () => {
     render(
       <BrowserRouter>
-        <App debugLogin={true} />
+        <App debugId={"1"} />
       </BrowserRouter>
     );
 
@@ -321,7 +321,7 @@ describe("Sidebar Tests", () => {
   test("Click on the sidebar's account info button to see the log out option", () => {
     render(
       <BrowserRouter>
-        <App debugLogin={true} />
+        <App debugId={"1"} />
       </BrowserRouter>
     );
 

@@ -41,7 +41,7 @@ export const dummyLastWorkout = [11, 24, 2024];
 export const dummyWorkoutPlans = [
   {
     // Note: Sunday - Saturday is represented as 0 - 6
-    day: 0,
+    day: 3,
     time: "3:30",
     am: false,
     exercises: [

@@ -157,16 +157,17 @@ const Layout = ({
 
 // Set debug props to bypass login
 interface AppProps {
-  debugLogin?: boolean;
+  debugId?: string;
 }
 
-const App: React.FC<AppProps> = ({ debugLogin = false }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(debugLogin); // Authentication state
-  const [userId, setUserId] = useState("0"); // User ID
+const App: React.FC<AppProps> = ({ debugId = "0" }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(debugId === "0" ? false : true); // Authentication state
+  const [userId, setUserId] = useState(debugId); // User ID
 
   const handleLoginSuccess = (id: string) => {
     setIsLoggedIn(true);
     setUserId(id);
+    console.log(id);
   };
 
   return (
