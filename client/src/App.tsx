@@ -133,9 +133,11 @@ import "./App.css";
 const Layout = ({
   children,
   setIsLoggedIn,
+  userId,
 }: {
   children: React.ReactNode;
   setIsLoggedIn: (value: boolean) => void;
+  userId: string;
 }) => {
   const [pageIndex, setPageIndex] = useState(0);
 
@@ -149,6 +151,7 @@ const Layout = ({
         pageIndex={pageIndex}
         sidebarClickHandler={handleSidebarClick}
         setIsLoggedIn={setIsLoggedIn} // Pass the setIsLoggedIn prop
+        userId={userId}
       />
       <div className="App-views">{children}</div>
     </div>
@@ -167,7 +170,6 @@ const App: React.FC<AppProps> = ({ debugId = "0" }) => {
   const handleLoginSuccess = (id: string) => {
     setIsLoggedIn(true);
     setUserId(id);
-    console.log(id);
   };
 
   return (
@@ -192,7 +194,7 @@ const App: React.FC<AppProps> = ({ debugId = "0" }) => {
           <Route
             path="/"
             element={
-              <Layout setIsLoggedIn={setIsLoggedIn}>
+              <Layout setIsLoggedIn={setIsLoggedIn} userId={userId}>
                 <StartWorkout userId={userId} />
               </Layout>
             }
@@ -200,7 +202,7 @@ const App: React.FC<AppProps> = ({ debugId = "0" }) => {
           <Route
             path="/workout-planner"
             element={
-              <Layout setIsLoggedIn={setIsLoggedIn}>
+              <Layout setIsLoggedIn={setIsLoggedIn} userId={userId}>
                 <WorkoutPlanner />
               </Layout>
             }
@@ -208,7 +210,7 @@ const App: React.FC<AppProps> = ({ debugId = "0" }) => {
           <Route
             path="/build-your-own"
             element={
-              <Layout setIsLoggedIn={setIsLoggedIn}>
+              <Layout setIsLoggedIn={setIsLoggedIn} userId={userId}>
                 <BuildYourOwn />
               </Layout>
             }
@@ -216,7 +218,7 @@ const App: React.FC<AppProps> = ({ debugId = "0" }) => {
           <Route
             path="/exercise-library"
             element={
-              <Layout setIsLoggedIn={setIsLoggedIn}>
+              <Layout setIsLoggedIn={setIsLoggedIn} userId={userId}>
                 <ExerciseLibrary />
               </Layout>
             }
@@ -224,7 +226,7 @@ const App: React.FC<AppProps> = ({ debugId = "0" }) => {
           <Route
             path="/track-progress"
             element={
-              <Layout setIsLoggedIn={setIsLoggedIn}>
+              <Layout setIsLoggedIn={setIsLoggedIn} userId={userId}>
                 <TrackProgress />
               </Layout>
             }
@@ -232,7 +234,7 @@ const App: React.FC<AppProps> = ({ debugId = "0" }) => {
           <Route
             path="/build-your-own/:day"
             element={
-              <Layout setIsLoggedIn={setIsLoggedIn}>
+              <Layout setIsLoggedIn={setIsLoggedIn} userId={userId}>
                 <DayPlanner />
               </Layout>
             }
@@ -240,7 +242,7 @@ const App: React.FC<AppProps> = ({ debugId = "0" }) => {
           <Route
             path="/change-preferences"
             element={
-              <Layout setIsLoggedIn={setIsLoggedIn}>
+              <Layout setIsLoggedIn={setIsLoggedIn} userId={userId}>
                 <ChangePreferences userId={userId} />
               </Layout>
             }
@@ -248,7 +250,7 @@ const App: React.FC<AppProps> = ({ debugId = "0" }) => {
           <Route
             path="/workout-calendar"
             element={
-              <Layout setIsLoggedIn={setIsLoggedIn}>
+              <Layout setIsLoggedIn={setIsLoggedIn} userId={userId}>
                 <WorkoutCalendar />
               </Layout>
             }
