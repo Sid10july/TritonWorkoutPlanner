@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, within } from "@testing-library/react";
+import { render, screen, fireEvent, within, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 // COMPONENTS
 import App from "./App";
@@ -6,6 +6,8 @@ import { BuildYourOwn } from "./views/BuildYourOwn";
 import { WorkoutCalendar } from "./views/WorkoutCalender";
 // CONSTANTS
 import { daysOfWeek, recommendedExercises, dummySchedule } from "./constants/constants";
+import { DayPlanner } from "./views/DayPlanner";
+import { fetchWorkouts } from "./utils/workout-utils";
 
 describe("Customize Workout Plan Tests", () => {
   test("all days initialized as unchecked", () => {
@@ -359,4 +361,122 @@ describe("WorkoutCalendar Tests", () => {
       `Event: ${eventTitle}\nStart: ${new Date(eventStart).toString()}\nEnd: ${new Date(eventEnd).toString()}`
     );
   });
+});
+
+describe("Filter Workouts page tests",()=>{
+    test("Fetching Workouts",async ()=>{
+        render(
+            <BrowserRouter>
+                <DayPlanner/>
+            </BrowserRouter>
+        );
+
+        const search = screen.getByText("Search");
+        expect(search).toBeInTheDocument();
+        fireEvent.click(search);
+        await fetchWorkouts({});
+        
+        await waitFor(() => {
+            expect(screen.getByText('Rickshaw Carry')).toBeInTheDocument();
+            expect(screen.getByText('Single-Leg Press')).toBeInTheDocument();
+            expect(screen.getByText('Landmine twist')).toBeInTheDocument();
+            expect(screen.getByText('Weighted pull-up')).toBeInTheDocument();
+            expect(screen.getByText('T-Bar Row with Handle')).toBeInTheDocument();
+            expect(screen.getByText('Palms-down wrist curl over bench')).toBeInTheDocument();
+            expect(screen.getByText('Atlas Stones')).toBeInTheDocument();
+            expect(screen.getByText('Dumbbell front raise to lateral raise')).toBeInTheDocument();
+            expect(screen.getByText('Clean from Blocks')).toBeInTheDocument();
+            expect(screen.getByText('Incline Hammer Curls')).toBeInTheDocument();
+        })
+    });
+
+    test("Fetching workouts by strength",async()=>{
+        render(
+            <BrowserRouter>
+                <DayPlanner/>
+            </BrowserRouter>
+        );
+        const type = screen.getByTestId("type");
+        fireEvent.change(type,{target:{value: "strength"}}); // sets value to strength
+
+        const search = screen.getByText("Search");
+        expect(search).toBeInTheDocument();
+        fireEvent.click(search);
+        await fetchWorkouts({});
+
+        await waitFor(() => {
+            expect(screen.getByText('Dumbbell front raise to lateral raise')).toBeInTheDocument();
+            expect(screen.getByText('Single-Leg Press')).toBeInTheDocument();
+            expect(screen.getByText('Landmine twist')).toBeInTheDocument();
+            expect(screen.getByText('Weighted pull-up')).toBeInTheDocument();
+            expect(screen.getByText('T-Bar Row with Handle')).toBeInTheDocument();
+            expect(screen.getByText('Palms-down wrist curl over bench')).toBeInTheDocument();
+            expect(screen.getByText('Incline Hammer Curls')).toBeInTheDocument();
+            expect(screen.getByText('Straight-bar wrist roll-up')).toBeInTheDocument();
+            expect(screen.getByText('Clean and press')).toBeInTheDocument();
+            expect(screen.getByText('Triceps dip')).toBeInTheDocument();
+        })
+    });
+
+    test("Fetching workouts by strength and biceps",async()=>{
+        render(
+            <BrowserRouter>
+                <DayPlanner/>
+            </BrowserRouter>
+        );
+        const type = screen.getByTestId("type");
+        fireEvent.change(type,{target:{value: "strength"}}); // sets value to strength
+        const muscle = screen.getByTestId("muscle");
+        fireEvent.change(muscle,{target:{value: "biceps"}}); // sets value to strength
+
+        const search = screen.getByText("Search");
+        expect(search).toBeInTheDocument();
+        fireEvent.click(search);
+        await fetchWorkouts({});
+
+        await waitFor(() => {
+            expect(screen.getByText('Incline Hammer Curls')).toBeInTheDocument();
+            expect(screen.getByText('Wide-grip barbell curl')).toBeInTheDocument();
+            expect(screen.getByText('EZ-bar spider curl')).toBeInTheDocument();
+            expect(screen.getByText('Hammer Curls')).toBeInTheDocument();
+            expect(screen.getByText('EZ-Bar Curl')).toBeInTheDocument();
+            expect(screen.getByText('Zottman Curl')).toBeInTheDocument();
+            expect(screen.getByText('Biceps curl to shoulder press')).toBeInTheDocument();
+            expect(screen.getByText('Barbell Curl')).toBeInTheDocument();
+            expect(screen.getByText('Concentration curl')).toBeInTheDocument();
+            expect(screen.getByText('Flexor Incline Dumbbell Curls')).toBeInTheDocument();
+        })
+    });
+
+    test("Fetching workouts by strength,muscle,and intermediate",async()=>{
+        render(
+            <BrowserRouter>
+                <DayPlanner/>
+            </BrowserRouter>
+        );
+        const type = screen.getByTestId("type");
+        fireEvent.change(type,{target:{value: "strength"}}); // sets value to strength
+        const muscle = screen.getByTestId("muscle");
+        fireEvent.change(muscle,{target:{value: "biceps"}}); // sets value to muscle
+        const difficulty = screen.getByTestId("difficulty");
+        fireEvent.change(difficulty,{target:{value: "intermediate"}}); // sets value to intermediate
+
+        const search = screen.getByText("Search");
+        expect(search).toBeInTheDocument();
+        fireEvent.click(search);
+        await fetchWorkouts({});
+
+        await waitFor(() => {
+            expect(screen.getByText('Dumbbell Alternate Bicep Curl')).toBeInTheDocument();
+            expect(screen.getByText('EZ-bar spider curl')).toBeInTheDocument();
+            expect(screen.getByText('Hammer Curls')).toBeInTheDocument();
+            expect(screen.getByText('EZ-Bar Curl')).toBeInTheDocument();
+            expect(screen.getByText('Zottman Curl')).toBeInTheDocument();
+            expect(screen.getByText('Dumbbell Bicep Curl')).toBeInTheDocument();
+            expect(screen.getByText('Barbell Curl')).toBeInTheDocument();
+            expect(screen.getByText('Concentration curl')).toBeInTheDocument();
+            expect(screen.getByText('Overhead cable curl')).toBeInTheDocument();
+            expect(screen.getByText('Preacher Curl')).toBeInTheDocument();
+        })
+    });
 });

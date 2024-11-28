@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { Exercise } from "../types/types";
 
-export function WorkoutCard({workout, handleAddWorkout, handleDeleteWorkout}: {workout:Exercise, handleAddWorkout:(key:string)=>void,handleDeleteWorkout:(key:string)=>void}){
+export function WorkoutCard({workout, handleAddWorkout}: {workout:Exercise, handleAddWorkout:(key:string)=>void,handleDeleteWorkout:(key:string)=>void}){
     const [checked,setChecked] = useState<boolean>(false);
 
     function handleCheck(key2: string){
         setChecked(!checked);
         if(!checked) handleAddWorkout(key2);
-        else handleDeleteWorkout(key2);
     }
 
     return (
