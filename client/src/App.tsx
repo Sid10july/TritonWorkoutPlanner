@@ -227,7 +227,7 @@ const App: React.FC<AppProps> = ({ debugId = "0" }) => {
             path="/track-progress"
             element={
               <Layout setIsLoggedIn={setIsLoggedIn} userId={userId}>
-                <TrackProgress />
+                <TrackProgress userId={userId} />
               </Layout>
             }
           />

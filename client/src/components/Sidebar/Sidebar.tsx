@@ -26,7 +26,7 @@ export const Sidebar = (props: SidebarProps) => {
     fetchUserData(props.userId)
       .then((result) => setUserInfo(result))
       .catch((err) => console.log(err));
-  }, []);
+  }, [props.userId]);
 
   return (
     <div className="sidebar">
@@ -61,7 +61,8 @@ export const Sidebar = (props: SidebarProps) => {
             className="sidebar-profile_icon"
           />
           <p className="mb-0">
-            {userInfo.username} 🔥: {userInfo.streak}
+            {userInfo.username}
+            {/* 🔥: {userInfo.streak} */}
           </p>
           <img
             src="/arrow_drop_up.png"

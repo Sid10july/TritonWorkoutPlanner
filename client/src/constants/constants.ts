@@ -36,7 +36,7 @@ export const dummyExercisesList = [
 ];
 
 // Last time user worked out
-export const dummyLastWorkout = [11, 24, 2024];
+export const dummyLastWorkout = [11, 25, 2024];
 
 export const dummyWorkoutPlans = [
   {
