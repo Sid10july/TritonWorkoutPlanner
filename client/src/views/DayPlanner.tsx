@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate} from 'react-router-dom';
 import { useState } from 'react';
 import { muscles,difficultyLevels,exerciesTypes } from '../constants/constants';
 import { fetchWorkouts } from '../utils/workout-utils';
@@ -7,19 +7,32 @@ import { WorkoutCard, WorkoutsSelected } from '../components/WorkoutCard';
 
 export function DayPlanner(){
     const {day} = useParams();
+    const navigate = useNavigate();
     const [workouts,setWorkouts] = useState<Exercise[]>([]); // State that keeps track of the workouts on a specific day.
     const [selectedWorkouts,setSelectedWorkouts] = useState<Exercise[]>([]);
+    const [hiddenWorkouts, setHiddenWorkouts] = useState<Set<string>>(new Set()); // To track hidden workouts
 
     function handleAddWorkout(key: string){
         console.log(`Add workouts called with key: ${key}`);
         const workout = workouts.find(workout=>workout.name===key);
         if(workout){ // workout is found
             setSelectedWorkouts([...selectedWorkouts,workout]);
+            setHiddenWorkouts(prev => new Set(prev.add(key))); // Mark as hidden
         }
     }
 
     function handleDeleteWorkout(key: string){
         setSelectedWorkouts(selectedWorkouts.filter(workout=>workout.name!==key));
+        setHiddenWorkouts(prev => {
+            const newHidden = new Set(prev);
+            newHidden.delete(key); // Remove from hidden
+            return newHidden;
+        });
+    }
+
+    // Handle submission and navigation back to MyWorkoutPg
+    function handleSubmit() {
+        navigate('/build-your-own', { state: { selectedWorkouts } }); // Pass selectedWorkouts to the new page
     }
  
     return (
@@ -27,7 +40,10 @@ export function DayPlanner(){
             <h1>This is the {`${day}`} planner</h1>
             <QueryForm setWorkouts={setWorkouts}/> 
             <SelectedWorkoutCards selectedWorkouts={selectedWorkouts} handleDeleteWorkout={handleDeleteWorkout}/>
-            <WorkoutCards workouts={workouts} handleAddWorkout={handleAddWorkout} handleDeleteWorkout={handleDeleteWorkout}/>
+            <WorkoutCards workouts={workouts.filter(workout => !hiddenWorkouts.has(workout.name))} // Only show workouts that are not hidden
+             handleAddWorkout={handleAddWorkout} handleDeleteWorkout={handleDeleteWorkout}/>
+            {/* Submit Button */}
+            <button onClick={handleSubmit} className="btn btn-primary">Submit</button>
         </div>
         
     );
