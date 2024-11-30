@@ -10,7 +10,9 @@ jobs: # the things being executed
  tests: # the name of your status check, will become important when you do branch protection
    runs-on: ubuntu-latest # which device on Github's server that you are running the Actions on
    env:
-     API_NINJA_KEY: ${{ secrets.API_NINJA_KEY }}
+       REACT_APP_API_KEY: ${{ secrets.API_KEY }}
+       REACT_APP_CLIENT_ID: ${{ secrets.CLIENT_ID}}
+       API_NINJA_KEY: ${{ secrets.API_NINJA_KEY }}
    steps:
      - uses: actions/checkout@v4 # using version 4 of Actions
      - name: Install Dependencies
