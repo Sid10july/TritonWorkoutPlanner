@@ -20,6 +20,7 @@ jobs: # the things being executed
      - name: Start server
        run: | # start the server
           cd server
+          npm install
           npm start &
      - name: Unit Test
        run: cd client; npm test # the actual testing line
