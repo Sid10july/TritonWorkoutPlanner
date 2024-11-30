@@ -12,6 +12,7 @@ jobs: # the things being executed
    env:
        REACT_APP_API_KEY: ${{ secrets.API_KEY }}
        REACT_APP_CLIENT_ID: ${{ secrets.CLIENT_ID}}
+       API_NINJA_KEY: ${{ secrets.API_NINJA_KEY }}
    steps:
      - uses: actions/checkout@v4 # using version 4 of Actions
      - name: Install Dependencies

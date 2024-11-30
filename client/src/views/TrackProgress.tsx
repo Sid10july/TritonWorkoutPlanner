@@ -14,19 +14,19 @@ export const TrackProgress = () => {
 
   // Create object with goal IDs as keys for easier use
   interface exerciseGoalsType {
-    [id: string]: { goalString: string; targetValue: number };
+    [id: string]: { goal: string; value: number };
   }
 
   const exerciseGoals: exerciseGoalsType = dummyExerciseGoals.reduce(
     (ac, cur) =>
       Object.assign(ac, {
-        [cur.id]: { goalString: cur.goalString, targetValue: cur.targetValue },
+        [cur._id]: { goal: cur.goal, value: cur.value },
       }),
     {}
   );
 
   interface GoalType {
-    id: number;
+    id: string;
     progressValue: number;
   }
 
@@ -50,15 +50,14 @@ export const TrackProgress = () => {
           <ul className="workout-progress fs-4">
             {Object.keys(props.goals).map((e) => {
               // Filter goals for progress value
-              const progressValue = props.goals.filter(
-                (g) => g.id === parseInt(e)
-              )[0].progressValue;
-              console.log(progressValue);
+              const progressValue = props.goals.filter((g) => g.id === e)[0]
+                .progressValue;
+              console.log(exerciseGoals[e]);
               return (
                 <li key={e}>
-                  {exerciseGoals[e].goalString}: {progressValue}/
+                  {exerciseGoals[e].goal}: {progressValue}/
                   <span style={{ color: "gray" }}>
-                    {exerciseGoals[e].targetValue}
+                    {exerciseGoals[e].value}
                   </span>
                 </li>
               );

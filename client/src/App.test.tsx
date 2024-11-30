@@ -2,14 +2,23 @@ import { render, screen, fireEvent, within } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 // COMPONENTS
 import App from "./App";
+import { Sidebar } from "./components/Sidebar/Sidebar";
 import { BuildYourOwn } from "./views/BuildYourOwn";
 import { WorkoutCalendar } from "./views/WorkoutCalender";
 // CONSTANTS
-import { daysOfWeek, recommendedExercises, dummySchedule } from "./constants/constants";
+import {
+  daysOfWeek,
+  recommendedExercises,
+  dummySchedule,
+} from "./constants/constants";
 
 describe("Customize Workout Plan Tests", () => {
   test("all days initialized as unchecked", () => {
-    render(<BuildYourOwn />);
+    render(
+      <BrowserRouter>
+        <BuildYourOwn />
+      </BrowserRouter>
+    );
 
     daysOfWeek.forEach((day) => {
       //iterate through days of the week
@@ -20,7 +29,11 @@ describe("Customize Workout Plan Tests", () => {
   });
 
   test("Checking a day sets it as checked, unchecking a day sets it as unchecked", () => {
-    render(<BuildYourOwn />);
+    render(
+      <BrowserRouter>
+        <BuildYourOwn />
+      </BrowserRouter>
+    );
     const fridayCheckbox = screen.getByLabelText("Friday");
 
     //should be initially unchecked
@@ -40,7 +53,11 @@ describe("Customize Workout Plan Tests", () => {
   });
 
   test("Setting start and end time for a day works as intended", () => {
-    render(<BuildYourOwn />);
+    render(
+      <BrowserRouter>
+        <BuildYourOwn />
+      </BrowserRouter>
+    );
 
     const day = daysOfWeek[0]; //day is set to Monday
 
@@ -61,7 +78,11 @@ describe("Customize Workout Plan Tests", () => {
   });
 
   test("Selecting focus category for a day updates values correctly", () => {
-    render(<BuildYourOwn />);
+    render(
+      <BrowserRouter>
+        <BuildYourOwn />
+      </BrowserRouter>
+    );
 
     const day = daysOfWeek[0]; //day is set to Monday
     const focuses = Object.keys(recommendedExercises); //get list of all focuses
@@ -76,7 +97,11 @@ describe("Customize Workout Plan Tests", () => {
   });
 
   test("selected exercises display properly", () => {
-    render(<BuildYourOwn />); //render component
+    render(
+      <BrowserRouter>
+        <BuildYourOwn />
+      </BrowserRouter>
+    ); //render component
 
     const day = daysOfWeek[0]; // day set to Monday
     //retrieve Monday's focus category dropdown
@@ -89,15 +114,26 @@ describe("Customize Workout Plan Tests", () => {
     // add first exercise from the cardio focus
     const exerciseDropdown = screen.getByTestId(`${day}-exercise-dropdown`);
     fireEvent.change(exerciseDropdown, {
-      target: { value: recommendedExercises[focus as keyof typeof recommendedExercises][0] },
+      target: {
+        value:
+          recommendedExercises[focus as keyof typeof recommendedExercises][0],
+      },
     });
 
     // ensure that the selected exercise is displayed to the user
-    expect(screen.getByText(recommendedExercises[focus as keyof typeof recommendedExercises][0])).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        recommendedExercises[focus as keyof typeof recommendedExercises][0]
+      )
+    ).toBeInTheDocument();
   });
 
   test("removing an exercise from the selected exercises updates user's list of selected exercises", () => {
-    render(<BuildYourOwn />); //render componenet
+    render(
+      <BrowserRouter>
+        <BuildYourOwn />
+      </BrowserRouter>
+    ); //render componenet
 
     const day = daysOfWeek[0]; // set day to be Monday
     //retrieve Monday's focus category dropdown
@@ -113,7 +149,8 @@ describe("Customize Workout Plan Tests", () => {
 
     // add the first exercise from dropdown to the selected exercises list
     const exerciseDropdown = screen.getByTestId(`${day}-exercise-dropdown`);
-    const exercise = recommendedExercises[focus as keyof typeof recommendedExercises][0];
+    const exercise =
+      recommendedExercises[focus as keyof typeof recommendedExercises][0];
     fireEvent.change(exerciseDropdown, { target: { value: exercise } });
 
     // the exercise should be displayed in the selected exercises list
@@ -130,8 +167,12 @@ describe("Customize Workout Plan Tests", () => {
     expect(screen.getByRole("option", { name: exercise })).toBeInTheDocument();
   });
 
-  test("reordering the exercises works as intended", ()=> {
-    render(<BuildYourOwn />); //render component
+  test("reordering the exercises works as intended", () => {
+    render(
+      <BrowserRouter>
+        <BuildYourOwn />
+      </BrowserRouter>
+    ); //render component
 
     const day = daysOfWeek[0]; // set the day to be Monday
     //select day first
@@ -149,9 +190,11 @@ describe("Customize Workout Plan Tests", () => {
     // add two exercises to the list of selected exercises
     const exerciseDropdown = screen.getByTestId(`${day}-exercise-dropdown`);
     //'Running'
-    const exercise1 = recommendedExercises[focus as keyof typeof recommendedExercises][0];
+    const exercise1 =
+      recommendedExercises[focus as keyof typeof recommendedExercises][0];
     //'Cycling'
-    const exercise2 = recommendedExercises[focus as keyof typeof recommendedExercises][1];
+    const exercise2 =
+      recommendedExercises[focus as keyof typeof recommendedExercises][1];
     fireEvent.change(exerciseDropdown, { target: { value: exercise1 } });
     fireEvent.change(exerciseDropdown, { target: { value: exercise2 } });
 
@@ -166,7 +209,11 @@ describe("Customize Workout Plan Tests", () => {
   });
 
   test("amount of reps inputted by the user is updated and displayed as expected", () => {
-    render(<BuildYourOwn />); 
+    render(
+      <BrowserRouter>
+        <BuildYourOwn />
+      </BrowserRouter>
+    );
 
     const day = daysOfWeek[0]; // set the day to be Monday
     //select day first
@@ -175,7 +222,7 @@ describe("Customize Workout Plan Tests", () => {
     //retrieve Monday's focus category dropdown
     const focusDropdown = screen.getByLabelText(`${day} Focus:`);
     // set focus to first category (cardio)
-    const focus = Object.keys(recommendedExercises)[0]; 
+    const focus = Object.keys(recommendedExercises)[0];
 
     // set the focus category to cardio
     fireEvent.change(focusDropdown, { target: { value: focus } });
@@ -183,7 +230,8 @@ describe("Customize Workout Plan Tests", () => {
     // add an exercise to list of selected exercises
     const exerciseDropdown = screen.getByTestId(`${day}-exercise-dropdown`);
     //retrieve the first exercise from the list
-    const exercise = recommendedExercises[focus as keyof typeof recommendedExercises][0];
+    const exercise =
+      recommendedExercises[focus as keyof typeof recommendedExercises][0];
     fireEvent.change(exerciseDropdown, { target: { value: exercise } });
 
     // update the number of repetitions to 15
@@ -195,7 +243,11 @@ describe("Customize Workout Plan Tests", () => {
   });
 
   test("focus dropdown should be disabled until the day is selected", () => {
-    render(<BuildYourOwn />);
+    render(
+      <BrowserRouter>
+        <BuildYourOwn />
+      </BrowserRouter>
+    );
 
     const day = daysOfWeek[0]; // select day to be monday
     //retrieve Monday's focus dropdown
@@ -213,7 +265,11 @@ describe("Customize Workout Plan Tests", () => {
   });
 
   test("exercise dropdown and state/end times are disabled until a day is selected", () => {
-    render(<BuildYourOwn />);
+    render(
+      <BrowserRouter>
+        <BuildYourOwn />
+      </BrowserRouter>
+    );
 
     const day = daysOfWeek[0]; // select day to be Monday
     //retrieve the exercise dropdown for Monday
@@ -249,7 +305,7 @@ describe("Sidebar Tests", () => {
   test("Clicking a tab on the sidebar directs you to the specified page", () => {
     render(
       <BrowserRouter>
-        <App />
+        <App debugLogin={true} />
       </BrowserRouter>
     );
 
@@ -265,7 +321,7 @@ describe("Sidebar Tests", () => {
   test("Click on the sidebar's account info button to see the log out option", () => {
     render(
       <BrowserRouter>
-        <App />
+        <App debugLogin={true} />
       </BrowserRouter>
     );
 
@@ -282,11 +338,11 @@ describe("Sidebar Tests", () => {
 describe("WorkoutCalendar Tests", () => {
   test("WorkoutCalendar renders title and button as expected", () => {
     render(<WorkoutCalendar />);
-    const title = "Workout Calendar"
-  
-    // title displays as expected 
+    const title = "Workout Calendar";
+
+    // title displays as expected
     expect(screen.getByText(title)).toBeInTheDocument();
-  
+
     // ensure export button is rendered on the screen
     const exportButton = screen.getByText("Export to Google Calendar");
     expect(exportButton).toBeInTheDocument();
@@ -307,16 +363,18 @@ describe("WorkoutCalendar Tests", () => {
     window.alert = jest.fn();
 
     // get the title, start, and end time for the first event in dummy schedule
-    const eventTitle = dummySchedule[0].title; 
-    const eventStart = dummySchedule[0].start; 
-    const eventEnd = dummySchedule[0].end; 
+    const eventTitle = dummySchedule[0].title;
+    const eventStart = dummySchedule[0].start;
+    const eventEnd = dummySchedule[0].end;
 
     // click on the event
     fireEvent.click(screen.getByText(eventTitle));
 
     //ensure that the alert was called with the expected details for that event
     expect(window.alert).toHaveBeenCalledWith(
-      `Event: ${eventTitle}\nStart: ${new Date(eventStart).toString()}\nEnd: ${new Date(eventEnd).toString()}`
+      `Event: ${eventTitle}\nStart: ${new Date(
+        eventStart
+      ).toString()}\nEnd: ${new Date(eventEnd).toString()}`
     );
   });
 });
