@@ -22,5 +22,6 @@ jobs: # the things being executed
           cd server
           npm ci
           npm start &
+          cd ..
      - name: Unit Test
-       run: cd ../client; npm test # the actual testing line
+       run: cd client; npm test # the actual testing line
