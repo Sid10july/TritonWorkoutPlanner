@@ -17,6 +17,10 @@ jobs: # the things being executed
      - uses: actions/checkout@v4 # using version 4 of Actions
      - name: Install Dependencies
        run: cd client; npm install
+     - name: Set up Node.js
+       uses: actions/setup-node@v2
+       with:
+          node-version: '20'
      - name: Start server
        run: | # start the server
           cd server
