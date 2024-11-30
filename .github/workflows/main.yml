@@ -23,5 +23,10 @@ jobs: # the things being executed
           npm ci
           npm start &
           cd ..
+     - name: Wait for server
+       run: |
+         for i in {1..10}; do
+           curl --silent http://localhost:8080 && break || sleep 3
+         done
      - name: Unit Test
        run: cd client; npm test # the actual testing line
