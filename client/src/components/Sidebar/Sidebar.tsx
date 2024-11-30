@@ -51,6 +51,7 @@ export const Sidebar = (props: SidebarProps) => {
         ))}
         <div
           className="sidebar-account"
+          data-testid="sidebar-account"
           onClick={() => {
             setOpenLogout(!openLogout);
           }}

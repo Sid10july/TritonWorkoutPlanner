@@ -326,7 +326,7 @@ describe("Sidebar Tests", () => {
     );
 
     // Click on account info button
-    const accountButton = screen.getByText("🔥", { exact: false });
+    const accountButton = screen.getByTestId("sidebar-account");
     fireEvent.click(accountButton);
 
     // Should now be able to see the "Log Out" option
