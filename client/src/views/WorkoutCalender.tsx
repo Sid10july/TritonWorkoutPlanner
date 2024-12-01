@@ -1,15 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react"; // calendar library
 import dayGridPlugin from "@fullcalendar/daygrid"; //month view
 import timeGridPlugin from "@fullcalendar/timegrid"; //weekly and daily view
 import {dummySchedule} from "../constants/constants";
 import "./WorkoutCalendar.css";
 import {gapi} from "gapi-script";
+import { WorkoutsContext } from "../context/workouts-context";
 
 export const WorkoutCalendar = () => {
   const CLIENT_ID = process.env.REACT_APP_CLIENT_ID; 
   const API_KEY = process.env.REACT_APP_API_KEY;
   const SCOPES = "https://www.googleapis.com/auth/calendar";
+
+  const {weeklyWorkouts} = useContext(WorkoutsContext);
 
   // authenticate and initialize the Google Calendar API
   useEffect(() => {
@@ -95,11 +98,21 @@ export const WorkoutCalendar = () => {
   };
   
   //map the dummy workout schedule to the event format used by FullCalendar 
-  const events = dummySchedule.map((workout) => ({
+//   const events = dummySchedule.map((workout) => ({
+//     // title of the event is the workout title and workout time
+//     title: `${workout.title}`,
+//     start: workout.start, //start time
+//     end: workout.end, //end time
+//   }));
+
+  /**
+   * The start and end times are jst  the times and do not have dates, so we have to pass the dates
+   */
+  const events = weeklyWorkouts.map((workout) => ({
     // title of the event is the workout title and workout time
-    title: `${workout.title}`,
-    start: workout.start, //start time
-    end: workout.end, //end time
+    title: `${workout.day}'s workouts`, // day - 
+    start: workout.startTime, //start time - 2024-11-20T07:00:00
+    end: workout.endTime, //end time - 2024-11-20T09:00:00
   }));
 
   //handles the event click
