@@ -1,36 +1,28 @@
-import { useState } from "react";
 import { Exercise } from "../types/types";
 
 export function WorkoutCard({
   workout,
-  handleAddWorkout,
-  handleDeleteWorkout,
+  handleAddWorkout
 }: {
   workout: Exercise;
   handleAddWorkout: (key: string) => void;
-  handleDeleteWorkout: (key: string) => void;
 }) {
-  const [checked, setChecked] = useState<boolean>(false);
 
-  function handleCheck(key2: string) {
-    setChecked(!checked);
-    if (!checked) handleAddWorkout(key2);
-    else handleDeleteWorkout(key2);
-  }
-
+  
   return (
     <div className="col-sm-12">
       <div
         className="card"
         style={{
-          margin: "10px",
-          padding: "15px",
-          border: "1px solid #ccc",
-          borderRadius: "8px",
-          width: "100%",
-        }}
+            margin: "10px auto", // Center the card horizontally
+            padding: "15px",
+            border: "1px solid #ccc",
+            borderRadius: "8px",
+            width: "100%", // Ensure the card takes up the maximum width of its container
+            maxWidth: "100%", // Prevent overflow beyond its container
+          }}
       >
-        <div className="card-body">
+        <div className="card-body" style={{ textAlign: "left" }}>
           <div
             style={{
               display: "flex",
@@ -38,11 +30,11 @@ export function WorkoutCard({
               justifyContent: "space-between",
             }}
           >
-            <h5 className="card-title">{workout.name}</h5>
+            <h5 className="card-title"><strong>{workout.name}</strong></h5>
             {/* <input type="checkbox" onChange={()=>handleCheck(workout.name)}/> */}
             <button
               className="btn btn-primary"
-              onClick={() => handleCheck(workout.name)}
+              onClick={() => handleAddWorkout(workout.name)}
             >
               Add
             </button>
@@ -57,9 +49,10 @@ export function WorkoutCard({
             <strong>Difficulty:</strong> {workout.difficulty}
           </p>
           {/* <ExpandableInstructions instructions={workout.instructions} /> */}
+          {workout.instructions!=='' && 
           <p className="card-text">
             <strong>Instructions:</strong> {workout.instructions}
-          </p>
+          </p>}
         </div>
       </div>
     </div>
@@ -78,6 +71,7 @@ export function WorkoutsSelected({
     <li
       key={workout.name}
       className="list-group-item d-flex justify-content-between align-items-center border rounded mb-2 py-3 px-4 bg-white"
+      style={{ width: "100%"}}
     >
       <div className="d-flex flex-column">
         <h5 className="mb-0">{workout.name}</h5>

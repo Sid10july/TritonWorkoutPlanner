@@ -34,3 +34,10 @@ export async function fetchWorkouts(params: any): Promise<Exercise[]> {
   }
   return response.json() || [];
 }
+
+/**
+ * This function sends a GET request to the server to retrieve the Weekly Plan of the user
+ */
+export async function fetchWeeklyPlan(){
+    
+}

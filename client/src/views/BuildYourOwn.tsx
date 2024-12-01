@@ -146,7 +146,7 @@ export const BuildYourOwn = () => {
                   className="day-selection"
                   data-testid={`${day}-plan`}
                 >
-                  <Link to={`/build-your-own/${day}`} key={day}>
+                  <Link to={`/Day-Planner/${day}`} key={day}>
                     <label>Search Workouts</label>
                   </Link>
                   <label>

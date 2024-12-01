@@ -128,6 +128,8 @@ import { DayPlanner } from "./views/DayPlanner";
 // Styles
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import { WorkoutsProvider } from "./context/workouts-context";
+import { WeekPlan } from "./views/WeekPlan";
 
 // Layout Component for Sidebar and Authenticated Pages
 const Layout = ({
@@ -144,14 +146,16 @@ const Layout = ({
   };
 
   return (
-    <div className="App">
-      <Sidebar
-        pageIndex={pageIndex}
-        sidebarClickHandler={handleSidebarClick}
-        setIsLoggedIn={setIsLoggedIn} // Pass the setIsLoggedIn prop
-      />
-      <div className="App-views">{children}</div>
-    </div>
+    <WorkoutsProvider>
+        <div className="App">
+        <Sidebar
+            pageIndex={pageIndex}
+            sidebarClickHandler={handleSidebarClick}
+            setIsLoggedIn={setIsLoggedIn} // Pass the setIsLoggedIn prop
+        />
+        <div className="App-views">{children}</div>
+        </div>
+    </WorkoutsProvider>
   );
 };
 
@@ -200,7 +204,7 @@ const App: React.FC<AppProps> = ({ debugLogin = false }) => {
             path="/workout-planner"
             element={
               <Layout setIsLoggedIn={setIsLoggedIn}>
-                <WorkoutPlanner />
+                <WeekPlan />
               </Layout>
             }
           />
@@ -229,7 +233,7 @@ const App: React.FC<AppProps> = ({ debugLogin = false }) => {
             }
           />
           <Route
-            path="/build-your-own/:day"
+            path="/Day-Planner/:day"
             element={
               <Layout setIsLoggedIn={setIsLoggedIn}>
                 <DayPlanner />

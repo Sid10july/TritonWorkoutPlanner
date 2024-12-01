@@ -6,15 +6,15 @@
 //   { id: 5, name: "Pushup" },
 // ];
 
-// export const daysOfWeek = [
-//   "Monday",
-//   "Tuesday",
-//   "Wednesday",
-//   "Thursday",
-//   "Friday",
-//   "Saturday",
-//   "Sunday",
-// ];
+export const Week: string[] = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
 // export const recommendedExercises = {
 //   cardio: ["Running", "Cycling", "Jump Rope"],

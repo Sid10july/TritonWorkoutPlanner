@@ -1,28 +1,46 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from 'react-router-dom';
 import { Exercise, ScheduledExercise } from "../types/types";
+import { WorkoutsContext } from "../context/workouts-context";
 
 /**
  * 
- * @param workouts - list of workouts from that particular day
  * @param day - the day
  */
-export function WeekdayWorkout(workouts: Exercise[], day: string){
-    const [startTime, setStartTime] = useState<string>('00:00'); // Use ISO8601 format to set time
-    const [endTime, setEndTime] = useState<string>('00:00'); // Use ISO8601 format to set time
-    const [exercises, setExercises] = useState<Exercise[]>(workouts);
-    const todaysDetails : ScheduledExercise = {
-        day: day,
-        exercises: workouts,
-        startTime: startTime,
-        endTime: endTime
-    }
+export function WeekdayWorkout({day}:{day:string}){
+    // const [startTime, setStartTime] = useState<string>('00:00'); // Use ISO8601 format to set time
+    // const [endTime, setEndTime] = useState<string>('00:00'); // Use ISO8601 format to set time
+    const {weeklyWorkouts,setWeeklyWorkouts} = useContext(WorkoutsContext);
+    const todaysDetails : ScheduledExercise = weeklyWorkouts.find(x=>x.day===day) || { day: day, exercises: [], startTime: "00:00", endTime: "00:00" };
+    const [exercises, setExercises] = useState<Exercise[]>(weeklyWorkouts.find(x=>x.day===day)?.exercises||[]);
+
+
     const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setStartTime(e.target.value);
+        setWeeklyWorkouts((prevWorkouts)=>{
+            return prevWorkouts.map((daySchedule)=>{
+                if(daySchedule.day===day){
+                    return {
+                        ...daySchedule,
+                        startTime:e.target.value
+                    }
+                }
+                return daySchedule
+            });
+        });
     };
     
     const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEndTime(e.target.value);
+        setWeeklyWorkouts((prevWorkouts)=>{
+            return prevWorkouts.map((daySchedule)=>{
+                if(daySchedule.day===day){
+                    return {
+                        ...daySchedule,
+                        endTime:e.target.value
+                    }
+                }
+                return daySchedule
+            });
+        });
     };
 
     const handleReorder = (updatedExercises: Exercise[]) => {
@@ -33,7 +51,7 @@ export function WeekdayWorkout(workouts: Exercise[], day: string){
         <div className="card mb-3">
             <div className="card-header d-flex justify-content-between align-items-center">
             <h5 className="mb-0">{day}'s Plan</h5>
-            <Link to={`/build-your-own/${day}`} className="btn btn-primary btn-sm">
+            <Link to={`/Day-Planner/${day}`} className="btn btn-primary btn-sm">
                 Edit
             </Link>
             </div>
@@ -46,7 +64,7 @@ export function WeekdayWorkout(workouts: Exercise[], day: string){
                 type="time"
                 id="startTime"
                 className="form-control"
-                value={startTime}
+                value={todaysDetails.startTime}
                 onChange={handleStartTimeChange}
                 />
             </div>
@@ -58,7 +76,7 @@ export function WeekdayWorkout(workouts: Exercise[], day: string){
                 type="time"
                 id="endTime"
                 className="form-control"
-                value={endTime}
+                value={todaysDetails.endTime}
                 onChange={handleEndTimeChange}
                 />
             </div>
@@ -69,7 +87,7 @@ export function WeekdayWorkout(workouts: Exercise[], day: string){
                     <strong>{exercise.name}</strong> - {exercise.muscle} ({exercise.difficulty})
                     </li>
                 ))}
-                <FancyWorkoutsDisplay exercises={exercises} onReorder={handleReorder}/>
+                <FancyWorkoutsDisplay exercises={todaysDetails.exercises} onReorder={handleReorder}/>
                 </ul>
             ) : (
                 <p>No exercises planned for ${day}.</p>
