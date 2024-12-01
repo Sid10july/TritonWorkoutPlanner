@@ -26,10 +26,12 @@ export function DayPlanner() {
             return prevWorkouts.map((daySchedule) => {
                 if (daySchedule.day === day) {
                     // Update the day's exercises
-                    return {
-                        ...daySchedule,
-                        exercises: [...daySchedule.exercises, workout],
-                    };
+                    if(!daySchedule.exercises.find(x=>x.name===key)){
+                        return {
+                            ...daySchedule,
+                            exercises: [...daySchedule.exercises, workout],
+                        };
+                    }
                 }
                 return daySchedule;
             });

@@ -105,14 +105,35 @@ export const WorkoutCalendar = () => {
 //     end: workout.end, //end time
 //   }));
 
+  function differenceTime(startTime: string,endTime:string){ //HH:MM format
+    const [startHours, startMinutes] = startTime.split(':').map(Number);
+    const [endHours, endMinutes] = endTime.split(':').map(Number);
+
+    const startTotalMinutes = startHours * 60 + startMinutes;
+    const endTotalMinutes = endHours * 60 + endMinutes;
+
+    // Subtract the minutes
+    const differenceMinutes = endTotalMinutes - startTotalMinutes;
+
+    // Convert back to HH:MM
+    const diffHours = Math.floor(differenceMinutes / 60);
+    const diffMinutes = differenceMinutes % 60;
+
+    return `${diffHours.toString().padStart(2, '0')}:${diffMinutes.toString().padStart(2, '0')}`;
+  }
   /**
    * The start and end times are jst  the times and do not have dates, so we have to pass the dates
    */
-  const events = weeklyWorkouts.map((workout) => ({
+  const events = weeklyWorkouts.map((workout, index) => ({
     // title of the event is the workout title and workout time
     title: `${workout.day}'s workouts`, // day - 
-    start: workout.startTime, //start time - 2024-11-20T07:00:00
-    end: workout.endTime, //end time - 2024-11-20T09:00:00
+    // start: `2024-12-${2+index}T1${workout.startTime}`, //start time - 2024-11-20T07:00:00
+    // end: `2024-12-${2+index}T2${workout.endTime}`, //end time - 2024-11-20T09:00:00
+    rrule: {
+        freq: 'weekly',
+        dtstart: `2024-12-0${2+index}T${workout.startTime}:00`
+    },
+    duration: differenceTime(workout.startTime,workout.endTime)
   }));
 
   //handles the event click
