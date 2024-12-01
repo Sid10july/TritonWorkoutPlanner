@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   muscles,
   difficultyLevels,
@@ -118,6 +119,11 @@ function SelectedWorkoutCards({
           handleDeleteWorkout={handleDeleteWorkout}
         />
       ))}
+      <Link to="/workout-planner">
+        <button type="submit" className="btn btn-primary">
+            Save
+        </button>
+      </Link>
     </div>
   );
 }

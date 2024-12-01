@@ -50,56 +50,51 @@ export function WeekdayWorkout({day}:{day:string}){
     return (
         <div className="card mb-3">
             <div className="card-header d-flex justify-content-between align-items-center">
-            <h5 className="mb-0">{day}'s Plan</h5>
-            <Link to={`/Day-Planner/${day}`} className="btn btn-primary btn-sm">
+                <h5 className="mb-0">{day}'s Plan</h5>
+            </div>
+            <div className="card-body d-flex">
+                <div className="flex-grow-1 text-center">
+                {todaysDetails.exercises.length > 0 ? (
+                    <ul className="list-group mx-auto">
+                        <FancyWorkoutsDisplay exercises={todaysDetails.exercises} onReorder={handleReorder} />
+                    </ul>
+                ) : (
+                    <p>No exercises planned for {day}.</p>
+                )}
+                </div>
+                {/* Start and End Times on the right */}
+                <div className="ms-4" style={{ minWidth: "200px" }}>
+                <div className="mb-3">
+                    <label htmlFor="startTime" className="form-label">
+                    Start Time
+                    </label>
+                    <input
+                    type="time"
+                    id="startTime"
+                    className="form-control"
+                    value={todaysDetails.startTime}
+                    onChange={handleStartTimeChange}
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="endTime" className="form-label">
+                    End Time
+                    </label>
+                    <input
+                    type="time"
+                    id="endTime"
+                    className="form-control"
+                    value={todaysDetails.endTime}
+                    onChange={handleEndTimeChange}
+                    />
+                </div>
+                </div>
+            </div>
+            {/* Footer with Edit Button */}
+            <div className="card-footer d-flex justify-content-end">
+                <Link to={`/Day-Planner/${day}`} className="btn btn-primary btn-sm">
                 Edit
-            </Link>
-            </div>
-            <div className="card-body">
-            <div className="mb-3">
-                <label htmlFor="startTime" className="form-label">
-                Start Time
-                </label>
-                <input
-                type="time"
-                id="startTime"
-                className="form-control"
-                value={todaysDetails.startTime}
-                onChange={handleStartTimeChange}
-                />
-            </div>
-            <div className="mb-3">
-                <label htmlFor="endTime" className="form-label">
-                End Time
-                </label>
-                <input
-                type="time"
-                id="endTime"
-                className="form-control"
-                value={todaysDetails.endTime}
-                onChange={handleEndTimeChange}
-                />
-            </div>
-            {todaysDetails.exercises.length > 0 ? (
-                <ul className="list-group">
-                {todaysDetails.exercises.map((exercise, index) => (
-                    <li key={index} className="list-group-item">
-                    <strong>{exercise.name}</strong> - {exercise.muscle} ({exercise.difficulty})
-                    </li>
-                ))}
-                <FancyWorkoutsDisplay exercises={todaysDetails.exercises} onReorder={handleReorder}/>
-                </ul>
-            ) : (
-                <p>No exercises planned for ${day}.</p>
-            )}
-            </div>
-            <div className="card-footer">
-            <p>
-                Start Time: <strong>{todaysDetails.startTime}</strong>
-            </p>
-            <p>
-                End Time: <strong>{todaysDetails.endTime}</strong>
-            </p>
+                </Link>
             </div>
         </div>
     );
