@@ -34,6 +34,7 @@
 }
 
 /* Input field styling */
+.signup-container [type="text"],
 .signup-container [type="email"],
 .signup-container input[type="password"] {
   width: 100%;

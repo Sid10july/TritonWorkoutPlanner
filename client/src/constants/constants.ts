@@ -36,7 +36,7 @@ export const dummyExercisesList = [
 ];
 
 // Last time user worked out
-export const dummyLastWorkout = [11, 24, 2024];
+export const dummyLastWorkout = [11, 25, 2024];
 
 export const dummyWorkoutPlans = [
   {
@@ -130,7 +130,7 @@ export const recommendedExercises = {
 
 export const dummyProfileData = {
   username: "John",
-  streak: 3,
+  streak: 0,
 };
 
 export const dummyExerciseGoals = [
@@ -169,18 +169,18 @@ export const dummyWorkoutData = [
 export const dummySchedule = [
   {
     title: "Morning Cardio",
-    start: "2024-11-20T07:00:00",
-    end: "2024-11-20T08:00:00",
+    start: "2024-12-20T07:00:00",
+    end: "2024-12-20T08:00:00",
   },
   {
     title: "Strength Training",
-    start: "2024-11-21T17:00:00",
-    end: "2024-11-21T18:30:00",
+    start: "2024-12-21T17:00:00",
+    end: "2024-12-21T18:30:00",
   },
   {
     title: "Yoga Session",
-    start: "2024-11-22T06:30:00",
-    end: "2024-11-22T07:30:00",
+    start: "2024-12-22T06:30:00",
+    end: "2024-12-22T07:30:00",
   },
 ];
 
