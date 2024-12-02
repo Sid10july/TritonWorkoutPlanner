@@ -4,6 +4,7 @@ import {
   fetchUserData,
   incrementStreak,
   resetStreak,
+  updateWorkoutDate,
 } from "../utils/user-utils";
 import { InputField } from "../components/InputField";
 import ProgressBar from "@ramonak/react-progress-bar";
@@ -23,7 +24,11 @@ export const StartWorkout = (StartProps: { userId: string }) => {
 
   const [goals, setGoals] = useState(dummyExerciseGoals);
   const [streak, setStreak] = useState(dummyProfileData.streak);
+  const [lastWorkout, setLastWorkout] = useState(dummyLastWorkout);
   let progress = useRef([] as { _id: string; value: number }[]);
+
+  // Resetting date for debugging purposes
+  // updateWorkoutDate(StartProps.userId, [0, 0, 0]);
 
   // Fetch goals from the backend when the component mounts
   useEffect(() => {
@@ -33,6 +38,7 @@ export const StartWorkout = (StartProps: { userId: string }) => {
         .then((result) => {
           setStreak(result.streak);
           setGoals(result.goals);
+          setLastWorkout(result.lastWorkedOut);
           progress.current = result.goals.map(
             (e: { _id: string; goal: string; value: number }) => ({
               _id: e._id,
@@ -57,8 +63,6 @@ export const StartWorkout = (StartProps: { userId: string }) => {
   // Increment and reset streak in the database
   // Log workout goals in the database
   // When finished working out, log current date as last workout time in database
-
-  const [lastWorkout, setLastWorkout] = useState(dummyLastWorkout);
 
   // Get current time (disregard hours/minutes/seconds)
   let currentTime = new Date();
@@ -160,7 +164,10 @@ export const StartWorkout = (StartProps: { userId: string }) => {
         </div>
       );
     if (streakStatus === "broken") {
-      resetStreak(StartProps.userId);
+      // Prevents page from resetting streak if data hasn't loaded yet
+      if (lastWorkout[2] !== 1) {
+        resetStreak(StartProps.userId);
+      }
       return (
         <div className="exercise-container">
           <p className="workoutIndicator-title mb-0">You broke your streak!</p>
@@ -288,7 +295,6 @@ export const StartWorkout = (StartProps: { userId: string }) => {
 
       // Track goals
       if (props.exerciseNum === props.numExercises && goals.length) {
-        incrementStreak(StartProps.userId);
         return (
           <div className="exercise-container">
             <p className="workoutIndicator-title mb-0">Workout finished!</p>
@@ -353,14 +359,15 @@ export const StartWorkout = (StartProps: { userId: string }) => {
             <form
               onSubmit={(e) => {
                 // BACKEND INTEGRATION NEEDED
-                // Update backend with last workout time
                 // Add "progress" variable as a new workout entry in database
-                // Replace user goals with "goals" in database
-                setLastWorkout([
+                const currentDate: number[] = [
                   currentTime.getMonth() + 1, // monthIndex maps 0-11 to January - December, so readjust by adding 1
                   currentTime.getDate(),
                   currentTime.getFullYear(),
-                ]);
+                ];
+                incrementStreak(StartProps.userId);
+                updateWorkoutDate(StartProps.userId, currentDate);
+                setLastWorkout(currentDate);
                 if (newGoals) {
                   newGoals.forEach((g) => {
                     updateGoal(g._id, g.value);

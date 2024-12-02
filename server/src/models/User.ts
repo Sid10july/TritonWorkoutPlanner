@@ -101,6 +101,7 @@ export interface IUser extends Document {
   password: string;
   goals: IGoal[];
   streak: number;
+  lastWorkedOut: number[];
 }
 
 const GoalSchema: Schema = new Schema<IGoal>({
@@ -115,6 +116,7 @@ const UserSchema: Schema = new Schema<IUser>(
     password: { type: String, required: true },
     goals: { type: [GoalSchema], default: [] },
     streak: { type: Number, default: 0 },
+    lastWorkedOut: { type: [], default: [0, 0, 0] },
   },
   { timestamps: true }
 );

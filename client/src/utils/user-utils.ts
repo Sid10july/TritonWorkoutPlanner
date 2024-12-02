@@ -44,3 +44,23 @@ export async function resetStreak(userId: string): Promise<any> {
     console.log("Network error: " + err);
   }
 }
+
+/**
+ * Function to update last workout date from the server side
+ * @params userId - to update workout date for specific user from the database
+ * @params date - new date to store in the database
+ * @returns The updated workout date
+ */
+export async function updateWorkoutDate(
+  userId: string,
+  date: number[]
+): Promise<any> {
+  try {
+    const data = { userId: userId, date: date };
+
+    const response = await axios.patch(`/streaks/logWorkoutDate`, data);
+    return response.data;
+  } catch (err) {
+    console.log("Network error: " + err);
+  }
+}

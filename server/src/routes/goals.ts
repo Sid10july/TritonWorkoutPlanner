@@ -115,8 +115,6 @@ router.put("/:userId/:goalId", async (req, res) => {
     const goalId = req.params.goalId;
     const { value } = req.body;
 
-    console.log(goalId);
-
     const user = await User.findById(req.params.userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 

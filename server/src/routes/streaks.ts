@@ -46,4 +46,20 @@ router.patch("/:userId/reset", async (req, res) => {
   }
 });
 
+// PATCH /streaks/logWorkoutDate - Update workout date
+router.patch("/logWorkoutDate", async (req, res) => {
+  const { userId, date } = req.body;
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.lastWorkedOut = date; // Update workout date
+    await user.save();
+    res.status(200).json(user.lastWorkedOut);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating workout date", error });
+  }
+});
+
 export default router;
