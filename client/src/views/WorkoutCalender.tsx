@@ -111,26 +111,53 @@ export const WorkoutCalendar = () => {
     }
 
     try {
-      //create a new calendar called "Workout Planner"
-      const calendarResponse = await calendar.calendars.insert({
-        resource: { summary: "Workout Planner" }, // Calendar name
-      });
-      
-      // get ID of newly created calendar "Workout Planner"
-      const calendarId = calendarResponse.result.id; 
+        // List existing calendars to check if "Workout Planner" exists
+        const calendarListResponse = await calendar.calendarList.list();
+        const existingCalendar = calendarListResponse.result.items.find(
+          (cal: any) => cal.summary === "Workout Planner"
+        );
     
-      // add all the dummy events to the new calendar
-      for (const event of events) {
-        await calendar.events.insert({
-          calendarId: calendarId,
-          resource: event, //details of each event
-        });
+        let calendarId;
+    
+        if (existingCalendar) {
+          // If calendar exists, use its ID
+          calendarId = existingCalendar.id;
+    
+          // Optionally clear all existing events in this calendar
+          const eventsListResponse = await calendar.events.list({
+            calendarId,
+            showDeleted: false,
+            singleEvents: true,
+            maxResults: 2500,
+          });
+    
+          for (const existingEvent of eventsListResponse.result.items) {
+            await calendar.events.delete({
+              calendarId,
+              eventId: existingEvent.id,
+            });
+          }
+        } else {
+          // If calendar does not exist, create a new one
+          const calendarResponse = await calendar.calendars.insert({
+            resource: { summary: "Workout Planner" },
+          });
+          calendarId = calendarResponse.result.id;
+        }
+    
+        // Add all events to the calendar
+        for (const event of events) {
+          await calendar.events.insert({
+            calendarId,
+            resource: event,
+          });
+        }
+    
+        alert("Events successfully exported to the Workout Planner calendar!");
+      } catch (error) {
+        console.error("Error inserting events into Google Calendar:", error);
+        alert("Failed to export events. Please try again.");
       }
-      alert("Events successfully exported to a new Workout Planner calendar!");
-    } catch (error) {
-      console.error("Error inserting events into Google Calendar:", error);
-      alert("Failed to export events. Please try again.");
-    }
   };
   
   //map the dummy workout schedule to the event format used by FullCalendar 
