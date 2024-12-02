@@ -8,10 +8,6 @@ import {gapi} from "gapi-script";
 import { WorkoutsContext } from "../context/workouts-context";
 
 export const WorkoutCalendar = () => {
-//   const CLIENT_ID = process.env.REACT_APP_CLIENT_ID; 
-//   const CLIENT_ID = "361860920175-262hlsv8v6khml2cpvu1iq8o7bpl8ni0.apps.googleusercontent.com"; 
-//   const API_KEY = process.env.REACT_APP_API_KEY;
-//   const API_KEY = "AIzaSyAvDYFYmUmHBBtqTVbegLgo0pLtCTcqTBs";
   const SCOPES = "https://www.googleapis.com/auth/calendar";
 
   const {weeklyWorkouts} = useContext(WorkoutsContext);
