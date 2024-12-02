@@ -273,7 +273,7 @@ export function WeekdayWorkout({ day }: { day: string }) {
               });
               setExercises(data.exercises || []);
           } catch (error) {
-              // console.error("Error fetching workout plan:", error);
+              console.error("Error fetching workout plan:", error);
           } finally {
               setLoading(false);
           }
