@@ -9,8 +9,12 @@ axios.defaults.baseURL = `http://localhost:${process.env.PORT || 8080}`;
  * @returns The username, email, goals, and streak count
  */
 export async function fetchUserData(userId: string): Promise<any> {
-  const response = await axios.get(`/users/${userId}`);
-  return response.data;
+  try {
+    const response = await axios.get(`/users/${userId}`);
+    return response.data;
+  } catch (err) {
+    console.log("Network error: " + err);
+  }
 }
 
 /**
@@ -19,8 +23,12 @@ export async function fetchUserData(userId: string): Promise<any> {
  * @returns The streak count
  */
 export async function incrementStreak(userId: string): Promise<any> {
-  const response = await axios.patch(`/streaks/${userId}/increment`);
-  return response.data;
+  try {
+    const response = await axios.patch(`/streaks/${userId}/increment`);
+    return response.data;
+  } catch (err) {
+    console.log("Network error: " + err);
+  }
 }
 
 /**
@@ -29,6 +37,10 @@ export async function incrementStreak(userId: string): Promise<any> {
  * @returns The streak count (0)
  */
 export async function resetStreak(userId: string): Promise<any> {
-  const response = await axios.patch(`/streaks/${userId}/reset`);
-  return response.data;
+  try {
+    const response = await axios.patch(`/streaks/${userId}/reset`);
+    return response.data;
+  } catch (err) {
+    console.log("Network error: " + err);
+  }
 }

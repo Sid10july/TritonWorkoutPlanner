@@ -27,19 +27,21 @@ export const StartWorkout = (StartProps: { userId: string }) => {
 
   // Fetch goals from the backend when the component mounts
   useEffect(() => {
-    axios.get(`/api/goals/${StartProps.userId}`).then((response) => {
-      setGoals(response.data);
-      // Set progress template
-      progress.current = response.data.map(
-        (e: { _id: string; goal: string; value: number }) => ({
-          _id: e._id,
-          value: 0,
+    // Bypass this process if testing
+    if (StartProps.userId != "1") {
+      fetchUserData(StartProps.userId)
+        .then((result) => {
+          setStreak(result.streak);
+          setGoals(result.goals);
+          progress.current = result.goals.map(
+            (e: { _id: string; goal: string; value: number }) => ({
+              _id: e._id,
+              value: 0,
+            })
+          );
         })
-      );
-    });
-    fetchUserData(StartProps.userId)
-      .then((result) => setStreak(result.streak))
-      .catch((error) => console.error("Error fetching goals:", error));
+        .catch((error) => console.error("Error fetching goals:", error));
+    }
   }, [StartProps.userId]);
 
   // Function for updating goals

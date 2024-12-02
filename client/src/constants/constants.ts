@@ -41,7 +41,7 @@ export const dummyLastWorkout = [11, 25, 2024];
 export const dummyWorkoutPlans = [
   {
     // Note: Sunday - Saturday is represented as 0 - 6
-    day: 3,
+    day: 0,
     time: "3:30",
     am: false,
     exercises: [
@@ -130,7 +130,7 @@ export const recommendedExercises = {
 
 export const dummyProfileData = {
   username: "John",
-  streak: 3,
+  streak: 0,
 };
 
 export const dummyExerciseGoals = [
