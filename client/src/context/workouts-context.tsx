@@ -2,13 +2,13 @@ import { createContext, useState } from "react";
 import { ScheduledExercise } from "../types/types";
 
 const state: ScheduledExercise[] = [
+    { day: "Sunday", exercises: [], startTime: "00:00", endTime: "00:00" },
     { day: "Monday", exercises: [], startTime: "00:00", endTime: "00:00" },
     { day: "Tuesday", exercises: [], startTime: "00:00", endTime: "00:00" },
     { day: "Wednesday", exercises: [], startTime: "00:00", endTime: "00:00" },
     { day: "Thursday", exercises: [], startTime: "00:00", endTime: "00:00" },
     { day: "Friday", exercises: [], startTime: "00:00", endTime: "00:00" },
-    { day: "Saturday", exercises: [], startTime: "00:00", endTime: "00:00" },
-    { day: "Sunday", exercises: [], startTime: "00:00", endTime: "00:00" },
+    { day: "Saturday", exercises: [], startTime: "00:00", endTime: "00:00" }
 ];
 
 

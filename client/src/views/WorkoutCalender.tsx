@@ -2,14 +2,16 @@ import React, { useContext, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react"; // calendar library
 import dayGridPlugin from "@fullcalendar/daygrid"; //month view
 import timeGridPlugin from "@fullcalendar/timegrid"; //weekly and daily view
-import {dummySchedule} from "../constants/constants";
+import {dummySchedule, Week} from "../constants/constants";
 import "./WorkoutCalendar.css";
 import {gapi} from "gapi-script";
 import { WorkoutsContext } from "../context/workouts-context";
 
 export const WorkoutCalendar = () => {
-  const CLIENT_ID = process.env.REACT_APP_CLIENT_ID; 
-  const API_KEY = process.env.REACT_APP_API_KEY;
+//   const CLIENT_ID = process.env.REACT_APP_CLIENT_ID; 
+//   const CLIENT_ID = "361860920175-262hlsv8v6khml2cpvu1iq8o7bpl8ni0.apps.googleusercontent.com"; 
+//   const API_KEY = process.env.REACT_APP_API_KEY;
+//   const API_KEY = "AIzaSyAvDYFYmUmHBBtqTVbegLgo0pLtCTcqTBs";
   const SCOPES = "https://www.googleapis.com/auth/calendar";
 
   const {weeklyWorkouts} = useContext(WorkoutsContext);
@@ -22,8 +24,8 @@ export const WorkoutCalendar = () => {
         await gapi.load("client:auth2", async () => {
           try {
             await gapi.client.init({
-              apiKey: API_KEY, //api key for authentication
-              clientId: CLIENT_ID,
+              apiKey: process.env.REACT_APP_API_KEY, //api key for authentication
+              clientId: process.env.REACT_APP_CLIENT_ID,
               //discovery document for the Google Calendar API
               discoveryDocs: [
                 "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
@@ -40,10 +42,11 @@ export const WorkoutCalendar = () => {
       }
     };
     initClient(); //initialize API client
-  }, [API_KEY, CLIENT_ID]);
+  }, [process.env.REACT_APP_API_KEY, process.env.REACT_APP_CLIENT_ID]);
 
   // Handle exporting events to Google Calendar
   const handleExport = async () => {
+    // console.log(events);
     const calendar = gapi.client.calendar; //google API client
 
     //prepare formatting for list of events from dummy schedule
@@ -98,42 +101,29 @@ export const WorkoutCalendar = () => {
   };
   
   //map the dummy workout schedule to the event format used by FullCalendar 
-//   const events = dummySchedule.map((workout) => ({
-//     // title of the event is the workout title and workout time
-//     title: `${workout.title}`,
-//     start: workout.start, //start time
-//     end: workout.end, //end time
-//   }));
-
-  function differenceTime(startTime: string,endTime:string){ //HH:MM format
-    const [startHours, startMinutes] = startTime.split(':').map(Number);
-    const [endHours, endMinutes] = endTime.split(':').map(Number);
-
-    const startTotalMinutes = startHours * 60 + startMinutes;
-    const endTotalMinutes = endHours * 60 + endMinutes;
-
-    // Subtract the minutes
-    const differenceMinutes = endTotalMinutes - startTotalMinutes;
-
-    // Convert back to HH:MM
-    const diffHours = Math.floor(differenceMinutes / 60);
-    const diffMinutes = differenceMinutes % 60;
-
-    return `${diffHours.toString().padStart(2, '0')}:${diffMinutes.toString().padStart(2, '0')}`;
-  }
+  const dummyEvents = dummySchedule.map((workout) => ({
+    // title of the event is the workout title and workout time
+    title: `Something`,
+    start: workout.start, //start time
+    end: workout.end, //end time
+  }));
   /**
    * The start and end times are jst  the times and do not have dates, so we have to pass the dates
    */
-  const events = weeklyWorkouts.map((workout, index) => ({
+  const events = weeklyWorkouts
+  .filter((workout)=>workout.startTime!==workout.endTime)
+  .map((workout) => (
+    {
     // title of the event is the workout title and workout time
     title: `${workout.day}'s workouts`, // day - 
     // start: `2024-12-${2+index}T1${workout.startTime}`, //start time - 2024-11-20T07:00:00
     // end: `2024-12-${2+index}T2${workout.endTime}`, //end time - 2024-11-20T09:00:00
-    rrule: {
-        freq: 'weekly',
-        dtstart: `2024-12-0${2+index}T${workout.startTime}:00`
-    },
-    duration: differenceTime(workout.startTime,workout.endTime)
+    daysOfWeek: [`${Week.findIndex(x=>x===workout.day)}`],
+    startTime: `${workout.startTime}:00`,
+    endTime: `${workout.endTime}:00`,
+    color: 'green',
+    startRecur: '2024-11-30',
+    endRecur: '2025-02-01'
   }));
 
   //handles the event click

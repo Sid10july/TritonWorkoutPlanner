@@ -69,6 +69,11 @@ export function DayPlanner() {
           workouts={workouts}
           handleAddWorkout={handleAddWorkout}
         />
+        <Link to="/workout-planner">
+            <button type="submit" className="btn btn-primary">
+                Save
+            </button>
+        </Link>
       </div>
     </div>
   );
@@ -88,7 +93,9 @@ function WorkoutCards({
   handleAddWorkout: (key: string) => void;
 }) {
   return (
-    <div className="cards">
+    <div className="cards" 
+        // style={{maxHeight:"380px", overflowY:'scroll'}}
+    >
       {workouts.map((workout) => (
         <WorkoutCard
           key={workout.name}
@@ -114,18 +121,13 @@ function SelectedWorkoutCards({
   handleDeleteWorkout: (key: string) => void;
 }) {
   return (
-    <div className="selected-cards">
+    <div className="selected-cards" style={{width:"100%"}}>
       {selectedWorkouts.map((workout) => (
         <WorkoutsSelected
           workout={workout}
           handleDeleteWorkout={handleDeleteWorkout}
         />
       ))}
-      <Link to="/workout-planner">
-        <button type="submit" className="btn btn-primary">
-            Save
-        </button>
-      </Link>
     </div>
   );
 }
