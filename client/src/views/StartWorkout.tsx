@@ -28,7 +28,7 @@ export const StartWorkout = (StartProps: { userId: string }) => {
   // Fetch goals from the backend when the component mounts
   useEffect(() => {
     // Bypass this process if testing
-    if (StartProps.userId != "1") {
+    if (StartProps.userId !== "1") {
       fetchUserData(StartProps.userId)
         .then((result) => {
           setStreak(result.streak);

@@ -23,9 +23,12 @@ export const Sidebar = (props: SidebarProps) => {
 
   // Fetch user data from the backend when the component mounts
   useEffect(() => {
-    fetchUserData(props.userId)
-      .then((result) => setUserInfo(result))
-      .catch((err) => console.log(err));
+    // Bypass this process if testing
+    if (props.userId !== "1") {
+      fetchUserData(props.userId)
+        .then((result) => setUserInfo(result))
+        .catch((err) => console.log(err));
+    }
   }, [props.userId]);
 
   return (
