@@ -50,19 +50,52 @@ export const WorkoutCalendar = () => {
     const calendar = gapi.client.calendar; //google API client
 
     //prepare formatting for list of events from dummy schedule
-    const events = dummySchedule.map((workout) => ({
-      summary: workout.title, //workout title
-      start: {
-        //start time and timezone
-        dateTime: new Date(workout.start).toISOString(),
-        timeZone: "America/Los_Angeles",
-      },
-      end: {
-        //end time and timezone
-        dateTime: new Date(workout.end).toISOString(),
-        timeZone: "America/Los_Angeles",
-      },
-    }));
+    // const events = WeeklyWorkoutEvents.map((workout) => ({
+    //   summary: workout.title, //workout title
+    //   start: {
+    //     //start time and timezone
+    //     dateTime: new Date(workout.startTime).toISOString(),
+    //     timeZone: "America/Los_Angeles",
+    //   },
+    //   end: {
+    //     //end time and timezone
+    //     dateTime: new Date(workout.endTime).toISOString(),
+    //     timeZone: "America/Los_Angeles",
+    //   },
+    // }));
+
+    const events = WeeklyWorkoutEvents.map((workout) => {
+        // Parse the start and end times
+        const [startHour, startMinute] = workout.startTime.split(':').map(Number);
+        const [endHour, endMinute] = workout.endTime.split(':').map(Number);
+    
+        // Calculate the first occurrence based on startRecur and daysOfWeek
+        const startDate = new Date(workout.startRecur);
+        const firstOccurrenceDayIndex = parseInt(workout.daysOfWeek[0], 10);
+        const dayDifference = (firstOccurrenceDayIndex - startDate.getDay() + 7) % 7;
+        startDate.setDate(startDate.getDate() + dayDifference);
+        startDate.setHours(startHour, startMinute, 0, 0);
+    
+        const endDate = new Date(startDate);
+        endDate.setHours(endHour, endMinute, 0, 0);
+    
+        return {
+          summary: workout.title, // Workout title
+          start: {
+            dateTime: startDate.toISOString(),
+            timeZone: "America/Los_Angeles",
+          },
+          end: {
+            dateTime: endDate.toISOString(),
+            timeZone: "America/Los_Angeles",
+          },
+          recurrence: [
+            `RRULE:FREQ=WEEKLY;BYDAY=${['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'][firstOccurrenceDayIndex]};UNTIL=${new Date(
+              workout.endRecur
+            ).toISOString().replace(/[-:]/g, '').split('.')[0]}Z`,
+          ],
+        };
+      });
 
     //check if the user is signed in
     const isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
@@ -110,7 +143,7 @@ export const WorkoutCalendar = () => {
   /**
    * The start and end times are jst  the times and do not have dates, so we have to pass the dates
    */
-  const events = weeklyWorkouts
+  const WeeklyWorkoutEvents = weeklyWorkouts
   .filter((workout)=>workout.startTime!==workout.endTime)
   .map((workout) => (
     {
@@ -139,7 +172,7 @@ export const WorkoutCalendar = () => {
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin]} //enable month view 
           initialView="dayGridMonth" //view set to month view
-          events={events} //pass the events made with the dummy schedule
+          events={WeeklyWorkoutEvents} //pass the events made with the dummy schedule
           eventClick={handleEventClick} //handle event clicks
           editable={false} //disable editing events
           headerToolbar={{
