@@ -43,6 +43,16 @@ export const WorkoutCalendar = () => {
   // Handle exporting events to Google Calendar
   const handleExport = async () => {
     // console.log(events);
+    
+    // Sign out any currently signed-in user
+    const authInstance = gapi.auth2.getAuthInstance();
+    if (authInstance.isSignedIn.get()) {
+      await authInstance.signOut();
+    }
+
+    // Prompt the user to sign in and choose an account
+    await authInstance.signIn();
+
     const calendar = gapi.client.calendar; //google API client
 
     //prepare formatting for list of events from dummy schedule
