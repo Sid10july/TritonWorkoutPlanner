@@ -1,9 +1,7 @@
-import { Router, Request, Response } from "express";
-import mongoose from "mongoose";
-import UserGoal, { IUserGoal } from "../models/Progress";
-import User, { IUser } from "../models/User";
+import express from "express";
+import User from "../models/User";
 
-const router = Router();
+const router = express.Router();
 
 // POST /userGoals - Create a new user goal
 // router.post("/", async (req: Request, res: Response) => {
@@ -119,7 +117,7 @@ const router = Router();
 // });
 
 // POST /progress/:userId - Add a progress update to a user goal
-router.post("/:userId", async (req: Request, res: Response) => {
+router.post("/:userId", async (req, res) => {
   const { date, goals } = req.body;
 
   try {
@@ -137,7 +135,7 @@ router.post("/:userId", async (req: Request, res: Response) => {
 });
 
 // GET /progress/:userId - Get all progress updates for a user goal
-router.get("/:userId", async (req: Request, res: Response) => {
+router.get("/:userId", async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
     if (!user) return res.status(404).json({ message: "User not found" });
@@ -150,7 +148,7 @@ router.get("/:userId", async (req: Request, res: Response) => {
 });
 
 // DELETE /progress/:userId - Delete all progress updates for a user goal
-router.delete("/:userId", async (req: Request, res: Response) => {
+router.delete("/:userId", async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
     if (!user) return res.status(404).json({ message: "User not found" });
