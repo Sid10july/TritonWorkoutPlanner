@@ -40,6 +40,7 @@ export const StartWorkout = (StartProps: { userId: string }) => {
         .then((result) => {
           setStreak(result.streak);
           setGoals(result.goals);
+          // deleteWorkoutProgress(StartProps.userId);
           setLastWorkout(result.lastWorkedOut);
           progress.current = result.goals.map(
             (e: { _id: string; goal: string; value: number }) => ({
@@ -53,10 +54,10 @@ export const StartWorkout = (StartProps: { userId: string }) => {
   }, [StartProps.userId]);
 
   // Function for updating goals
-  const updateGoal = (goalId: string, value: number) => {
+  const updateGoals = (newGoals: Goal[]) => {
     // Send put request to the backend
     axios
-      .put(`/api/goals/${StartProps.userId}/${goalId}`, { value: value })
+      .put(`/api/goals/${StartProps.userId}`, { newGoals: newGoals })
       .catch((error) => console.error("Error updating goals:", error));
   };
 
@@ -74,7 +75,7 @@ export const StartWorkout = (StartProps: { userId: string }) => {
     currentTime.getDate()
   );
   // Dummy time for testing
-  // currentTime = new Date(2024, 11 - 1, 23);
+  // currentTime = new Date(2024, 12 - 1, 8);
 
   const day = currentTime.getDay();
 
@@ -157,6 +158,9 @@ export const StartWorkout = (StartProps: { userId: string }) => {
       setExerciseNum(exerciseNum);
     };
 
+    if (lastWorkout[2] === 1) {
+      return null;
+    }
     if (!dummyWorkoutPlans.length)
       return (
         <div>
@@ -380,9 +384,7 @@ export const StartWorkout = (StartProps: { userId: string }) => {
                 setLastWorkout(currentDate);
                 // Update goals
                 if (newGoals) {
-                  newGoals.forEach((g) => {
-                    updateGoal(g._id, g.value);
-                  });
+                  updateGoals(newGoals);
                 }
               }}
               className="exercise-form"

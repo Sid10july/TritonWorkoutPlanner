@@ -73,7 +73,7 @@ export const TrackProgress = (props: { userId: string }) => {
               const progressValue = props.goals.filter(
                 (g) => g._id === e._id
               )[0].value;
-              if (progressValue !== 0) {
+              if (progressValue && progressValue !== 0) {
                 return (
                   <li key={e._id}>
                     {exerciseGoals[e._id].goal}: {progressValue}/

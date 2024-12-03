@@ -109,26 +109,31 @@ router.delete("/:userId/:goalId", async (req, res) => {
   }
 });
 
-// PUT /api/goals/:userId/:goalId - Modify a goal's value
-router.put("/:userId/:goalId", async (req, res) => {
+// PUT /api/goals/:userId - Modify goals
+router.put("/:userId", async (req, res) => {
+  const { newGoals } = req.body;
   try {
-    const goalId = req.params.goalId;
-    const { value } = req.body;
-
     const user = await User.findById(req.params.userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Update goal
-    user.goals.forEach((goal) => {
-      if (goalId === goal._id?.toString()) {
-        goal.value = value;
-      }
+    console.log(user.goals);
+    console.log(newGoals);
+
+    // Update goals
+    user.goals = user.goals.map((g) => {
+      const changedGoal = newGoals.filter(
+        (nG: any) => nG._id == g._id?.toString()
+      )[0];
+      console.log(changedGoal);
+      return { goal: g.goal, value: changedGoal.value, _id: g._id };
     });
+
+    console.log(user.goals);
 
     await user.save();
     res.status(200).json(user.goals);
   } catch (error) {
-    res.status(500).json({ message: "Error updating goal", error });
+    res.status(500).json({ message: "Error updating goals", error });
   }
 });
 
