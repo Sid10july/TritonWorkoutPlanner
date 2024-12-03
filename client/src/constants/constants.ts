@@ -7,13 +7,13 @@
 // ];
 
 export const Week: string[] = [
+  "Sunday",
   "Monday",
   "Tuesday",
   "Wednesday",
   "Thursday",
   "Friday",
-  "Saturday",
-  "Sunday",
+  "Saturday"
 ];
 
 // export const recommendedExercises = {

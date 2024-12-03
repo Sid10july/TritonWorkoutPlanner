@@ -11,7 +11,6 @@
 //     { day: "Sunday", exercises: [], startTime: "00:00", endTime: "00:00" },
 // ];
 
-
 // interface context {
 //     weeklyWorkouts: ScheduledExercise[],
 //     setWeeklyWorkouts: React.Dispatch<React.SetStateAction<ScheduledExercise[]>>;

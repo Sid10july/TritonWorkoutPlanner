@@ -97,6 +97,74 @@ export function DayPlanner() {
       <h1 className="title-container">This is the {`${day}`} planner</h1>
       <div className="content-container">
         <QueryForm setWorkouts={setWorkouts} />
+<!-- <<<<<<< Integrating-workouts-page-with-server
+        <SelectedWorkoutCards
+          selectedWorkouts={selectedWorkouts}
+          handleDeleteWorkout={handleDeleteWorkout}
+        />
+        <WorkoutCards
+          workouts={workouts}
+          handleAddWorkout={handleAddWorkout}
+        />
+        <Link to="/workout-planner">
+            <button type="submit" className="btn btn-primary">
+                Save
+            </button>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+/**
+ *
+ * @param param0 : workoouts is a list of Exercises. This is a parent state and is passed down to this component.
+ *  On every render this function renders the workout cards.
+ * @returns A list of workout cards
+ */
+function WorkoutCards({
+  workouts,
+  handleAddWorkout
+}: {
+  workouts: Exercise[];
+  handleAddWorkout: (key: string) => void;
+}) {
+  return (
+    <div className="cards" 
+        // style={{maxHeight:"380px", overflowY:'scroll'}}
+    >
+      {workouts.map((workout) => (
+        <WorkoutCard
+          key={workout.name}
+          workout={workout}
+          handleAddWorkout={handleAddWorkout}
+        />
+      ))}
+    </div>
+  );
+}
+
+/**
+ *
+ * @param param0 selectedWorkouts state whihc is a list of selected workouts and a handleDelete function that handles the deletion of one
+ * of these cards
+ * @returns A list of selected cards
+ */
+function SelectedWorkoutCards({
+  selectedWorkouts,
+  handleDeleteWorkout,
+}: {
+  selectedWorkouts: Exercise[];
+  handleDeleteWorkout: (key: string) => void;
+}) {
+  return (
+    <div className="selected-cards" style={{width:"100%"}}>
+<!--       {selectedWorkouts.map((workout) => (
+        <WorkoutsSelected
+          workout={workout}
+          handleDeleteWorkout={handleDeleteWorkout}
+        />
+      ))} -->
         <div className="selected-cards">
           {selectedWorkouts.map((workout) => (
             <WorkoutsSelected
