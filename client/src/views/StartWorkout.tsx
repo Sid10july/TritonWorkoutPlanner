@@ -4,7 +4,9 @@ import {
   fetchUserData,
   incrementStreak,
   resetStreak,
+  addWorkoutProgress,
   updateWorkoutDate,
+  deleteWorkoutProgress,
 } from "../utils/user-utils";
 import { InputField } from "../components/InputField";
 import ProgressBar from "@ramonak/react-progress-bar";
@@ -359,15 +361,24 @@ export const StartWorkout = (StartProps: { userId: string }) => {
             <form
               onSubmit={(e) => {
                 // BACKEND INTEGRATION NEEDED
-                // Add "progress" variable as a new workout entry in database
                 const currentDate: number[] = [
                   currentTime.getMonth() + 1, // monthIndex maps 0-11 to January - December, so readjust by adding 1
                   currentTime.getDate(),
                   currentTime.getFullYear(),
                 ];
+                // Add "progress" variable as a new workout entry in database
+                addWorkoutProgress(
+                  StartProps.userId,
+                  currentDate[2] + "-" + currentDate[0] + "-" + currentDate[1],
+                  progress.current
+                );
+                // Increment streak
                 incrementStreak(StartProps.userId);
+                // Update last workout date
                 updateWorkoutDate(StartProps.userId, currentDate);
+                // Rerender UI
                 setLastWorkout(currentDate);
+                // Update goals
                 if (newGoals) {
                   newGoals.forEach((g) => {
                     updateGoal(g._id, g.value);

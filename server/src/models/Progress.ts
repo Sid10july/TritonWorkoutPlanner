@@ -1,5 +1,5 @@
-import mongoose, { Document, Schema } from 'mongoose';
-import { IUser } from './User';
+import mongoose, { Document, Schema } from "mongoose";
+import { IUser } from "./User";
 
 interface IProgressUpdate {
   date: Date;
@@ -27,7 +27,7 @@ const ProgressUpdateSchema: Schema = new Schema({
 
 const UserGoalSchema: Schema = new Schema(
   {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     goalType: { type: String, required: true },
     targetValue: { type: Number, required: true },
     currentValue: { type: Number, required: true },
@@ -40,4 +40,4 @@ const UserGoalSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-export default mongoose.model<IUserGoal>('UserGoal', UserGoalSchema);
+export default mongoose.model<IUserGoal>("UserGoal", UserGoalSchema);

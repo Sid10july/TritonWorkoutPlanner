@@ -95,11 +95,22 @@ export interface IGoal {
   value: number;
 }
 
+interface ProgressType {
+  _id: string;
+  value: number;
+}
+
+interface IProgressUpdate {
+  date: string;
+  goals: ProgressType[];
+}
+
 export interface IUser extends Document {
   username: string;
   email: string;
   password: string;
   goals: IGoal[];
+  progressUpdates: IProgressUpdate[];
   streak: number;
   lastWorkedOut: number[];
 }
@@ -109,6 +120,11 @@ const GoalSchema: Schema = new Schema<IGoal>({
   value: { type: Number, required: true },
 });
 
+const ProgressSchema: Schema = new Schema<IProgressUpdate>({
+  date: { type: String, required: true },
+  goals: { type: Schema.Types.Mixed, required: true },
+});
+
 const UserSchema: Schema = new Schema<IUser>(
   {
     username: { type: String, required: true, unique: true },
@@ -116,6 +132,7 @@ const UserSchema: Schema = new Schema<IUser>(
     password: { type: String, required: true },
     goals: { type: [GoalSchema], default: [] },
     streak: { type: Number, default: 0 },
+    progressUpdates: { type: [ProgressSchema], default: [] },
     lastWorkedOut: { type: [], default: [0, 0, 0] },
   },
   { timestamps: true }
