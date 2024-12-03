@@ -88,7 +88,7 @@ app.use((req, res, next) => {
 
 // Register user and workoutPlan routes
 app.use('/users', userRoutes);
-app.use('/api/workoutPlans', workoutPlanRoutes);
+app.use('/api/workouts', workoutPlanRoutes);
 
 // Register auth and goal routes
 app.use('/auth', authRoutes);

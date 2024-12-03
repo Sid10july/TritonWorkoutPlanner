@@ -1,30 +1,28 @@
-import mongoose, { Document, Schema } from 'mongoose';
-
-export interface IDailyWorkoutPlan extends Document {
-  day: string; // Day of the week (e.g., "Monday")
-  exercises: {
-    name: string; // Name of the exercise
-    muscle: string; // Target muscle group
-    difficulty: string; // Difficulty level
-  }[]; // Array of exercises
-  startTime: string; // Start time in ISO 8601 format
-  endTime: string; // End time in ISO 8601 format
-}
-
-const ExerciseSchema: Schema = new Schema({
+import mongoose, { Schema, Document, Types } from "mongoose";
+  
+// Define the Exercise schema
+const ExerciseSchema = new Schema({
   name: { type: String, required: true },
+  type: { type: String, required: true },
   muscle: { type: String, required: true },
+  equipment: { type: String, required: true },
   difficulty: { type: String, required: true },
+  instructions: { type: String, required: true },
 });
 
-const DailyWorkoutPlanSchema: Schema = new Schema(
-  {
-    day: { type: String, required: true, unique: true }, // Unique per day
-    exercises: { type: [ExerciseSchema], required: true }, // Array of exercises
-    startTime: { type: String, required: true }, // Required start time
-    endTime: { type: String, required: true }, // Required end time
-  },
-  { timestamps: true } // Automatically track createdAt and updatedAt
-);
+// Define the ScheduledExercise schema
+const ScheduledExerciseSchema = new Schema({
+  day: { type: String, required: true },
+  exercises: { type: [ExerciseSchema], default: [] }, // Use [ExerciseSchema] to specify a nested document array
+  startTime: { type: String, required: true },
+  endTime: { type: String, required: true },
+});
 
-export default mongoose.model<IDailyWorkoutPlan>('DailyWorkoutPlan', DailyWorkoutPlanSchema);
+// Define the User schema
+const UserSchema = new Schema({
+  username: { type: String, required: true, unique: true },
+  weeklyWorkoutPlan: { type: [ScheduledExerciseSchema], default: [] },
+});
+
+// Export the model
+export const WeeklyPlans = mongoose.model("WeeklyPlans", UserSchema);

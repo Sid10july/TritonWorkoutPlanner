@@ -5,7 +5,7 @@
 //   { id: 4, name: "Burpee" },
 //   { id: 5, name: "Pushup" },
 // ];
-
+import { ScheduledExercise } from "../types/types";
 export const Week: string[] = [
   "Sunday",
   "Monday",
@@ -219,4 +219,14 @@ export const difficultyLevels: string[] = [
   "beginner",
   "intermediate",
   "expert",
+];
+
+export const state: ScheduledExercise[] = [
+    { day: "Monday", exercises: [], startTime: "00:00", endTime: "00:00" },
+    { day: "Tuesday", exercises: [], startTime: "00:00", endTime: "00:00" },
+    { day: "Wednesday", exercises: [], startTime: "00:00", endTime: "00:00" },
+    { day: "Thursday", exercises: [], startTime: "00:00", endTime: "00:00" },
+    { day: "Friday", exercises: [], startTime: "00:00", endTime: "00:00" },
+    { day: "Saturday", exercises: [], startTime: "00:00", endTime: "00:00" },
+    { day: "Sunday", exercises: [], startTime: "00:00", endTime: "00:00" },
 ];

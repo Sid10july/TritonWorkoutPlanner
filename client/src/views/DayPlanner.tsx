@@ -23,8 +23,8 @@ export function DayPlanner() {
     const workout = workouts.find((workout) => workout.name === key);
     if (workout) {
       // workout is found
-        setWeeklyWorkouts((prevWorkouts) => {
-            return prevWorkouts.map((daySchedule) => {
+        setWeeklyWorkouts(
+            weeklyWorkouts.map((daySchedule) => {
                 if (daySchedule.day === day) {
                     // Update the day's exercises
                     if(!daySchedule.exercises.find(x=>x.name===key)){
@@ -35,8 +35,8 @@ export function DayPlanner() {
                     }
                 }
                 return daySchedule;
-            });
-        });
+            
+        }));
     }
   }
 
@@ -77,11 +77,11 @@ export function DayPlanner() {
           workouts={workouts}
           handleAddWorkout={handleAddWorkout}
         />
-        <Link to="/workout-planner">
+        {/* <Link to="/workout-planner">
             <button type="submit" className="btn btn-primary">
                 Save
             </button>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
@@ -132,6 +132,7 @@ function SelectedWorkoutCards({
     <div className="selected-cards" style={{width:"100%"}}>
       {selectedWorkouts.map((workout) => (
         <WorkoutsSelected
+          key={workout.name}
           workout={workout}
           handleDeleteWorkout={handleDeleteWorkout}
         />

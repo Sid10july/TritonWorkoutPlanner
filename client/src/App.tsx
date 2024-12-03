@@ -204,7 +204,7 @@ const App: React.FC<AppProps> = ({ debugLogin = false }) => {
             path="/workout-planner"
             element={
               <Layout setIsLoggedIn={setIsLoggedIn}>
-                <WeekPlan />
+                <WeekPlan userId={userId}/>
               </Layout>
             }
           />
