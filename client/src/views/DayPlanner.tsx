@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
 import {
   muscles,
   difficultyLevels,
@@ -12,55 +11,93 @@ import { WorkoutCard, WorkoutsSelected } from "../components/WorkoutCard";
 import { WorkoutsContext } from "../context/workouts-context";
 
 export function DayPlanner() {
-  const { day } = useParams();
-  const {weeklyWorkouts, setWeeklyWorkouts} = useContext(WorkoutsContext); 
-  const [workouts, setWorkouts] = useState<Exercise[]>([]);// State that keeps track of the workouts on a specific day.
-//   const [selectedWorkouts, setSelectedWorkouts] = useState<Exercise[]>([]);
+  const { day } = useParams<{ day: string }>(); // Enforces 'day' to always be a string
+  const { weeklyWorkouts, setWeeklyWorkouts, setModifiedDays } = useContext(WorkoutsContext);
+  const [workouts, setWorkouts] = useState<Exercise[]>([]);
+
+  if (!day) {
+    throw new Error("Day parameter is required."); // Ensure day exists
+  }
+
+  const selectedWorkouts: Exercise[] =
+    weeklyWorkouts.find((x) => x.day === day)?.exercises || [];
 
   function handleAddWorkout(key: string) {
-    console.log(`Add workouts called with key: ${key}`);
     const workout = workouts.find((workout) => workout.name === key);
     if (workout) {
-      // workout is found
-        setWeeklyWorkouts((prevWorkouts) => {
-            return prevWorkouts.map((daySchedule) => {
-                if (daySchedule.day === day) {
-                    // Update the day's exercises
-                    if(!daySchedule.exercises.find(x=>x.name===key)){
-                        return {
-                            ...daySchedule,
-                            exercises: [...daySchedule.exercises, workout],
-                        };
-                    }
-                }
-                return daySchedule;
-            });
-        });
+      setWeeklyWorkouts((prevWorkouts) =>
+        prevWorkouts.map((daySchedule) =>
+          daySchedule.day === day
+            ? {
+                ...daySchedule,
+                exercises: [...daySchedule.exercises, workout],
+              }
+            : daySchedule
+        )
+      );
     }
   }
 
   function handleDeleteWorkout(key: string) {
-
-    setWeeklyWorkouts((prevWorkouts) => {
-        return prevWorkouts.map((daySchedule)=>{
-            if(daySchedule.day===day){
-                return {
-                    ...daySchedule,
-                    exercises : daySchedule.exercises.filter(x=> x.name!==key)
-                };
+    setWeeklyWorkouts((prevWorkouts) =>
+      prevWorkouts.map((daySchedule) =>
+        daySchedule.day === day
+          ? {
+              ...daySchedule,
+              exercises: daySchedule.exercises.filter((x) => x.name !== key),
             }
-            return daySchedule;
-        });
-    });
+          : daySchedule
+      )
+    );
   }
 
-  const selectedWorkouts: Exercise[] = weeklyWorkouts.find(x=>x.day===day)?.exercises || [];
+  async function handleSave() {
+    if (!day) {
+        alert("Day is undefined!");
+        return;
+    }
+
+    const selectedWorkouts = weeklyWorkouts.find((x) => x.day === day)?.exercises || [];
+
+    const requestBody = {
+        day,
+        exercises: selectedWorkouts,
+        startTime: "12:00",
+        endTime: "12:00",
+    };
+
+    console.log("Request body for saving workout plan:", requestBody);
+
+    try {
+        const response = await fetch("http://localhost:8080/api/workoutPlans/day", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            console.error("Error response from server:", error);
+            throw new Error("Failed to save workout plan");
+        }
+
+        const data = await response.json();
+        console.log("Workout plan saved successfully:", data);
+        alert("Workout plan saved successfully!");
+    } catch (error) {
+        console.error("Error saving workout plan:", error);
+        alert("Error saving workout plan.");
+    }
+}
 
   return (
     <div>
       <h1 className="title-container">This is the {`${day}`} planner</h1>
       <div className="content-container">
         <QueryForm setWorkouts={setWorkouts} />
+<!-- <<<<<<< Integrating-workouts-page-with-server
         <SelectedWorkoutCards
           selectedWorkouts={selectedWorkouts}
           handleDeleteWorkout={handleDeleteWorkout}
@@ -122,21 +159,38 @@ function SelectedWorkoutCards({
 }) {
   return (
     <div className="selected-cards" style={{width:"100%"}}>
-      {selectedWorkouts.map((workout) => (
+<!--       {selectedWorkouts.map((workout) => (
         <WorkoutsSelected
           workout={workout}
           handleDeleteWorkout={handleDeleteWorkout}
         />
-      ))}
+      ))} -->
+        <div className="selected-cards">
+          {selectedWorkouts.map((workout) => (
+            <WorkoutsSelected
+              key={workout.name}
+              workout={workout}
+              handleDeleteWorkout={handleDeleteWorkout}
+            />
+          ))}
+          <button onClick={handleSave} className="btn btn-primary">
+            Save
+          </button>
+        </div>
+        <div className="cards">
+          {workouts.map((workout) => (
+            <WorkoutCard
+              key={workout.name}
+              workout={workout}
+              handleAddWorkout={handleAddWorkout}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
-/**
- *
- * @param param0 : setWorkouts to set the workouts of the parent component
- * @returns A query form that on submission sends the parameters to request and gets the response(Exercies[])
- */
 function QueryForm({
   setWorkouts,
 }: {
@@ -146,13 +200,9 @@ function QueryForm({
   const [muscle, setMuscle] = useState("");
   const [difficulty, setDifficulty] = useState("");
 
-  /**
-   * On form submission. Send the values of muscle, type and difficulty to fetchWorkouts function with these values.
-   * @param event - Form submission event
-   */
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const params = { type: type, muscle: muscle, difficulty: difficulty };
+    const params = { type, muscle, difficulty };
     try {
       const workouts: Exercise[] = await fetchWorkouts(params);
       setWorkouts(workouts);
@@ -160,13 +210,13 @@ function QueryForm({
       console.log(error);
     }
   }
+
   return (
     <form
       onSubmit={(event) => onSubmit(event)}
       className="p-4 border rounded bg-white py-4 w-100"
     >
       <div className="row g-3">
-        {/* Type Selection */}
         <div className="col-sm-4">
           <label htmlFor="type" className="form-label fw-bold">
             Type
@@ -176,10 +226,7 @@ function QueryForm({
             className="form-select"
             id="type"
             value={type}
-            onChange={(e) => {
-              console.log(`Change triggered: ${e.target.value}`);
-              setType(e.target.value);
-            }}
+            onChange={(e) => setType(e.target.value)}
           >
             <option value="" disabled>
               Select a type
@@ -191,8 +238,6 @@ function QueryForm({
             ))}
           </select>
         </div>
-
-        {/* Muscle Group Selection */}
         <div className="col-sm-4">
           <label htmlFor="muscle" className="form-label fw-bold">
             Muscle Group
@@ -202,10 +247,7 @@ function QueryForm({
             className="form-select"
             id="muscle"
             value={muscle}
-            onChange={(e) => {
-              console.log(`Change triggered: ${e.target.value}`);
-              setMuscle(e.target.value);
-            }}
+            onChange={(e) => setMuscle(e.target.value)}
           >
             <option value="" disabled>
               Select a muscle
@@ -217,8 +259,6 @@ function QueryForm({
             ))}
           </select>
         </div>
-
-        {/* Difficulty Level Selection */}
         <div className="col-sm-4">
           <label htmlFor="difficulty" className="form-label fw-bold">
             Difficulty Level
@@ -228,10 +268,7 @@ function QueryForm({
             className="form-select"
             id="difficulty"
             value={difficulty}
-            onChange={(e) => {
-              console.log(`Change triggered: ${e.target.value}`);
-              setDifficulty(e.target.value);
-            }}
+            onChange={(e) => setDifficulty(e.target.value)}
           >
             <option value="" disabled>
               Select a difficulty
@@ -243,8 +280,6 @@ function QueryForm({
             ))}
           </select>
         </div>
-
-        {/* Submit Button */}
         <div className="col-sm-12 text-end">
           <button type="submit" className="btn btn-primary">
             Search
