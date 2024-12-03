@@ -10,6 +10,7 @@ import { fetchWorkouts } from "../utils/workout-utils";
 import { Exercise } from "../types/types";
 import { WorkoutCard, WorkoutsSelected } from "../components/WorkoutCard";
 import { WorkoutsContext } from "../context/workouts-context";
+import "./DayPlanner.css";
 
 export function DayPlanner() {
   const { day } = useParams();
@@ -58,7 +59,14 @@ export function DayPlanner() {
 
   return (
     <div>
-      <h1 className="title-container">This is the {`${day}`} planner</h1>
+      <div className="sticky-header">
+        <h1 className="title-container">This is the {`${day}`} planner</h1>
+        <Link to="/workout-planner" className="save-button">
+          <button type="submit" className="btn btn-primary">
+            Save
+          </button>
+        </Link>
+      </div>
       <div className="content-container">
         <QueryForm setWorkouts={setWorkouts} />
         <SelectedWorkoutCards

@@ -73,7 +73,7 @@ export function WorkoutsSelected({
       className="list-group-item d-flex justify-content-between align-items-center border rounded mb-2 py-3 px-4 bg-white"
       style={{ width: "100%"}}
     >
-      <div className="d-flex flex-column">
+      <div className="workout-details">
         <h5 className="mb-0">{workout.name}</h5>
         <small className="text-muted">{workout.muscle}</small>
       </div>
