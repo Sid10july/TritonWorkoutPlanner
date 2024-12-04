@@ -66,7 +66,7 @@ export const dummyWorkoutPlans = [
     ],
   },
   {
-    day: 1,
+    day: 2,
     time: "7:30",
     am: true,
     exercises: [

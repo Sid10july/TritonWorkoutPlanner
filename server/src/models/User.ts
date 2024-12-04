@@ -133,7 +133,7 @@ const UserSchema: Schema = new Schema<IUser>(
     goals: { type: [GoalSchema], default: [] },
     streak: { type: Number, default: 0 },
     progressUpdates: { type: [ProgressSchema], default: [] },
-    lastWorkedOut: { type: [], default: [0, 0, 0] },
+    lastWorkedOut: { type: [Number], default: [0, 0, 0] },
   },
   { timestamps: true }
 );
