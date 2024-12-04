@@ -18,6 +18,18 @@ export function DayPlanner() {
   const selectedWorkouts: Exercise[] = weeklyWorkouts.find(x=>x.day===day)?.exercises || []; // EDIT1: moved from below to top
 //   const [selectedWorkouts, setSelectedWorkouts] = useState<Exercise[]>([]);
 
+  //EDIT4: Function to remove duplicates based on workout name
+  const removeDuplicates = (workouts: Exercise[]) => {
+    const seen = new Set();
+    return workouts.filter((workout) => {
+      if (seen.has(workout.name)) {
+        return false; // Skip duplicate
+      } else {
+        seen.add(workout.name);
+        return true;
+      }
+    });
+  };
   //EDIT2: Filter out exercises that have already been added to the day
   const availableWorkouts = workouts.filter(workout => 
     !selectedWorkouts.some(selected => selected.name === workout.name)
@@ -64,7 +76,7 @@ export function DayPlanner() {
     <div>
       <h1 className="title-container">This is the {`${day}`} planner</h1>
       <div className="content-container">
-        <QueryForm setWorkouts={setWorkouts} />
+        <QueryForm setWorkouts={setWorkouts} removeDuplicates={removeDuplicates} />
         <SelectedWorkoutCards
           selectedWorkouts={selectedWorkouts}
           handleDeleteWorkout={handleDeleteWorkout}
@@ -143,8 +155,10 @@ function SelectedWorkoutCards({
  */
 function QueryForm({
   setWorkouts,
+  removeDuplicates
 }: {
   setWorkouts: React.Dispatch<React.SetStateAction<Exercise[]>>;
+  removeDuplicates: (workouts: Exercise[]) => Exercise[];
 }) {
   const [type, setType] = useState("");
   const [muscle, setMuscle] = useState("");
@@ -159,7 +173,8 @@ function QueryForm({
     const params = { type: type, muscle: muscle, difficulty: difficulty };
     try {
       const workouts: Exercise[] = await fetchWorkouts(params);
-      setWorkouts(workouts); // Set the unique list of workouts
+      const uniqueWorkouts = removeDuplicates(workouts); // EDIT5:Filter duplicates here
+      setWorkouts(uniqueWorkouts); // Set the unique list of workouts
     } catch (error) {
       console.log(error);
     }
