@@ -107,7 +107,7 @@ app.use('/api/goals', goalsRoutes);
 })();
 
 // MongoDB connection
-const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/tritonworkoutplanner';
+const mongoURI = `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@tritonworkoutplanner.wzohk.mongodb.net/?retryWrites=true&w=majority&appName=TritonWorkoutPlanner`;
 mongoose
     .connect(mongoURI)
     .then(() => console.log('✅ Connected to MongoDB'))
