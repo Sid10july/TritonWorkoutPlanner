@@ -10,21 +10,25 @@ import { fetchWorkouts } from "../utils/workout-utils";
 import { Exercise } from "../types/types";
 import { WorkoutCard, WorkoutsSelected } from "../components/WorkoutCard";
 import { WorkoutsContext } from "../context/workouts-context";
-import "./DayPlanner.css";
 
 export function DayPlanner() {
   const { day } = useParams();
   const {weeklyWorkouts, setWeeklyWorkouts} = useContext(WorkoutsContext); 
   const [workouts, setWorkouts] = useState<Exercise[]>([]);// State that keeps track of the workouts on a specific day.
+  const selectedWorkouts: Exercise[] = weeklyWorkouts.find(x=>x.day===day)?.exercises || []; // EDIT1: moved from below to top
 //   const [selectedWorkouts, setSelectedWorkouts] = useState<Exercise[]>([]);
 
+  //EDIT2: Filter out exercises that have already been added to the day
+  const availableWorkouts = workouts.filter(workout => 
+    !selectedWorkouts.some(selected => selected.name === workout.name)
+  );
   function handleAddWorkout(key: string) {
     console.log(`Add workouts called with key: ${key}`);
     const workout = workouts.find((workout) => workout.name === key);
     if (workout) {
       // workout is found
-        setWeeklyWorkouts(
-            weeklyWorkouts.map((daySchedule) => {
+        setWeeklyWorkouts((prevWorkouts) => {
+            return prevWorkouts.map((daySchedule) => {
                 if (daySchedule.day === day) {
                     // Update the day's exercises
                     if(!daySchedule.exercises.find(x=>x.name===key)){
@@ -35,8 +39,8 @@ export function DayPlanner() {
                     }
                 }
                 return daySchedule;
-            
-        }));
+            });
+        });
     }
   }
 
@@ -55,18 +59,10 @@ export function DayPlanner() {
     });
   }
 
-  const selectedWorkouts: Exercise[] = weeklyWorkouts.find(x=>x.day===day)?.exercises || [];
 
   return (
     <div>
-      <div className="sticky-header">
-        <h1 className="title-container">This is the {`${day}`} planner</h1>
-        <Link to="/workout-planner" className="save-button">
-          <button type="submit" className="btn btn-primary">
-            Save
-          </button>
-        </Link>
-      </div>
+      <h1 className="title-container">This is the {`${day}`} planner</h1>
       <div className="content-container">
         <QueryForm setWorkouts={setWorkouts} />
         <SelectedWorkoutCards
@@ -74,14 +70,14 @@ export function DayPlanner() {
           handleDeleteWorkout={handleDeleteWorkout}
         />
         <WorkoutCards
-          workouts={workouts}
+          workouts={availableWorkouts}  //EDIT3: Only pass the available workouts to be displayed
           handleAddWorkout={handleAddWorkout}
         />
-        {/* <Link to="/workout-planner">
+        <Link to="/workout-planner">
             <button type="submit" className="btn btn-primary">
                 Save
             </button>
-        </Link> */}
+        </Link>
       </div>
     </div>
   );
@@ -132,7 +128,6 @@ function SelectedWorkoutCards({
     <div className="selected-cards" style={{width:"100%"}}>
       {selectedWorkouts.map((workout) => (
         <WorkoutsSelected
-          key={workout.name}
           workout={workout}
           handleDeleteWorkout={handleDeleteWorkout}
         />
@@ -164,7 +159,7 @@ function QueryForm({
     const params = { type: type, muscle: muscle, difficulty: difficulty };
     try {
       const workouts: Exercise[] = await fetchWorkouts(params);
-      setWorkouts(workouts);
+      setWorkouts(workouts); // Set the unique list of workouts
     } catch (error) {
       console.log(error);
     }
@@ -263,3 +258,4 @@ function QueryForm({
     </form>
   );
 }
+
