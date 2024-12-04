@@ -1,11 +1,25 @@
-import { useState } from "react";
-import { dummyWorkoutData, dummyExerciseGoals } from "../constants/constants";
+import { useState, useEffect } from "react";
+import { fetchUserData } from "../utils/user-utils";
+import {
+  dummyWorkoutData,
+  dummyExerciseGoals,
+  dummyProfileData,
+} from "../constants/constants";
 import "./TrackProgress.css";
 
 // BACKEND: Replace the dummy values with database values. Make sure
 // they match the same format
 
-export const TrackProgress = () => {
+export const TrackProgress = (props: { userId: string }) => {
+  const [userInfo, setUserInfo] = useState(dummyProfileData);
+
+  // Fetch user data from the backend when the component mounts
+  useEffect(() => {
+    fetchUserData(props.userId)
+      .then((result) => setUserInfo(result))
+      .catch((err) => console.log(err));
+  }, [props.userId]);
+
   // Sort exerciseData by newest date
   const exerciseData = dummyWorkoutData.sort((a, b) => {
     if (a.date > b.date) return -1;
@@ -70,7 +84,9 @@ export const TrackProgress = () => {
 
   return (
     <div>
-      <h1 className="title-container">Track Progress</h1>
+      <h1 className="title-container">
+        Track Progress (Workout Streak 🔥: {userInfo.streak})
+      </h1>
       <div className="content-container">
         {exerciseData.map((e) => {
           return <WorkoutData key={e.date} date={e.date} goals={e.goals} />;

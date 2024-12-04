@@ -15,6 +15,7 @@ export type SidebarProps = {
   pageIndex: number;
   sidebarClickHandler: (pageIndex: number) => void;
   setIsLoggedIn: (loggedIn: boolean) => void; // Add setIsLoggedIn
+  userId: string;
 };
 
 export type SidebarOptionProps = {
