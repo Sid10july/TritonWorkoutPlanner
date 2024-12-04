@@ -55,6 +55,7 @@ router.patch("/logWorkoutDate", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    // Update workout date
     for (let i = 0; i < user.lastWorkedOut.length; i++) {
       user.lastWorkedOut[i] = date[i];
     }
