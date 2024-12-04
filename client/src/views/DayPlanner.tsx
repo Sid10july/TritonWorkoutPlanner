@@ -163,6 +163,7 @@ function QueryForm({
   const [type, setType] = useState("");
   const [muscle, setMuscle] = useState("");
   const [difficulty, setDifficulty] = useState("");
+  const [noWorkoutsFound, setNoWorkoutsFound] = useState(false); // EDIT6: Track if no workouts are found
 
   /**
    * On form submission. Send the values of muscle, type and difficulty to fetchWorkouts function with these values.
@@ -173,8 +174,13 @@ function QueryForm({
     const params = { type: type, muscle: muscle, difficulty: difficulty };
     try {
       const workouts: Exercise[] = await fetchWorkouts(params);
-      const uniqueWorkouts = removeDuplicates(workouts); // EDIT5:Filter duplicates here
-      setWorkouts(uniqueWorkouts); // Set the unique list of workouts
+      if (workouts.length === 0) {
+        setNoWorkoutsFound(true);  // No workouts found with search categories 
+      } else {
+        setNoWorkoutsFound(false); // Reset flag if workouts are found
+        const uniqueWorkouts = removeDuplicates(workouts); // EDIT5:Filter duplicates here
+        setWorkouts(uniqueWorkouts); // Set the unique list of workouts
+      }
     } catch (error) {
       console.log(error);
     }
@@ -270,7 +276,17 @@ function QueryForm({
           </button>
         </div>
       </div>
+      {/*EDIT7: output msg when no workouts found w/ search category */}
+      {noWorkoutsFound && (
+        <div style={{
+          marginTop: "20px",
+          color: "red",
+          fontSize: "16px",
+          fontWeight: "bold"
+        }}>
+          <p>No workout found matching your search criteria.</p>
+        </div>
+      )}
     </form>
   );
 }
-
