@@ -154,6 +154,7 @@ const Layout = ({
             pageIndex={pageIndex}
             sidebarClickHandler={handleSidebarClick}
             setIsLoggedIn={setIsLoggedIn} // Pass the setIsLoggedIn prop
+            userId={userId}
         />
         <div className="App-views">{children}</div>
         </div>
@@ -205,7 +206,7 @@ const App: React.FC<AppProps> = ({ debugId = "0" }) => {
           <Route
             path="/workout-planner"
             element={
-              <Layout setIsLoggedIn={setIsLoggedIn}>
+              <Layout setIsLoggedIn={setIsLoggedIn} userId={userId}>
                 <WeekPlan userId={userId}/>
               </Layout>
             }
