@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import {
+  fetchUserData,
+  incrementStreak,
+  resetStreak,
+} from "../utils/user-utils";
 import { InputField } from "../components/InputField";
 import ProgressBar from "@ramonak/react-progress-bar";
 import { WorkoutPlan, Goal } from "../types/types";
@@ -12,35 +17,38 @@ import {
 } from "../constants/constants";
 import "./StartWorkout.css";
 
-export const StartWorkout = (props: { userId: string }) => {
+export const StartWorkout = (StartProps: { userId: string }) => {
   // Use axios baseURL to define the port
   axios.defaults.baseURL = `http://localhost:${process.env.PORT || 8080}`;
 
   const [goals, setGoals] = useState(dummyExerciseGoals);
+  const [streak, setStreak] = useState(dummyProfileData.streak);
   let progress = useRef([] as { _id: string; value: number }[]);
 
   // Fetch goals from the backend when the component mounts
   useEffect(() => {
-    axios
-      .get(`/api/goals/${props.userId}`)
-      .then((response) => {
-        setGoals(response.data);
-        // Set progress template
-        progress.current = response.data.map(
-          (e: { _id: string; goal: string; value: number }) => ({
-            _id: e._id,
-            value: 0,
-          })
-        );
-      })
-      .catch((error) => console.error("Error fetching goals:", error));
-  }, [props.userId]);
+    // Bypass this process if testing
+    if (StartProps.userId !== "1") {
+      fetchUserData(StartProps.userId)
+        .then((result) => {
+          setStreak(result.streak);
+          setGoals(result.goals);
+          progress.current = result.goals.map(
+            (e: { _id: string; goal: string; value: number }) => ({
+              _id: e._id,
+              value: 0,
+            })
+          );
+        })
+        .catch((error) => console.error("Error fetching goals:", error));
+    }
+  }, [StartProps.userId]);
 
   // Function for updating goals
   const updateGoal = (goalId: string, value: number) => {
     // Send put request to the backend
     axios
-      .put(`/api/goals/${props.userId}/${goalId}`, { value: value })
+      .put(`/api/goals/${StartProps.userId}/${goalId}`, { value: value })
       .catch((error) => console.error("Error updating goals:", error));
   };
 
@@ -152,7 +160,7 @@ export const StartWorkout = (props: { userId: string }) => {
         </div>
       );
     if (streakStatus === "broken") {
-      // BACKEND: Set streak value to 0
+      resetStreak(StartProps.userId);
       return (
         <div className="exercise-container">
           <p className="workoutIndicator-title mb-0">You broke your streak!</p>
@@ -258,9 +266,9 @@ export const StartWorkout = (props: { userId: string }) => {
       );
     }
     // Workout is finished
-    // BACKEND: Increment streak to database
+    // BACKEND: Increment streak to database and last workout
     else {
-      let newGoals: any[];
+      let newGoals: any[] = goals;
 
       const handleProgressChange = (id: string, value: number) => {
         if (isNaN(value)) value = 0;
@@ -272,20 +280,19 @@ export const StartWorkout = (props: { userId: string }) => {
 
       const handleGoalChange = (id: string, value: number) => {
         if (isNaN(value)) value = 0;
-        newGoals = goals.map((e: Goal) => {
-          if (id === e._id) return { _id: id, goal: e.goal, value: value };
+        newGoals = newGoals.map((e: Goal) => {
+          if (id === e._id) return { goal: e.goal, value: value, _id: id };
           else return { ...e };
         });
       };
 
       // Track goals
       if (props.exerciseNum === props.numExercises && goals.length) {
+        incrementStreak(StartProps.userId);
         return (
           <div className="exercise-container">
             <p className="workoutIndicator-title mb-0">Workout finished!</p>
-            <p className="fs-4 mb-5">
-              New streak 🔥: {dummyProfileData.streak + 1}
-            </p>
+            <p className="fs-4 mb-5">New streak 🔥: {streak + 1}</p>
             <p className="fs-2 mb-5">Progress Tracker:</p>
             <form
               className="exercise-form"
@@ -331,9 +338,7 @@ export const StartWorkout = (props: { userId: string }) => {
         return (
           <div className="exercise-container">
             <p className="workoutIndicator-title mb-0">Workout finished!</p>
-            <p className="fs-4 mb-5">
-              New streak 🔥: {dummyProfileData.streak + 1}
-            </p>
+            <p className="fs-4 mb-5">New streak 🔥: {streak + 1}</p>
             <p className="fs-2 mb-5">
               {isGoalMet
                 ? "Progress Tracker (Goal(s) met! Set new goals?)"

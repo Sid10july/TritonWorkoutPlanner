@@ -306,28 +306,28 @@ describe("Sidebar Tests", () => {
   test("Clicking a tab on the sidebar directs you to the specified page", () => {
     render(
       <BrowserRouter>
-        <App debugLogin={true} />
+        <App debugId={"1"} />
       </BrowserRouter>
     );
 
-    // Click on exercise library button
-    const exerciseLibraryButton = screen.getByText("Exercise Library");
-    fireEvent.click(exerciseLibraryButton);
+    // Click on workout calendar button
+    const workoutCalendarButton = screen.getByText("Workout Calendar");
+    fireEvent.click(workoutCalendarButton);
 
-    // Expect to see "Exercise Library" twice (first in the sidebar, and second as a page header)
-    const exerciseLibraryTitle = screen.getAllByText("Exercise Library");
-    expect(exerciseLibraryTitle.length).toBe(2);
+    // Expect to see "Workout Calendar" twice (first in the sidebar, and second as a page header)
+    const workoutCalendarTitle = screen.getAllByText("Workout Calendar");
+    expect(workoutCalendarTitle.length).toBe(2);
   });
 
   test("Click on the sidebar's account info button to see the log out option", () => {
     render(
       <BrowserRouter>
-        <App debugLogin={true} />
+        <App debugId={"1"} />
       </BrowserRouter>
     );
 
     // Click on account info button
-    const accountButton = screen.getByText("🔥", { exact: false });
+    const accountButton = screen.getByTestId("sidebar-account");
     fireEvent.click(accountButton);
 
     // Should now be able to see the "Log Out" option
