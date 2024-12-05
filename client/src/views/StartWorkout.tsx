@@ -4,6 +4,9 @@ import {
   fetchUserData,
   incrementStreak,
   resetStreak,
+  addWorkoutProgress,
+  updateWorkoutDate,
+  deleteWorkoutProgress,
 } from "../utils/user-utils";
 import { InputField } from "../components/InputField";
 import ProgressBar from "@ramonak/react-progress-bar";
@@ -23,7 +26,11 @@ export const StartWorkout = (StartProps: { userId: string }) => {
 
   const [goals, setGoals] = useState(dummyExerciseGoals);
   const [streak, setStreak] = useState(dummyProfileData.streak);
+  const [lastWorkout, setLastWorkout] = useState(dummyLastWorkout);
   let progress = useRef([] as { _id: string; value: number }[]);
+
+  // Resetting date for debugging purposes
+  // updateWorkoutDate(StartProps.userId, [0, 0, 0]);
 
   // Fetch goals from the backend when the component mounts
   useEffect(() => {
@@ -33,6 +40,8 @@ export const StartWorkout = (StartProps: { userId: string }) => {
         .then((result) => {
           setStreak(result.streak);
           setGoals(result.goals);
+          // deleteWorkoutProgress(StartProps.userId);
+          setLastWorkout(result.lastWorkedOut);
           progress.current = result.goals.map(
             (e: { _id: string; goal: string; value: number }) => ({
               _id: e._id,
@@ -45,10 +54,10 @@ export const StartWorkout = (StartProps: { userId: string }) => {
   }, [StartProps.userId]);
 
   // Function for updating goals
-  const updateGoal = (goalId: string, value: number) => {
+  const updateGoals = (newGoals: Goal[]) => {
     // Send put request to the backend
     axios
-      .put(`/api/goals/${StartProps.userId}/${goalId}`, { value: value })
+      .put(`/api/goals/${StartProps.userId}`, { newGoals: newGoals })
       .catch((error) => console.error("Error updating goals:", error));
   };
 
@@ -58,8 +67,6 @@ export const StartWorkout = (StartProps: { userId: string }) => {
   // Log workout goals in the database
   // When finished working out, log current date as last workout time in database
 
-  const [lastWorkout, setLastWorkout] = useState(dummyLastWorkout);
-
   // Get current time (disregard hours/minutes/seconds)
   let currentTime = new Date();
   currentTime = new Date(
@@ -68,7 +75,7 @@ export const StartWorkout = (StartProps: { userId: string }) => {
     currentTime.getDate()
   );
   // Dummy time for testing
-  // currentTime = new Date(2024, 11 - 1, 23);
+  // currentTime = new Date(2024, 12 - 1, 8);
 
   const day = currentTime.getDay();
 
@@ -151,6 +158,9 @@ export const StartWorkout = (StartProps: { userId: string }) => {
       setExerciseNum(exerciseNum);
     };
 
+    if (lastWorkout[2] === 1) {
+      return null;
+    }
     if (!dummyWorkoutPlans.length)
       return (
         <div>
@@ -160,7 +170,10 @@ export const StartWorkout = (StartProps: { userId: string }) => {
         </div>
       );
     if (streakStatus === "broken") {
-      resetStreak(StartProps.userId);
+      // Prevents page from resetting streak if data hasn't loaded yet
+      if (lastWorkout[2] !== 1) {
+        resetStreak(StartProps.userId);
+      }
       return (
         <div className="exercise-container">
           <p className="workoutIndicator-title mb-0">You broke your streak!</p>
@@ -288,7 +301,6 @@ export const StartWorkout = (StartProps: { userId: string }) => {
 
       // Track goals
       if (props.exerciseNum === props.numExercises && goals.length) {
-        incrementStreak(StartProps.userId);
         return (
           <div className="exercise-container">
             <p className="workoutIndicator-title mb-0">Workout finished!</p>
@@ -353,18 +365,26 @@ export const StartWorkout = (StartProps: { userId: string }) => {
             <form
               onSubmit={(e) => {
                 // BACKEND INTEGRATION NEEDED
-                // Update backend with last workout time
-                // Add "progress" variable as a new workout entry in database
-                // Replace user goals with "goals" in database
-                setLastWorkout([
+                const currentDate: number[] = [
                   currentTime.getMonth() + 1, // monthIndex maps 0-11 to January - December, so readjust by adding 1
                   currentTime.getDate(),
                   currentTime.getFullYear(),
-                ]);
+                ];
+                // Add "progress" variable as a new workout entry in database
+                addWorkoutProgress(
+                  StartProps.userId,
+                  currentDate[2] + "-" + currentDate[0] + "-" + currentDate[1],
+                  progress.current
+                );
+                // Increment streak
+                incrementStreak(StartProps.userId);
+                // Update last workout date
+                updateWorkoutDate(StartProps.userId, currentDate);
+                // Rerender UI
+                setLastWorkout(currentDate);
+                // Update goals
                 if (newGoals) {
-                  newGoals.forEach((g) => {
-                    updateGoal(g._id, g.value);
-                  });
+                  updateGoals(newGoals);
                 }
               }}
               className="exercise-form"

@@ -93,6 +93,7 @@ import authRoutes from "./routes/auth";
 import userRoutes from "./routes/users";
 import streakRoutes from "./routes/streaks";
 import workoutPlanRoutes from "./routes/workoutPlans";
+import progressRoutes from "./routes/progress";
 import goalsRoutes from "./routes/goals"; // Import goals route
 import cors from "cors";
 
@@ -119,6 +120,9 @@ app.use('/api/workouts', workoutPlanRoutes);
 
 // Register streak routes with the /streaks prefix
 app.use("/streaks", streakRoutes);
+
+// Register progress routes with the /progress prefix
+app.use("/progress", progressRoutes);
 
 // Register goals routes with the /api/goals prefix
 app.use("/api/goals", goalsRoutes);

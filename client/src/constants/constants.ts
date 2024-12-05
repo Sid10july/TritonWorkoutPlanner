@@ -36,7 +36,7 @@ export const dummyExercisesList = [
 ];
 
 // Last time user worked out
-export const dummyLastWorkout = [11, 25, 2024];
+export const dummyLastWorkout = [1, 1, 1];
 
 export const dummyWorkoutPlans = [
   {
@@ -66,7 +66,7 @@ export const dummyWorkoutPlans = [
     ],
   },
   {
-    day: 1,
+    day: 2,
     time: "7:30",
     am: true,
     exercises: [
@@ -140,30 +140,30 @@ export const dummyExerciseGoals = [
 ];
 
 export const dummyWorkoutData = [
-  {
-    date: "2024-11-22",
-    goals: [
-      { id: "0", progressValue: 125 },
-      { id: "1", progressValue: 190 },
-      { id: "2", progressValue: 12 },
-    ],
-  },
-  {
-    date: "2024-10-19",
-    goals: [
-      { id: "0", progressValue: 115 },
-      { id: "1", progressValue: 170 },
-      { id: "2", progressValue: 17 },
-    ],
-  },
-  {
-    date: "2024-10-11",
-    goals: [
-      { id: "0", progressValue: 135 },
-      { id: "1", progressValue: 200 },
-      { id: "2", progressValue: 14 },
-    ],
-  },
+  // {
+  //   date: "2024-11-22",
+  //   goals: [
+  //     { _id: "0", value: 125 },
+  //     { _id: "1", value: 190 },
+  //     { _id: "2", value: 12 },
+  //   ],
+  // },
+  // {
+  //   date: "2024-10-19",
+  //   goals: [
+  //     { _id: "0", value: 115 },
+  //     { _id: "1", value: 170 },
+  //     { _id: "2", value: 17 },
+  //   ],
+  // },
+  // {
+  //   date: "2024-10-11",
+  //   goals: [
+  //     { _id: "0", value: 135 },
+  //     { _id: "1", value: 200 },
+  //     { _id: "2", value: 14 },
+  //   ],
+  // },
 ];
 
 export const dummySchedule = [
