@@ -28,6 +28,6 @@ jobs: # the things being executed
         npm start &
         sleep 5 # Wait for the server to fully start (adjust as needed)
      - name: Install Dependencies
-       run: cd ../client; npm install
+       run: cd client; npm install
      - name: Unit Test
        run: cd client; npm test # the actual testing line
