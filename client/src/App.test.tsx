@@ -501,16 +501,16 @@ describe("Filter Workouts page tests",()=>{
         await fetchWorkouts({});
         
         await waitFor(() => {
-            expect(screen.getByText('Rickshaw Carry')).toBeInTheDocument();
-            expect(screen.getByText('Single-Leg Press')).toBeInTheDocument();
-            expect(screen.getByText('Landmine twist')).toBeInTheDocument();
-            expect(screen.getByText('Weighted pull-up')).toBeInTheDocument();
-            expect(screen.getByText('T-Bar Row with Handle')).toBeInTheDocument();
-            expect(screen.getByText('Palms-down wrist curl over bench')).toBeInTheDocument();
-            expect(screen.getByText('Atlas Stones')).toBeInTheDocument();
-            expect(screen.getByText('Dumbbell front raise to lateral raise')).toBeInTheDocument();
-            expect(screen.getByText('Clean from Blocks')).toBeInTheDocument();
-            expect(screen.getByText('Incline Hammer Curls')).toBeInTheDocument();
+            expect(screen.findByText('Rickshaw Carry')).toBeInTheDocument();
+            expect(screen.findByText('Single-Leg Press')).toBeInTheDocument();
+            expect(screen.findByText('Landmine twist')).toBeInTheDocument();
+            expect(screen.findByText('Weighted pull-up')).toBeInTheDocument();
+            expect(screen.findByText('T-Bar Row with Handle')).toBeInTheDocument();
+            expect(screen.findByText('Palms-down wrist curl over bench')).toBeInTheDocument();
+            expect(screen.findByText('Atlas Stones')).toBeInTheDocument();
+            expect(screen.findByText('Dumbbell front raise to lateral raise')).toBeInTheDocument();
+            expect(screen.findByText('Clean from Blocks')).toBeInTheDocument();
+            expect(screen.findByText('Incline Hammer Curls')).toBeInTheDocument();
         })
     });
 
@@ -529,16 +529,16 @@ describe("Filter Workouts page tests",()=>{
         await fetchWorkouts({});
 
         await waitFor(() => {
-            expect(screen.getByText('Dumbbell front raise to lateral raise')).toBeInTheDocument();
-            expect(screen.getByText('Single-Leg Press')).toBeInTheDocument();
-            expect(screen.getByText('Landmine twist')).toBeInTheDocument();
-            expect(screen.getByText('Weighted pull-up')).toBeInTheDocument();
-            expect(screen.getByText('T-Bar Row with Handle')).toBeInTheDocument();
-            expect(screen.getByText('Palms-down wrist curl over bench')).toBeInTheDocument();
-            expect(screen.getByText('Incline Hammer Curls')).toBeInTheDocument();
-            expect(screen.getByText('Straight-bar wrist roll-up')).toBeInTheDocument();
-            expect(screen.getByText('Clean and press')).toBeInTheDocument();
-            expect(screen.getByText('Triceps dip')).toBeInTheDocument();
+            expect(screen.findByText('Dumbbell front raise to lateral raise')).toBeInTheDocument();
+            expect(screen.findByText('Single-Leg Press')).toBeInTheDocument();
+            expect(screen.findByText('Landmine twist')).toBeInTheDocument();
+            expect(screen.findByText('Weighted pull-up')).toBeInTheDocument();
+            expect(screen.findByText('T-Bar Row with Handle')).toBeInTheDocument();
+            expect(screen.findByText('Palms-down wrist curl over bench')).toBeInTheDocument();
+            expect(screen.findByText('Incline Hammer Curls')).toBeInTheDocument();
+            expect(screen.findByText('Straight-bar wrist roll-up')).toBeInTheDocument();
+            expect(screen.findByText('Clean and press')).toBeInTheDocument();
+            expect(screen.findByText('Triceps dip')).toBeInTheDocument();
         })
     });
 
@@ -559,16 +559,16 @@ describe("Filter Workouts page tests",()=>{
         await fetchWorkouts({});
 
         await waitFor(() => {
-            expect(screen.getByText('Incline Hammer Curls')).toBeInTheDocument();
-            expect(screen.getByText('Wide-grip barbell curl')).toBeInTheDocument();
-            expect(screen.getByText('EZ-bar spider curl')).toBeInTheDocument();
-            expect(screen.getByText('Hammer Curls')).toBeInTheDocument();
-            expect(screen.getByText('EZ-Bar Curl')).toBeInTheDocument();
-            expect(screen.getByText('Zottman Curl')).toBeInTheDocument();
-            expect(screen.getByText('Biceps curl to shoulder press')).toBeInTheDocument();
-            expect(screen.getByText('Barbell Curl')).toBeInTheDocument();
-            expect(screen.getByText('Concentration curl')).toBeInTheDocument();
-            expect(screen.getByText('Flexor Incline Dumbbell Curls')).toBeInTheDocument();
+            expect(screen.findByText('Incline Hammer Curls')).toBeInTheDocument();
+            expect(screen.findByText('Wide-grip barbell curl')).toBeInTheDocument();
+            expect(screen.findByText('EZ-bar spider curl')).toBeInTheDocument();
+            expect(screen.findByText('Hammer Curls')).toBeInTheDocument();
+            expect(screen.findByText('EZ-Bar Curl')).toBeInTheDocument();
+            expect(screen.findByText('Zottman Curl')).toBeInTheDocument();
+            expect(screen.findByText('Biceps curl to shoulder press')).toBeInTheDocument();
+            expect(screen.findByText('Barbell Curl')).toBeInTheDocument();
+            expect(screen.findByText('Concentration curl')).toBeInTheDocument();
+            expect(screen.findByText('Flexor Incline Dumbbell Curls')).toBeInTheDocument();
         })
     });
 
@@ -591,16 +591,16 @@ describe("Filter Workouts page tests",()=>{
         await fetchWorkouts({});
 
         await waitFor(() => {
-            expect(screen.getByText('Dumbbell Alternate Bicep Curl')).toBeInTheDocument();
-            expect(screen.getByText('EZ-bar spider curl')).toBeInTheDocument();
-            expect(screen.getByText('Hammer Curls')).toBeInTheDocument();
-            expect(screen.getByText('EZ-Bar Curl')).toBeInTheDocument();
-            expect(screen.getByText('Zottman Curl')).toBeInTheDocument();
-            expect(screen.getByText('Dumbbell Bicep Curl')).toBeInTheDocument();
-            expect(screen.getByText('Barbell Curl')).toBeInTheDocument();
-            expect(screen.getByText('Concentration curl')).toBeInTheDocument();
-            expect(screen.getByText('Overhead cable curl')).toBeInTheDocument();
-            expect(screen.getByText('Preacher Curl')).toBeInTheDocument();
+            expect(screen.findByText('Dumbbell Alternate Bicep Curl')).toBeInTheDocument();
+            expect(screen.findByText('EZ-bar spider curl')).toBeInTheDocument();
+            expect(screen.findByText('Hammer Curls')).toBeInTheDocument();
+            expect(screen.findByText('EZ-Bar Curl')).toBeInTheDocument();
+            expect(screen.findByText('Zottman Curl')).toBeInTheDocument();
+            expect(screen.findByText('Dumbbell Bicep Curl')).toBeInTheDocument();
+            expect(screen.findByText('Barbell Curl')).toBeInTheDocument();
+            expect(screen.findByText('Concentration curl')).toBeInTheDocument();
+            expect(screen.findByText('Overhead cable curl')).toBeInTheDocument();
+            expect(screen.findByText('Preacher Curl')).toBeInTheDocument();
         })
     });
 });
