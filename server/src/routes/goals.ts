@@ -68,7 +68,7 @@ const router = express.Router();
 // GET /api/goals/:userId - Retrieve all goals for a user
 router.get("/:userId", async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findOne({username:req.params.userId});
     if (!user) return res.status(404).json({ message: "User not found" });
     res.status(200).json(user.goals);
   } catch (error) {
@@ -80,7 +80,7 @@ router.get("/:userId", async (req, res) => {
 router.post("/:userId", async (req, res) => {
   const { goal, value } = req.body;
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findOne({username:req.params.userId});
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const newGoal = { goal, value };
@@ -95,7 +95,7 @@ router.post("/:userId", async (req, res) => {
 // DELETE /api/goals/:userId/:goalId - Delete a goal
 router.delete("/:userId/:goalId", async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findOne({username:req.params.userId});
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // Ensure TypeScript knows _id is defined
@@ -117,7 +117,7 @@ router.put("/:userId/:goalId", async (req, res) => {
 
     console.log(goalId);
 
-    const user = await User.findById(req.params.userId);
+    const user = await User.findOne({username:req.params.userId});
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // Update goal
