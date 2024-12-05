@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, within, waitFor } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Routes, MemoryRouter } from "react-router-dom";
 // COMPONENTS
 import App from "./App";
 import { Sidebar } from "./components/Sidebar/Sidebar";
@@ -12,6 +12,9 @@ import {
   recommendedExercises,
   dummySchedule,
 } from "./constants/constants";
+// CONTEXT
+import { WorkoutsContext, WorkoutsProvider } from "./context/workouts-context";
+import { WeekPlan } from "./views/WeekPlan";
 
 // describe("Customize Workout Plan Tests", () => {
 //   test("all days initialized as unchecked", () => {
@@ -302,6 +305,11 @@ import {
 //   });
 // });
 
+const mockSetWeeklyWorkouts = jest.fn();
+const mockWeeklyWorkouts = [
+  { day: "Monday", exercises: [], startTime: "00:00", endTime: "00:00" },
+];
+
 describe("Sidebar Tests", () => {
   test("Clicking a tab on the sidebar directs you to the specified page", () => {
     render(
@@ -349,27 +357,126 @@ describe("WorkoutCalendar Tests", () => {
     expect(exportButton).toBeInTheDocument();
   });
 
-  test("WorkoutCalendar renders the events in the dummy schedule as expected", () => {
-    render(<WorkoutCalendar />);
+  test("WorkoutCalendar renders the events in the weekly plan as expected", async() => {
+    //mock data for weekly workouts
+    const mockWeeklyWorkouts = [
+      {
+        day: "Monday",
+        exercises: [
+          {
+            name: "Dumbbell spell caster",
+            type: "strength",
+            muscle: "arms",
+            difficulty: "beginner",
+            equipment: "dumbbell",
+            instructions: "Perform with controlled movements.",
+          },
+        ],
+        startTime: "08:00",
+        endTime: "09:00",
+      },
+    ];
+    
+    //render the components necessary
+    render(
+      <MemoryRouter initialEntries={["/Day-Planner/Monday"]}>
+        <WorkoutsContext.Provider
+          value={{
+            weeklyWorkouts: mockWeeklyWorkouts,
+            setWeeklyWorkouts: mockSetWeeklyWorkouts,
+            numRenders: 0,
+            setNumRenders: jest.fn(), //mock function for render state
+          }}
+        >
+          <div className="App">
+            <Sidebar
+              userId="1" //mock user id
+              pageIndex={0} //active page index
+              sidebarClickHandler={jest.fn()} // Mock function for sidebar clicks
+              setIsLoggedIn={jest.fn()} // Mock function for login state
+            />
+            <Routes>
+              <Route path="/Day-Planner/:day" element={<DayPlanner />} />
+              <Route path="/workout-calendar" element={<WorkoutCalendar />} />
+              <Route path="/workout-planner" element={<WeekPlan userId="mockUserID"/>} />
+            </Routes>
+          </div>
+        </WorkoutsContext.Provider>
+      </MemoryRouter>
+    );
+  
+    // Navigate the weekly planner page
+    fireEvent.click(screen.getByText("My Workouts"));
 
-    // make sure the event titles in the dummy schedule are displayed in the calendar
-    dummySchedule.forEach((workout) => {
-      expect(screen.getByText(workout.title)).toBeInTheDocument();
-    });
+    // Change the values for start and end time inputs for Monday
+    const startTimeInput = screen.getAllByTestId("start-time");
+    fireEvent.change(startTimeInput[1], { target: { value: "08:00" } });
+
+    const endTimeInput = screen.getAllByTestId("end-time");
+    fireEvent.change(endTimeInput[1], { target: { value: "09:00" } });
+
+    // Save the updated time and plan for Monday
+    const saveButton = screen.getAllByText(/Save/i, { selector: "button" });
+    fireEvent.click(saveButton[1]);
+  
+    // Navigate to the calendar
+    fireEvent.click(screen.getByText(/Workout Calendar/i));
+  
+    screen.debug();
+
+    // Check that the events are displayed in the calendar
+    const mondayWorkouts = screen.getAllByText(/Monday's workouts/i);
+    expect(mondayWorkouts.length).toBeGreaterThan(0); //should at least have 1 event
   });
 
-  test("ensure that the alert message shows when an event is clicked", () => {
-    render(<WorkoutCalendar />);
+  test("ensure that the alert message shows when an event is clicked", async() => {
+    // Mock data for weekly workouts
+    const mockWeeklyWorkouts = [
+      {
+        day: "Monday",
+        exercises: [
+          {
+            name: "Dumbbell spell caster",
+            type: "strength",
+            muscle: "arms",
+            difficulty: "beginner",
+            equipment: "dumbbell",
+            instructions: "Perform with controlled movements.",
+          },
+        ],
+        startTime: "08:00",
+        endTime: "09:00",
+      },
+    ];
 
+    render(
+      <MemoryRouter initialEntries={["/workout-calendar"]}>
+        <WorkoutsContext.Provider
+          value={{
+            weeklyWorkouts: mockWeeklyWorkouts, // Provide the mock workouts to the context
+            setWeeklyWorkouts: jest.fn(), // Mock function to handle state updates
+            numRenders: 0,
+            setNumRenders: jest.fn(),
+          }}
+        >
+          <WorkoutCalendar />
+        </WorkoutsContext.Provider>
+      </MemoryRouter>
+    );
+
+    //mock alert 
     window.alert = jest.fn();
 
-    // get the title, start, and end time for the first event in dummy schedule
-    const eventTitle = dummySchedule[0].title;
-    const eventStart = dummySchedule[0].start;
-    const eventEnd = dummySchedule[0].end;
+    //define event details
+    const eventTitle = "Monday's workouts";
+    const eventStart = "2024-12-02T08:00:00"; 
+    const eventEnd = "2024-12-02T09:00:00";
+    // click on the first instance of event
+    fireEvent.click(screen.getAllByText(eventTitle)[0]);
 
-    // click on the event
-    fireEvent.click(screen.getByText(eventTitle));
+    // Check that the events are displayed in the calendar
+    const mondayWorkouts = screen.getAllByText(/Monday's workouts/i);
+    expect(mondayWorkouts.length).toBeGreaterThan(0); //should at least have 1 event
 
     //ensure that the alert was called with the expected details for that event
     expect(window.alert).toHaveBeenCalledWith(
@@ -496,4 +603,131 @@ describe("Filter Workouts page tests",()=>{
             expect(screen.getByText('Preacher Curl')).toBeInTheDocument();
         })
     });
+});
+
+describe("Creating Weekly Workout Plan Tests", () => {
+  test("Edit day plan, select exercise, and save workout plan", async()=> {
+    // Mock `useParams` to return a fixed day (Monday)
+    jest.mock("react-router-dom", () => ({
+      ...jest.requireActual("react-router-dom"),
+      useParams: () => ({ day: "Monday" }),
+    }));
+
+    //render the component with necessary routes and provider
+    render(
+      <MemoryRouter initialEntries={["/Day-Planner/Monday"]}>
+      <WorkoutsContext.Provider
+        value={{
+          weeklyWorkouts: mockWeeklyWorkouts, // Provide mock weekly workouts
+          setWeeklyWorkouts: mockSetWeeklyWorkouts, // Provide mock state update function
+          numRenders: 0,
+          setNumRenders: jest.fn(), // Mock setNumRenders function
+        }}
+      >
+        <Routes>
+          <Route path="/Day-Planner/:day" element={<DayPlanner />} />
+        </Routes>
+      </WorkoutsContext.Provider>
+    </MemoryRouter>
+    );
+  
+    // Verify the heading for the day plan
+    expect(screen.getByText(/This is the Monday planner/i)).toBeInTheDocument();
+
+    // select categories for exercise search
+    const type = screen.getByTestId("type");
+    fireEvent.change(type, { target: { value: "strength" } });
+
+    const muscle = screen.getByTestId("muscle");
+    fireEvent.change(muscle, { target: { value: "abdominals" } });
+
+    const difficulty = screen.getByTestId("difficulty");
+    fireEvent.change(difficulty, { target: { value: "beginner" } });
+
+    const search = screen.getByText("Search");
+    fireEvent.click(search);
+    await fetchWorkouts({});
+
+    //expect the first workout in the document
+    await waitFor(() => {
+      expect(screen.getByText("Dumbbell spell caster")).toBeInTheDocument();
+    });
+
+    // add the first exercise displayed
+    const addButton = screen.getAllByText("Add", { selector: "button" })[0];
+    fireEvent.click(addButton);
+
+    // Save and navigate back to weekly plan
+    const saveButton = screen.getByText("Save", { selector: "button" });
+    fireEvent.click(saveButton);
+
+    // Verify the selected exercise is saved to the workout plan
+    await waitFor(() => {
+      expect(mockSetWeeklyWorkouts).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            day: "Monday",
+            exercises: expect.arrayContaining([
+              expect.objectContaining({ name: "Dumbbell spell caster" }),
+            ]),
+          }),
+        ])
+      );
+    });
+  });
+
+  test("Adding the same exercise twice", async() => {
+    // Mock `useParams` to return a fixed day (Monday)
+    jest.mock("react-router-dom", () => ({
+      ...jest.requireActual("react-router-dom"),
+      useParams: () => ({ day: "Monday" }),
+    }));
+
+    render(
+      <MemoryRouter initialEntries={["/Day-Planner/Monday"]}>
+      <WorkoutsContext.Provider
+        value={{
+          weeklyWorkouts: mockWeeklyWorkouts,
+          setWeeklyWorkouts: mockSetWeeklyWorkouts,
+          numRenders: 0,
+          setNumRenders: jest.fn(),
+        }}
+      >
+        <Routes>
+          <Route path="/Day-Planner/:day" element={<DayPlanner />} />
+        </Routes>
+      </WorkoutsContext.Provider>
+    </MemoryRouter>
+    );
+  
+    // Verify heading for the day plan
+    expect(screen.getByText(/This is the Monday planner/i)).toBeInTheDocument();
+
+    // search for exercises in the following categories: strength, abdominals, beginner
+    const type = screen.getByTestId("type");
+    fireEvent.change(type, { target: { value: "strength" } });
+
+    const muscle = screen.getByTestId("muscle");
+    fireEvent.change(muscle, { target: { value: "abdominals" } });
+
+    const difficulty = screen.getByTestId("difficulty");
+    fireEvent.change(difficulty, { target: { value: "beginner" } });
+
+    const search = screen.getByText("Search");
+    fireEvent.click(search);
+    await fetchWorkouts({});
+
+    await waitFor(() => {
+      expect(screen.getByText("Plate Twist")).toBeInTheDocument();
+    });
+
+    // add the second exercise displayed
+    const addButton = screen.getAllByText("Add", { selector: "button" })[1];
+    //add it twice
+    fireEvent.click(addButton);
+    fireEvent.click(addButton);
+
+    const selectedWorkouts = screen.getAllByText("Plate Twist");
+    expect(selectedWorkouts.length).toBe(1); //there should only be one instance
+  });
 });

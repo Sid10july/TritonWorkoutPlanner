@@ -81,6 +81,7 @@ export function WeekdayWorkout({handleSave, day}:{handleSave: any,day:string}){
                     <input
                     type="time"
                     id="startTime"
+                    data-testid="start-time"
                     className="form-control"
                     value={todaysDetails.startTime}
                     onChange={handleStartTimeChange}
@@ -93,6 +94,7 @@ export function WeekdayWorkout({handleSave, day}:{handleSave: any,day:string}){
                     <input
                     type="time"
                     id="endTime"
+                    data-testid="end-time"
                     className="form-control"
                     value={todaysDetails.endTime}
                     onChange={handleEndTimeChange}
