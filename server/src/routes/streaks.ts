@@ -6,7 +6,7 @@ const router = express.Router();
 // GET /streaks/:userId - Retrieve streak data
 router.get("/:userId", async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findOne({username:req.params.userId});
     if (!user) return res.status(404).json({ message: "User not found" });
     res.status(200).json(user.streak);
   } catch (error) {
@@ -18,7 +18,7 @@ router.get("/:userId", async (req, res) => {
 router.patch("/:userId/increment", async (req, res) => {
   const { userId } = req.params;
   try {
-    const user = await User.findById(userId);
+    const user = await User.findOne({username:userId});
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -34,7 +34,7 @@ router.patch("/:userId/increment", async (req, res) => {
 router.patch("/:userId/reset", async (req, res) => {
   const { userId } = req.params;
   try {
-    const user = await User.findById(userId);
+    const user = await User.findOne({username:userId});
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }

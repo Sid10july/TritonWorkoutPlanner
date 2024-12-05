@@ -12,10 +12,7 @@ export function WeekdayWorkout({handleSave, day}:{handleSave: any,day:string}){
     // const [endTime, setEndTime] = useState<string>('00:00'); // Use ISO8601 format to set time
     const {weeklyWorkouts,setWeeklyWorkouts} = useContext(WorkoutsContext);
     const todaysDetails : ScheduledExercise = weeklyWorkouts.find(x=>x.day===day) || { day: day, exercises: [], startTime: "00:00", endTime: "00:00" };
-    const [exercises, setExercises] = useState<Exercise[]>(weeklyWorkouts.find(x=>x.day===day)?.exercises||[]);
-
-    
-
+    // const [exercises, setExercises] = useState<Exercise[]>(weeklyWorkouts.find(x=>x.day===day)?.exercises||[]);
 
     const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setWeeklyWorkouts((prevWorkouts)=>{
@@ -46,7 +43,18 @@ export function WeekdayWorkout({handleSave, day}:{handleSave: any,day:string}){
     };
 
     const handleReorder = (updatedExercises: Exercise[]) => {
-        setExercises(updatedExercises);
+        //setExercises(updatedExercises);
+        setWeeklyWorkouts((prevWorkouts)=>{
+            return prevWorkouts.map((daySchedule)=>{
+                if(daySchedule.day===day){
+                    return {
+                        ...daySchedule,
+                        exercises: updatedExercises
+                    }
+                }
+                return daySchedule;
+            })
+        })
       };
     
     return (

@@ -60,14 +60,14 @@
 // });
 
 
-import express, { Request, Response } from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
+// import express, { Request, Response } from 'express';
+// import mongoose from 'mongoose';
+// import cors from 'cors';
 
-import authRoutes from './routes/auth';
-import userRoutes from './routes/users';
-import workoutPlanRoutes from './routes/workoutPlans';
-import goalsRoutes from './routes/goals';
+// import authRoutes from './routes/auth';
+// import userRoutes from './routes/users';
+// import workoutPlanRoutes from './routes/workoutPlans';
+// import goalsRoutes from './routes/goals';
 
 // // Root route to test server
 // app.get('/', (req, res) => {
@@ -122,6 +122,8 @@ app.use("/streaks", streakRoutes);
 
 // Register goals routes with the /api/goals prefix
 app.use("/api/goals", goalsRoutes);
+
+app.use("/auth",authRoutes);
 
 
 // Initialize custom endpoints for pulling workouts from external API
