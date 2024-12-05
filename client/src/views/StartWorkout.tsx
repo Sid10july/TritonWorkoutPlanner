@@ -8,15 +8,18 @@ import {
   updateWorkoutDate,
   deleteWorkoutProgress,
 } from "../utils/user-utils";
+import { fetchWeeklyWorkouts } from "../utils/workout-utils";
 import { InputField } from "../components/InputField";
 import ProgressBar from "@ramonak/react-progress-bar";
-import { WorkoutPlan, Goal } from "../types/types";
+import { WorkoutPlan, Goal, ScheduledExercise } from "../types/types";
 import {
   dummyLastWorkout,
   dummyWorkoutPlans,
   dummyProfileData,
   dummyExerciseGoals,
   daysOfWeekJS,
+  mapBackend,
+  ExerciseInterface,
 } from "../constants/constants";
 import "./StartWorkout.css";
 
@@ -27,6 +30,8 @@ export const StartWorkout = (StartProps: { userId: string }) => {
   const [goals, setGoals] = useState(dummyExerciseGoals);
   const [streak, setStreak] = useState(dummyProfileData.streak);
   const [lastWorkout, setLastWorkout] = useState(dummyLastWorkout);
+  const [workoutPlans, setWorkoutPlans] = useState([] as ExerciseInterface[]);
+
   let progress = useRef([] as { _id: string; value: number }[]);
 
   // Resetting date for debugging purposes
@@ -50,6 +55,45 @@ export const StartWorkout = (StartProps: { userId: string }) => {
           );
         })
         .catch((error) => console.error("Error fetching goals:", error));
+
+      fetchWeeklyWorkouts(StartProps.userId)
+        .then((result: ScheduledExercise[]) => {
+          let plans = result.map((e) => {
+            const convertTimeStr = (str: string) => {
+              const split = str.split("");
+              let hours = split[0] + split[1];
+              let mins = split[3] + split[4];
+              let hr_num = Number(hours);
+
+              let am = true;
+              if (hr_num >= 12) {
+                am = false;
+                hr_num -= 12;
+              }
+
+              let new_hr_str = hr_num.toString();
+              if (new_hr_str.length == 1) new_hr_str = "0" + new_hr_str;
+
+              return [am, new_hr_str + ":" + mins];
+            };
+
+            const newTime = convertTimeStr(e.startTime);
+
+            if (e.exercises.length) {
+              return {
+                day: mapBackend[e.day],
+                time: newTime[1],
+                am: newTime[0],
+                exercises: e.exercises as any[],
+              };
+            } else {
+              return;
+            }
+          });
+          plans = plans.filter((e) => e !== undefined);
+          setWorkoutPlans(plans as ExerciseInterface[]);
+        })
+        .catch((error) => console.error("Error fetching plans:", error));
     }
   }, [StartProps.userId]);
 
@@ -87,8 +131,8 @@ export const StartWorkout = (StartProps: { userId: string }) => {
     exercises: [],
   };
   let titleString = "No Workout Today";
-  if (dummyWorkoutPlans.length) {
-    workoutPlan = dummyWorkoutPlans.filter((e) => e["day"] === day)[0];
+  if (workoutPlans.length) {
+    workoutPlan = workoutPlans.filter((e) => e["day"] === day)[0];
     // If there is a workout planned for today
     if (workoutPlan) {
       titleString = `Today's Workout (${daysOfWeekJS[workoutPlan.day]} at ${
@@ -98,9 +142,9 @@ export const StartWorkout = (StartProps: { userId: string }) => {
   }
   // Determine next workout
   let nextWorkoutPlan = workoutPlan;
-  if (dummyWorkoutPlans.length) {
+  if (workoutPlans.length) {
     for (let i = 1; i < 7; i++) {
-      const findNextPlan = dummyWorkoutPlans.filter(
+      const findNextPlan = workoutPlans.filter(
         (e) => e["day"] === (day + i) % 7
       )[0];
       if (findNextPlan) {
@@ -111,9 +155,9 @@ export const StartWorkout = (StartProps: { userId: string }) => {
   }
   // Determine previous workout day
   let lastWorkoutDay = day;
-  if (dummyWorkoutPlans.length) {
+  if (workoutPlans.length) {
     for (let i = 1; i < 7; i++) {
-      const findPrevPlan = dummyWorkoutPlans.filter(
+      const findPrevPlan = workoutPlans.filter(
         // Handles negative modulo
         (e) => e["day"] === (((day - i) % 7) + 7) % 7
       )[0];
@@ -161,7 +205,7 @@ export const StartWorkout = (StartProps: { userId: string }) => {
     if (lastWorkout[2] === 1) {
       return null;
     }
-    if (!dummyWorkoutPlans.length)
+    if (!workoutPlans.length)
       return (
         <div>
           <p className="workoutIndicator-title">

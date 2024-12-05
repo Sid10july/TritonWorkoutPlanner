@@ -13,7 +13,7 @@ export const Week: string[] = [
   "Wednesday",
   "Thursday",
   "Friday",
-  "Saturday"
+  "Saturday",
 ];
 
 // export const recommendedExercises = {
@@ -34,6 +34,20 @@ export const dummyExercisesList = [
   { id: 4, name: "Burpee" },
   { id: 5, name: "Pushup" },
 ];
+
+export const mapBackend: mapBackend = {
+  Monday: 1,
+  Tuesday: 2,
+  Wednesday: 3,
+  Thursday: 4,
+  Friday: 5,
+  Saturday: 6,
+  Sunday: 0,
+};
+
+export interface mapBackend {
+  [key: string]: number;
+}
 
 // Last time user worked out
 export const dummyLastWorkout = [1, 1, 1];
@@ -129,7 +143,7 @@ export const recommendedExercises = {
 };
 
 export const dummyProfileData = {
-  username: "John",
+  username: "",
   streak: 0,
 };
 
@@ -222,11 +236,18 @@ export const difficultyLevels: string[] = [
 ];
 
 export const state: ScheduledExercise[] = [
-    { day: "Monday", exercises: [], startTime: "00:00", endTime: "00:00" },
-    { day: "Tuesday", exercises: [], startTime: "00:00", endTime: "00:00" },
-    { day: "Wednesday", exercises: [], startTime: "00:00", endTime: "00:00" },
-    { day: "Thursday", exercises: [], startTime: "00:00", endTime: "00:00" },
-    { day: "Friday", exercises: [], startTime: "00:00", endTime: "00:00" },
-    { day: "Saturday", exercises: [], startTime: "00:00", endTime: "00:00" },
-    { day: "Sunday", exercises: [], startTime: "00:00", endTime: "00:00" },
+  { day: "Monday", exercises: [], startTime: "00:00", endTime: "00:00" },
+  { day: "Tuesday", exercises: [], startTime: "00:00", endTime: "00:00" },
+  { day: "Wednesday", exercises: [], startTime: "00:00", endTime: "00:00" },
+  { day: "Thursday", exercises: [], startTime: "00:00", endTime: "00:00" },
+  { day: "Friday", exercises: [], startTime: "00:00", endTime: "00:00" },
+  { day: "Saturday", exercises: [], startTime: "00:00", endTime: "00:00" },
+  { day: "Sunday", exercises: [], startTime: "00:00", endTime: "00:00" },
 ];
+
+export interface ExerciseInterface {
+  day: number;
+  time: string;
+  am: boolean;
+  exercises: any[];
+}

@@ -26,7 +26,10 @@ export const Sidebar = (props: SidebarProps) => {
     // Bypass this process if testing
     if (props.userId !== "1") {
       fetchUserData(props.userId)
-        .then((result) => setUserInfo(result))
+        .then((result) => {
+          setUserInfo(result);
+          console.log(result);
+        })
         .catch((err) => console.log(err));
     }
   }, [props.userId]);

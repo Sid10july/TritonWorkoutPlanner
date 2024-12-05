@@ -79,7 +79,6 @@ export async function addWorkoutProgress(
 ): Promise<any> {
   try {
     const data = { date: date, goals: goals };
-
     const response = await axios.post(`/progress/${userId}`, data);
     return response.data;
   } catch (err) {

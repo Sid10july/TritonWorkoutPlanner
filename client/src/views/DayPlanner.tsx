@@ -14,48 +14,48 @@ import "./DayPlanner.css";
 
 export function DayPlanner() {
   const { day } = useParams();
-  const {weeklyWorkouts, setWeeklyWorkouts} = useContext(WorkoutsContext); 
-  const [workouts, setWorkouts] = useState<Exercise[]>([]);// State that keeps track of the workouts on a specific day.
-//   const [selectedWorkouts, setSelectedWorkouts] = useState<Exercise[]>([]);
+  const { weeklyWorkouts, setWeeklyWorkouts } = useContext(WorkoutsContext);
+  const [workouts, setWorkouts] = useState<Exercise[]>([]); // State that keeps track of the workouts on a specific day.
+  //   const [selectedWorkouts, setSelectedWorkouts] = useState<Exercise[]>([]);
 
   function handleAddWorkout(key: string) {
     console.log(`Add workouts called with key: ${key}`);
     const workout = workouts.find((workout) => workout.name === key);
     if (workout) {
       // workout is found
-        setWeeklyWorkouts(
-            weeklyWorkouts.map((daySchedule) => {
-                if (daySchedule.day === day) {
-                    // Update the day's exercises
-                    if(!daySchedule.exercises.find(x=>x.name===key)){
-                        return {
-                            ...daySchedule,
-                            exercises: [...daySchedule.exercises, workout],
-                        };
-                    }
-                }
-                return daySchedule;
-            
-        }));
+      setWeeklyWorkouts(
+        weeklyWorkouts.map((daySchedule) => {
+          if (daySchedule.day === day) {
+            // Update the day's exercises
+            if (!daySchedule.exercises.find((x) => x.name === key)) {
+              return {
+                ...daySchedule,
+                exercises: [...daySchedule.exercises, workout],
+              };
+            }
+          }
+          return daySchedule;
+        })
+      );
     }
   }
 
   function handleDeleteWorkout(key: string) {
-
     setWeeklyWorkouts((prevWorkouts) => {
-        return prevWorkouts.map((daySchedule)=>{
-            if(daySchedule.day===day){
-                return {
-                    ...daySchedule,
-                    exercises : daySchedule.exercises.filter(x=> x.name!==key)
-                };
-            }
-            return daySchedule;
-        });
+      return prevWorkouts.map((daySchedule) => {
+        if (daySchedule.day === day) {
+          return {
+            ...daySchedule,
+            exercises: daySchedule.exercises.filter((x) => x.name !== key),
+          };
+        }
+        return daySchedule;
+      });
     });
   }
 
-  const selectedWorkouts: Exercise[] = weeklyWorkouts.find(x=>x.day===day)?.exercises || [];
+  const selectedWorkouts: Exercise[] =
+    weeklyWorkouts.find((x) => x.day === day)?.exercises || [];
 
   return (
     <div>
@@ -73,10 +73,7 @@ export function DayPlanner() {
           selectedWorkouts={selectedWorkouts}
           handleDeleteWorkout={handleDeleteWorkout}
         />
-        <WorkoutCards
-          workouts={workouts}
-          handleAddWorkout={handleAddWorkout}
-        />
+        <WorkoutCards workouts={workouts} handleAddWorkout={handleAddWorkout} />
         {/* <Link to="/workout-planner">
             <button type="submit" className="btn btn-primary">
                 Save
@@ -95,14 +92,15 @@ export function DayPlanner() {
  */
 function WorkoutCards({
   workouts,
-  handleAddWorkout
+  handleAddWorkout,
 }: {
   workouts: Exercise[];
   handleAddWorkout: (key: string) => void;
 }) {
   return (
-    <div className="cards" 
-        // style={{maxHeight:"380px", overflowY:'scroll'}}
+    <div
+      className="cards"
+      // style={{maxHeight:"380px", overflowY:'scroll'}}
     >
       {workouts.map((workout) => (
         <WorkoutCard
@@ -129,7 +127,7 @@ function SelectedWorkoutCards({
   handleDeleteWorkout: (key: string) => void;
 }) {
   return (
-    <div className="selected-cards" style={{width:"100%"}}>
+    <div className="selected-cards" style={{ width: "100%" }}>
       {selectedWorkouts.map((workout) => (
         <WorkoutsSelected
           key={workout.name}
@@ -172,7 +170,7 @@ function QueryForm({
   return (
     <form
       onSubmit={(event) => onSubmit(event)}
-      className="p-4 border rounded bg-white py-4 w-100"
+      className="p-4 border rounded bg-white py-4 w-100 day-form"
     >
       <div className="row g-3">
         {/* Type Selection */}
