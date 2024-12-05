@@ -1,33 +1,45 @@
-name: Unit Tests # name of the test
+name: Unit Tests
 
 on:
- push:
-   branches: [ main ]  # or 'master' if that's your primary branch name
- pull_request:
-   branches: [ main ] # the Github Action will activate "on" the event that you "push" to the repo
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
-jobs: # the things being executed
- tests: # the name of your status check, will become important when you do branch protection
-   runs-on: ubuntu-latest # which device on Github's server that you are running the Actions on
-   env:
-       REACT_APP_API_KEY: ${{ secrets.API_KEY }}
-       REACT_APP_CLIENT_ID: ${{ secrets.CLIENT_ID}}
-       API_NINJA_KEY: ${{ secrets.API_NINJA_KEY }}
-       USERNAME: ${{ secrets.USERNAME }}
-       PASSWORD: ${{ secrets.PASSWORD }}
-   steps:
-     - uses: actions/checkout@v4 # using version 4 of Actions
-     - name: Set up Node.js
-       uses: actions/setup-node@v3
-       with:
-         node-version: '18'
-     - name: Install Server Dependencies
-       run: cd server; npm install
-     - name: Start Server
-       run: |
-        npm start &
-        sleep 5 # Wait for the server to fully start (adjust as needed)
-     - name: Install Dependencies
-       run: cd client; npm install
-     - name: Unit Test
-       run: cd client; npm test # the actual testing line
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    env:
+      REACT_APP_API_KEY: ${{ secrets.API_KEY }}
+      REACT_APP_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      API_NINJA_KEY: ${{ secrets.API_NINJA_KEY }}
+      USERNAME: ${{ secrets.USERNAME }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Server Dependencies
+        run: cd server; npm install
+
+      - name: Start Server
+        run: |
+          cd server
+          npm start &
+          sleep 5  # Increase sleep time if needed
+          
+      - name: Wait for Server to be Ready
+        run: npx wait-on http://localhost:3000
+
+      - name: Install Client Dependencies
+        run: cd client; npm install
+
+      - name: Check if server is running
+        run: curl http://localhost:3000 || echo "Server not running"
+      - name: Unit Test
+        run: cd client; npm test  # Run tests for the client
+
