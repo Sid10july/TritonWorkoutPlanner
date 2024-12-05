@@ -2,9 +2,9 @@ name: Unit Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   tests:
@@ -21,19 +21,19 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "18"
 
       - name: Install Server Dependencies
         run: cd server; npm install
 
-      - name: Start Server
-        run: |
-          cd server
-          npm start &
-          sleep 5  # Increase sleep time if needed
-          
-      - name: Wait for Server to be Ready
-        run: npx wait-on http://localhost:3000
+      # - name: Start Server
+      #   run: |
+      #     cd server
+      #     npm start &
+      #     sleep 5  # Increase sleep time if needed
+
+      # - name: Wait for Server to be Ready
+      #   run: npx wait-on http://localhost:3000
 
       - name: Install Client Dependencies
         run: cd client; npm install
@@ -41,5 +41,5 @@ jobs:
       - name: Check if server is running
         run: curl http://localhost:3000 || echo "Server not running"
       - name: Unit Test
-        run: cd client; npm test  # Run tests for the client
+        run: cd client; npm test # Run tests for the client
 
