@@ -13,6 +13,8 @@ jobs: # the things being executed
        REACT_APP_API_KEY: ${{ secrets.API_KEY }}
        REACT_APP_CLIENT_ID: ${{ secrets.CLIENT_ID}}
        API_NINJA_KEY: ${{ secrets.API_NINJA_KEY }}
+       USERNAME: ${{ secrets.USERNAME }}
+       PASSWORD: ${{ secrets.PASSWORD }}
    steps:
      - uses: actions/checkout@v4 # using version 4 of Actions
      - name: Set up Node.js
@@ -26,6 +28,6 @@ jobs: # the things being executed
         npm start &
         sleep 5 # Wait for the server to fully start (adjust as needed)
      - name: Install Dependencies
-       run: cd client; npm install
+       run: cd ../client; npm install
      - name: Unit Test
-       run: cd ../client; npm test # the actual testing line
+       run: cd client; npm test # the actual testing line
