@@ -52,3 +52,10 @@ export type Exercise = {
   difficulty: string;
   instructions: string;
 };
+
+export type ScheduledExercise = {
+    day: string;
+    exercises: Exercise[];
+    startTime: string; // Store time in ISO 8601 format or as a string like "HH:mm"
+    endTime: string; 
+  };

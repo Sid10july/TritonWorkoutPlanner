@@ -59,7 +59,8 @@ const router = express.Router();
 router.get("/:userId", async (req, res) => {
   const { userId } = req.params;
   try {
-    const user = await User.findById(userId).select("-password"); // Exclude the password
+    // const user = await User.findById(userId).select("-password"); // Exclude the password
+    const user = await User.findOne({username:userId}).select("-password"); // Exclude the password
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }

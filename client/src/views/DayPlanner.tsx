@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   muscles,
   difficultyLevels,
@@ -8,30 +9,64 @@ import {
 import { fetchWorkouts } from "../utils/workout-utils";
 import { Exercise } from "../types/types";
 import { WorkoutCard, WorkoutsSelected } from "../components/WorkoutCard";
+import { WorkoutsContext } from "../context/workouts-context";
+import "./DayPlanner.css";
 
 export function DayPlanner() {
   const { day } = useParams();
-  const [workouts, setWorkouts] = useState<Exercise[]>([]); // State that keeps track of the workouts on a specific day.
-  const [selectedWorkouts, setSelectedWorkouts] = useState<Exercise[]>([]);
+  const {weeklyWorkouts, setWeeklyWorkouts} = useContext(WorkoutsContext); 
+  const [workouts, setWorkouts] = useState<Exercise[]>([]);// State that keeps track of the workouts on a specific day.
+//   const [selectedWorkouts, setSelectedWorkouts] = useState<Exercise[]>([]);
 
   function handleAddWorkout(key: string) {
     console.log(`Add workouts called with key: ${key}`);
     const workout = workouts.find((workout) => workout.name === key);
     if (workout) {
       // workout is found
-      setSelectedWorkouts([...selectedWorkouts, workout]);
+        setWeeklyWorkouts(
+            weeklyWorkouts.map((daySchedule) => {
+                if (daySchedule.day === day) {
+                    // Update the day's exercises
+                    if(!daySchedule.exercises.find(x=>x.name===key)){
+                        return {
+                            ...daySchedule,
+                            exercises: [...daySchedule.exercises, workout],
+                        };
+                    }
+                }
+                return daySchedule;
+            
+        }));
     }
   }
 
   function handleDeleteWorkout(key: string) {
-    setSelectedWorkouts(
-      selectedWorkouts.filter((workout) => workout.name !== key)
-    );
+
+    setWeeklyWorkouts((prevWorkouts) => {
+        return prevWorkouts.map((daySchedule)=>{
+            if(daySchedule.day===day){
+                return {
+                    ...daySchedule,
+                    exercises : daySchedule.exercises.filter(x=> x.name!==key)
+                };
+            }
+            return daySchedule;
+        });
+    });
   }
+
+  const selectedWorkouts: Exercise[] = weeklyWorkouts.find(x=>x.day===day)?.exercises || [];
 
   return (
     <div>
-      <h1 className="title-container">This is the {`${day}`} planner</h1>
+      <div className="sticky-header">
+        <h1 className="title-container">This is the {`${day}`} planner</h1>
+        <Link to="/workout-planner" className="save-button">
+          <button type="submit" className="btn btn-primary">
+            Save
+          </button>
+        </Link>
+      </div>
       <div className="content-container">
         <QueryForm setWorkouts={setWorkouts} />
         <SelectedWorkoutCards
@@ -41,8 +76,12 @@ export function DayPlanner() {
         <WorkoutCards
           workouts={workouts}
           handleAddWorkout={handleAddWorkout}
-          handleDeleteWorkout={handleDeleteWorkout}
         />
+        {/* <Link to="/workout-planner">
+            <button type="submit" className="btn btn-primary">
+                Save
+            </button>
+        </Link> */}
       </div>
     </div>
   );
@@ -56,21 +95,20 @@ export function DayPlanner() {
  */
 function WorkoutCards({
   workouts,
-  handleAddWorkout,
-  handleDeleteWorkout,
+  handleAddWorkout
 }: {
   workouts: Exercise[];
   handleAddWorkout: (key: string) => void;
-  handleDeleteWorkout: (key: string) => void;
 }) {
   return (
-    <div className="cards">
+    <div className="cards" 
+        // style={{maxHeight:"380px", overflowY:'scroll'}}
+    >
       {workouts.map((workout) => (
         <WorkoutCard
           key={workout.name}
           workout={workout}
           handleAddWorkout={handleAddWorkout}
-          handleDeleteWorkout={handleDeleteWorkout}
         />
       ))}
     </div>
@@ -91,9 +129,10 @@ function SelectedWorkoutCards({
   handleDeleteWorkout: (key: string) => void;
 }) {
   return (
-    <div className="selected-cards">
+    <div className="selected-cards" style={{width:"100%"}}>
       {selectedWorkouts.map((workout) => (
         <WorkoutsSelected
+          key={workout.name}
           workout={workout}
           handleDeleteWorkout={handleDeleteWorkout}
         />
@@ -133,7 +172,7 @@ function QueryForm({
   return (
     <form
       onSubmit={(event) => onSubmit(event)}
-      className="p-4 border rounded bg-light py-4"
+      className="p-4 border rounded bg-white py-4 w-100"
     >
       <div className="row g-3">
         {/* Type Selection */}
