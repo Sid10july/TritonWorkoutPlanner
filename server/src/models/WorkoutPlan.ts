@@ -8,6 +8,8 @@ export interface IWorkoutPlan extends Document {
   duration: number; // Total duration in minutes
   createdBy: mongoose.Types.ObjectId; // Reference to a User
   description?: string; // Optional description
+  startTime?: string; // Start time for the day (ISO 8601 format)
+  endTime?: string; // End time for the day (ISO 8601 format)
 }
 
 const WorkoutPlanSchema: Schema = new Schema(
@@ -23,6 +25,8 @@ const WorkoutPlanSchema: Schema = new Schema(
     duration: { type: Number, required: true },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     description: { type: String },
+    startTime: { type: String },
+    endTime: { type: String },
   },
   { timestamps: true }
 );

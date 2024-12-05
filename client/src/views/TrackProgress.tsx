@@ -11,17 +11,25 @@ import "./TrackProgress.css";
 // they match the same format
 
 export const TrackProgress = (props: { userId: string }) => {
-  const [userInfo, setUserInfo] = useState(dummyProfileData);
+  const [userInfo, setUserInfo] = useState(dummyProfileData.streak);
+  const [goals, setGoals] = useState(dummyExerciseGoals);
+  const [progress, setProgress] = useState(
+    dummyWorkoutData as { date: string; goals: GoalType[] }[]
+  );
 
   // Fetch user data from the backend when the component mounts
   useEffect(() => {
     fetchUserData(props.userId)
-      .then((result) => setUserInfo(result))
+      .then((result) => {
+        setUserInfo(result.streak);
+        setGoals(result.goals);
+        setProgress(result.progressUpdates);
+      })
       .catch((err) => console.log(err));
   }, [props.userId]);
 
   // Sort exerciseData by newest date
-  const exerciseData = dummyWorkoutData.sort((a, b) => {
+  const exerciseData = progress.sort((a, b) => {
     if (a.date > b.date) return -1;
     else return 1;
   });
@@ -31,22 +39,20 @@ export const TrackProgress = (props: { userId: string }) => {
     [id: string]: { goal: string; value: number };
   }
 
-  const exerciseGoals: exerciseGoalsType = dummyExerciseGoals.reduce(
+  const exerciseGoals: exerciseGoalsType = goals.reduce(
     (ac, cur) =>
       Object.assign(ac, {
         [cur._id]: { goal: cur.goal, value: cur.value },
       }),
     {}
   );
-
   interface GoalType {
-    id: string;
-    progressValue: number;
+    _id: string;
+    value: number;
   }
 
   const WorkoutData = (props: { date: string; goals: GoalType[] }) => {
     const [isOpen, setIsOpen] = useState(false);
-
     return (
       <div
         onClick={() => setIsOpen(!isOpen)}
@@ -62,19 +68,21 @@ export const TrackProgress = (props: { userId: string }) => {
         </div>
         {isOpen ? (
           <ul className="workout-progress fs-4">
-            {Object.keys(props.goals).map((e) => {
+            {props.goals.map((e) => {
               // Filter goals for progress value
-              const progressValue = props.goals.filter((g) => g.id === e)[0]
-                .progressValue;
-              console.log(exerciseGoals[e]);
-              return (
-                <li key={e}>
-                  {exerciseGoals[e].goal}: {progressValue}/
-                  <span style={{ color: "gray" }}>
-                    {exerciseGoals[e].value}
-                  </span>
-                </li>
-              );
+              const progressValue = props.goals.filter(
+                (g) => g._id === e._id
+              )[0].value;
+              if (progressValue && progressValue !== 0) {
+                return (
+                  <li key={e._id}>
+                    {exerciseGoals[e._id].goal}: {progressValue}/
+                    <span style={{ color: "gray" }}>
+                      {exerciseGoals[e._id].value}
+                    </span>
+                  </li>
+                );
+              }
             })}
           </ul>
         ) : null}
@@ -85,7 +93,7 @@ export const TrackProgress = (props: { userId: string }) => {
   return (
     <div>
       <h1 className="title-container">
-        Track Progress (Workout Streak 🔥: {userInfo.streak})
+        Track Progress (Workout Streak 🔥: {userInfo})
       </h1>
       <div className="content-container">
         {exerciseData.map((e) => {

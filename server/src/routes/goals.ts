@@ -68,7 +68,7 @@ const router = express.Router();
 // GET /api/goals/:userId - Retrieve all goals for a user
 router.get("/:userId", async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findOne({ username: req.params.userId });
     if (!user) return res.status(404).json({ message: "User not found" });
     res.status(200).json(user.goals);
   } catch (error) {
@@ -80,7 +80,7 @@ router.get("/:userId", async (req, res) => {
 router.post("/:userId", async (req, res) => {
   const { goal, value } = req.body;
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findOne({ username: req.params.userId });
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const newGoal = { goal, value };
@@ -95,7 +95,7 @@ router.post("/:userId", async (req, res) => {
 // DELETE /api/goals/:userId/:goalId - Delete a goal
 router.delete("/:userId/:goalId", async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findOne({ username: req.params.userId });
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // Ensure TypeScript knows _id is defined
@@ -109,28 +109,25 @@ router.delete("/:userId/:goalId", async (req, res) => {
   }
 });
 
-// PUT /api/goals/:userId/:goalId - Modify a goal's value
-router.put("/:userId/:goalId", async (req, res) => {
+// PUT /api/goals/:userId - Modify goals
+router.put("/:userId", async (req, res) => {
+  const { newGoals } = req.body;
   try {
-    const goalId = req.params.goalId;
-    const { value } = req.body;
-
-    console.log(goalId);
-
-    const user = await User.findById(req.params.userId);
+    const user = await User.findOne({ username: req.params.userId });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Update goal
-    user.goals.forEach((goal) => {
-      if (goalId === goal._id?.toString()) {
-        goal.value = value;
-      }
+    // Update goals
+    user.goals = user.goals.map((g) => {
+      const changedGoal = newGoals.filter(
+        (nG: any) => nG._id == g._id?.toString()
+      )[0];
+      return { goal: g.goal, value: changedGoal.value, _id: g._id };
     });
 
     await user.save();
     res.status(200).json(user.goals);
   } catch (error) {
-    res.status(500).json({ message: "Error updating goal", error });
+    res.status(500).json({ message: "Error updating goals", error });
   }
 });
 
