@@ -57,13 +57,9 @@ export const TrackProgress = (props: { userId: string }) => {
         "July", "August", "September", "October", "November", "December"
       ];
     
-      // Split the date into year, month, and day
       const [year, month, day] = date.split("-").map(Number);
     
-      // Get the month name
       const monthName = months[month - 1];
-    
-      // Determine the day suffix
       const daySuffix = 
         day % 10 === 1 && day !== 11 ? "st" :
         day % 10 === 2 && day !== 12 ? "nd" :
