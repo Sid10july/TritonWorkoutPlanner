@@ -41,8 +41,8 @@ export function DayPlanner() {
     const workout = workouts.find((workout) => workout.name === key);
     if (workout) {
       // workout is found
-      setWeeklyWorkouts((prevWorkouts) => {
-        return prevWorkouts.map((daySchedule) => {
+      setWeeklyWorkouts(
+        weeklyWorkouts.map((daySchedule) => {
           if (daySchedule.day === day) {
             // Update the day's exercises
             if (!daySchedule.exercises.find((x) => x.name === key)) {
@@ -53,8 +53,8 @@ export function DayPlanner() {
             }
           }
           return daySchedule;
-        });
-      });
+        })
+      );
     }
   }
 
