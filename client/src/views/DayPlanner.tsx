@@ -60,7 +60,9 @@ export function DayPlanner() {
   return (
     <div>
       <div className="sticky-header">
-        <h1 className="title-container">This is the {`${day}`} planner</h1>
+        <div className="title-container">
+          <h1>{`${day}`}'s Planner</h1>
+        </div>
         <Link to="/workout-planner" className="save-button">
           <button type="submit" className="btn btn-primary">
             Save

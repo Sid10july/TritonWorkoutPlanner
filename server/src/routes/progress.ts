@@ -121,7 +121,7 @@ router.post("/:userId", async (req, res) => {
   const { date, goals } = req.body;
 
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findOne({ username: req.params.userId });
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // Add progress update to the database
@@ -137,7 +137,7 @@ router.post("/:userId", async (req, res) => {
 // GET /progress/:userId - Get all progress updates for a user goal
 router.get("/:userId", async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findOne({ username: req.params.userId });
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // Get progress updates
@@ -150,7 +150,7 @@ router.get("/:userId", async (req, res) => {
 // DELETE /progress/:userId - Delete all progress updates for a user goal
 router.delete("/:userId", async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findOne({ username: req.params.userId });
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // Delete progress updates
