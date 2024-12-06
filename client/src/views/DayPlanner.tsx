@@ -98,11 +98,6 @@ export function DayPlanner() {
           workouts={availableWorkouts} //EDIT3: Only pass the available workouts to be displayed
           handleAddWorkout={handleAddWorkout}
         />
-        <Link to="/workout-planner">
-          <button type="submit" className="btn btn-primary">
-            Save
-          </button>
-        </Link>
       </div>
     </div>
   );
