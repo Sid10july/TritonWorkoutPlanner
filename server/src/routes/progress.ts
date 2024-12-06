@@ -121,14 +121,28 @@ router.post("/:userId", async (req, res) => {
   const { date, goals } = req.body;
 
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findOne({ username: req.params.userId });
     if (!user) return res.status(404).json({ message: "User not found" });
-
+    const id = user?.id;
+    console.log(`User found: ${user}`);
+    console.log(req.body);
     // Add progress update to the database
-    user.progressUpdates.push({ date: date, goals: goals });
-    await user.save();
-
-    res.status(200).json(user.progressUpdates);
+    //user.progressUpdates.push({ date: date, goals: goals });
+    
+    const updatedUser = await User.findByIdAndUpdate(
+        id,
+        { $push : {progressUpdates: {date: date,goals: goals }}},
+        { new: true }
+    );
+    if(!updatedUser){
+        return res.status(404).json({ message: "User not found" });
+    }
+    
+    console.log(`Succesfully pushed. ${user}`);
+    //await user.save();
+    console.log(`Successfully saved.`);
+    
+    res.status(200).json(updatedUser.progressUpdates);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
@@ -137,7 +151,7 @@ router.post("/:userId", async (req, res) => {
 // GET /progress/:userId - Get all progress updates for a user goal
 router.get("/:userId", async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findOne({ username: req.params.userId });
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // Get progress updates
@@ -150,7 +164,7 @@ router.get("/:userId", async (req, res) => {
 // DELETE /progress/:userId - Delete all progress updates for a user goal
 router.delete("/:userId", async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId);
+    const user = await User.findOne({ username: req.params.userId });
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // Delete progress updates

@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
-  
+
 // Define the Exercise schema
 const ExerciseSchema = new Schema({
   name: { type: String, required: true },
@@ -7,7 +7,7 @@ const ExerciseSchema = new Schema({
   muscle: { type: String, required: true },
   equipment: { type: String, required: true },
   difficulty: { type: String, required: true },
-  instructions: { type: String, required: true },
+  instructions: { type: String, required: false },
 });
 
 // Define the ScheduledExercise schema
