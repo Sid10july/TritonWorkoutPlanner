@@ -90,7 +90,7 @@ const Login = ({ onLoginSuccess }) => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Login successful");
+        // alert("Login successful");
         onLoginSuccess(data.userId); // Notify App that login is successful and pass back userId
       } else {
         setError(data.message || "Login failed");
