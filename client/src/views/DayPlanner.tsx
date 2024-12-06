@@ -10,6 +10,7 @@ import { fetchWorkouts } from "../utils/workout-utils";
 import { Exercise } from "../types/types";
 import { WorkoutCard, WorkoutsSelected } from "../components/WorkoutCard";
 import { WorkoutsContext } from "../context/workouts-context";
+import "./DayPlanner.css";
 
 export function DayPlanner() {
   const { day } = useParams();
