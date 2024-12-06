@@ -403,9 +403,7 @@ export const StartWorkout = (StartProps: { userId: string }) => {
                 : "Progress Tracker:"}
             </p>
             {noGoalsMessage ? (
-              <p className="fs-3">
-                No goals. Go to Change Preferences to set goals!
-              </p>
+              <p className="fs-3">No goals. Go to Set Goals to set goals!</p>
             ) : null}
 
             <form
