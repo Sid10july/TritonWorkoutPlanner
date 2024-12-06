@@ -51,6 +51,24 @@ export const TrackProgress = (props: { userId: string }) => {
     value: number;
   }
 
+  function dateSyntax(date: string){
+    const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+    
+      const [year, month, day] = date.split("-").map(Number);
+    
+      const monthName = months[month - 1];
+      const daySuffix = 
+        day % 10 === 1 && day !== 11 ? "st" :
+        day % 10 === 2 && day !== 12 ? "nd" :
+        day % 10 === 3 && day !== 13 ? "rd" : "th";
+    
+      // Format the date
+      return `${monthName} ${day}${daySuffix} ${year}`;
+  }
+
   const WorkoutData = (props: { date: string; goals: GoalType[] }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
@@ -59,7 +77,7 @@ export const TrackProgress = (props: { userId: string }) => {
         className="fs-2 p-2 mb-3 ps-4 text-start workout-container"
       >
         <div className="workout-title">
-          {props.date}
+          {dateSyntax(props.date)}
           <img
             src="/arrow_drop_up.png"
             alt="dropdown icon"
