@@ -306,7 +306,8 @@ export const StartWorkout = (StartProps: { userId: string }) => {
           </a>
           <div
             onClick={() => {
-              const view = document.getElementById("App-view");
+              const view = document.getElementById("App-views");
+              console.log(view);
               if (view) {
                 view.scrollTo({
                   top: 0,

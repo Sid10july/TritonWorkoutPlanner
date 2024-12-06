@@ -156,7 +156,9 @@ const Layout = ({
           setIsLoggedIn={setIsLoggedIn} // Pass the setIsLoggedIn prop
           userId={userId}
         />
-        <div className="App-views">{children}</div>
+        <div id="App-views" className="App-views">
+          {children}
+        </div>
       </div>
     </WorkoutsProvider>
   );
