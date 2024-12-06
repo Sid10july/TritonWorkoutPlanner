@@ -48,6 +48,7 @@ router.patch("/:userId/reset", async (req, res) => {
 
 // PATCH /streaks/logWorkoutDate - Update workout date
 router.patch("/logWorkoutDate", async (req, res) => {
+    console.log(`Request received`);
   const { userId, date } = req.body;
   try {
     const user = await User.findOne({ username: userId });

@@ -122,7 +122,7 @@ const GoalSchema: Schema = new Schema<IGoal>({
 
 const ProgressSchema: Schema = new Schema<IProgressUpdate>({
   date: { type: String, required: true },
-  goals: { type: Schema.Types.Mixed, required: true },
+  goals: { type: [GoalSchema], required: true },
 });
 
 const UserSchema: Schema = new Schema<IUser>(

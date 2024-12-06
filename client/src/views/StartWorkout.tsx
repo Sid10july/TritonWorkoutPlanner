@@ -35,7 +35,7 @@ export const StartWorkout = (StartProps: { userId: string }) => {
   let progress = useRef([] as { _id: string; value: number }[]);
 
   // Resetting date for debugging purposes
-  // updateWorkoutDate(StartProps.userId, [0, 0, 0]);
+    //updateWorkoutDate(StartProps.userId, [0, 0, 0]);
 
   // Fetch goals from the backend when the component mounts
   useEffect(() => {
