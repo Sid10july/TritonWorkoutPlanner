@@ -60,18 +60,46 @@
 // });
 
 
-import express, { Request, Response } from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
+// import express, { Request, Response } from 'express';
+// import mongoose from 'mongoose';
+// import cors from 'cors';
 
-import authRoutes from './routes/auth';
-import userRoutes from './routes/users';
-import workoutPlanRoutes from './routes/workoutPlans';
-import goalsRoutes from './routes/goals';
+// import authRoutes from './routes/auth';
+// import userRoutes from './routes/users';
+// import workoutPlanRoutes from './routes/workoutPlans';
+// import goalsRoutes from './routes/goals';
 
-import { createLoginEndpoints } from './login/login-endpoints';
-import { createWorkoutEndpoints } from './workouts/workout-endpoints';
-import { initializeDatabase } from './createDB';
+// // Root route to test server
+// app.get('/', (req, res) => {
+//   res.send('Welcome to the Triton Workout Planner API');
+// });
+
+// // Connect to MongoDB
+// const mongoURI = 'mongodb://localhost:27017/tritonworkoutplanner';
+// mongoose
+//   .connect(mongoURI)
+//   .then(() => console.log('✅ Connected to MongoDB'))
+//   .catch((err) => console.error('MongoDB connection error:', err));
+
+// // Start the server
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => {
+//   console.log(`🚀 Server running on port ${PORT}`);
+// });
+
+import express, { Request, Response } from "express";
+import mongoose from "mongoose";
+import authRoutes from "./routes/auth";
+import userRoutes from "./routes/users";
+import streakRoutes from "./routes/streaks";
+import workoutPlanRoutes from "./routes/workoutPlans";
+import progressRoutes from "./routes/progress";
+import goalsRoutes from "./routes/goals"; // Import goals route
+import cors from "cors";
+
+import { createLoginEndpoints } from "./login/login-endpoints";
+import { createWorkoutEndpoints } from "./workouts/workout-endpoints";
+import { initializeDatabase } from "./createDB";
 
 const app = express();
 require('dotenv').config();
@@ -90,9 +118,17 @@ app.use((req, res, next) => {
 app.use('/users', userRoutes);
 app.use('/api/workouts', workoutPlanRoutes);
 
-// Register auth and goal routes
-app.use('/auth', authRoutes);
-app.use('/api/goals', goalsRoutes);
+// Register streak routes with the /streaks prefix
+app.use("/streaks", streakRoutes);
+
+// Register progress routes with the /progress prefix
+app.use("/progress", progressRoutes);
+
+// Register goals routes with the /api/goals prefix
+app.use("/api/goals", goalsRoutes);
+
+app.use("/auth",authRoutes);
+
 
 // Initialize custom endpoints for pulling workouts from external API
 (async () => {
@@ -107,7 +143,7 @@ app.use('/api/goals', goalsRoutes);
 })();
 
 // MongoDB connection
-const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/tritonworkoutplanner';
+const mongoURI = `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@tritonworkoutplanner.wzohk.mongodb.net/?retryWrites=true&w=majority&appName=TritonWorkoutPlanner`;
 mongoose
     .connect(mongoURI)
     .then(() => console.log('✅ Connected to MongoDB'))

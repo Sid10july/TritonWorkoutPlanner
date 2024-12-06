@@ -13,10 +13,11 @@ import { WorkoutsContext } from "../context/workouts-context";
 
 export function DayPlanner() {
   const { day } = useParams();
-  const {weeklyWorkouts, setWeeklyWorkouts} = useContext(WorkoutsContext); 
-  const [workouts, setWorkouts] = useState<Exercise[]>([]);// State that keeps track of the workouts on a specific day.
-  const selectedWorkouts: Exercise[] = weeklyWorkouts.find(x=>x.day===day)?.exercises || []; // EDIT1: moved from below to top
-//   const [selectedWorkouts, setSelectedWorkouts] = useState<Exercise[]>([]);
+  const { weeklyWorkouts, setWeeklyWorkouts } = useContext(WorkoutsContext);
+  const [workouts, setWorkouts] = useState<Exercise[]>([]); // State that keeps track of the workouts on a specific day.
+  const selectedWorkouts: Exercise[] =
+    weeklyWorkouts.find((x) => x.day === day)?.exercises || []; // EDIT1: moved from below to top
+  //   const [selectedWorkouts, setSelectedWorkouts] = useState<Exercise[]>([]);
 
   //EDIT4: Function to remove duplicates based on workout name
   const removeDuplicates = (workouts: Exercise[]) => {
@@ -31,64 +32,75 @@ export function DayPlanner() {
     });
   };
   //EDIT2: Filter out exercises that have already been added to the day
-  const availableWorkouts = workouts.filter(workout => 
-    !selectedWorkouts.some(selected => selected.name === workout.name)
+  const availableWorkouts = workouts.filter(
+    (workout) =>
+      !selectedWorkouts.some((selected) => selected.name === workout.name)
   );
   function handleAddWorkout(key: string) {
     console.log(`Add workouts called with key: ${key}`);
     const workout = workouts.find((workout) => workout.name === key);
     if (workout) {
       // workout is found
-        setWeeklyWorkouts((prevWorkouts) => {
-            return prevWorkouts.map((daySchedule) => {
-                if (daySchedule.day === day) {
-                    // Update the day's exercises
-                    if(!daySchedule.exercises.find(x=>x.name===key)){
-                        return {
-                            ...daySchedule,
-                            exercises: [...daySchedule.exercises, workout],
-                        };
-                    }
-                }
-                return daySchedule;
-            });
+      setWeeklyWorkouts((prevWorkouts) => {
+        return prevWorkouts.map((daySchedule) => {
+          if (daySchedule.day === day) {
+            // Update the day's exercises
+            if (!daySchedule.exercises.find((x) => x.name === key)) {
+              return {
+                ...daySchedule,
+                exercises: [...daySchedule.exercises, workout],
+              };
+            }
+          }
+          return daySchedule;
         });
+      });
     }
   }
 
   function handleDeleteWorkout(key: string) {
-
     setWeeklyWorkouts((prevWorkouts) => {
-        return prevWorkouts.map((daySchedule)=>{
-            if(daySchedule.day===day){
-                return {
-                    ...daySchedule,
-                    exercises : daySchedule.exercises.filter(x=> x.name!==key)
-                };
-            }
-            return daySchedule;
-        });
+      return prevWorkouts.map((daySchedule) => {
+        if (daySchedule.day === day) {
+          return {
+            ...daySchedule,
+            exercises: daySchedule.exercises.filter((x) => x.name !== key),
+          };
+        }
+        return daySchedule;
+      });
     });
   }
 
-
   return (
     <div>
-      <h1 className="title-container">This is the {`${day}`} planner</h1>
+      <div className="sticky-header">
+        <div className="title-container">
+          <h1>{`${day}`}'s Planner</h1>
+        </div>
+        <Link to="/workout-planner" className="save-button">
+          <button type="submit" className="btn btn-primary">
+            Save
+          </button>
+        </Link>
+      </div>
       <div className="content-container">
-        <QueryForm setWorkouts={setWorkouts} removeDuplicates={removeDuplicates} />
+        <QueryForm
+          setWorkouts={setWorkouts}
+          removeDuplicates={removeDuplicates}
+        />
         <SelectedWorkoutCards
           selectedWorkouts={selectedWorkouts}
           handleDeleteWorkout={handleDeleteWorkout}
         />
         <WorkoutCards
-          workouts={availableWorkouts}  //EDIT3: Only pass the available workouts to be displayed
+          workouts={availableWorkouts} //EDIT3: Only pass the available workouts to be displayed
           handleAddWorkout={handleAddWorkout}
         />
         <Link to="/workout-planner">
-            <button type="submit" className="btn btn-primary">
-                Save
-            </button>
+          <button type="submit" className="btn btn-primary">
+            Save
+          </button>
         </Link>
       </div>
     </div>
@@ -103,14 +115,15 @@ export function DayPlanner() {
  */
 function WorkoutCards({
   workouts,
-  handleAddWorkout
+  handleAddWorkout,
 }: {
   workouts: Exercise[];
   handleAddWorkout: (key: string) => void;
 }) {
   return (
-    <div className="cards" 
-        // style={{maxHeight:"380px", overflowY:'scroll'}}
+    <div
+      className="cards"
+      // style={{maxHeight:"380px", overflowY:'scroll'}}
     >
       {workouts.map((workout) => (
         <WorkoutCard
@@ -137,7 +150,7 @@ function SelectedWorkoutCards({
   handleDeleteWorkout: (key: string) => void;
 }) {
   return (
-    <div className="selected-cards" style={{width:"100%"}}>
+    <div className="selected-cards" style={{ width: "100%" }}>
       {selectedWorkouts.map((workout) => (
         <WorkoutsSelected
           workout={workout}
@@ -155,7 +168,7 @@ function SelectedWorkoutCards({
  */
 function QueryForm({
   setWorkouts,
-  removeDuplicates
+  removeDuplicates,
 }: {
   setWorkouts: React.Dispatch<React.SetStateAction<Exercise[]>>;
   removeDuplicates: (workouts: Exercise[]) => Exercise[];
@@ -175,7 +188,7 @@ function QueryForm({
     try {
       const workouts: Exercise[] = await fetchWorkouts(params);
       if (workouts.length === 0) {
-        setNoWorkoutsFound(true);  // No workouts found with search categories 
+        setNoWorkoutsFound(true); // No workouts found with search categories
       } else {
         setNoWorkoutsFound(false); // Reset flag if workouts are found
         const uniqueWorkouts = removeDuplicates(workouts); // EDIT5:Filter duplicates here
@@ -188,7 +201,7 @@ function QueryForm({
   return (
     <form
       onSubmit={(event) => onSubmit(event)}
-      className="p-4 border rounded bg-white py-4 w-100"
+      className="p-4 border rounded bg-white py-4 w-100 day-form"
     >
       <div className="row g-3">
         {/* Type Selection */}
@@ -278,12 +291,14 @@ function QueryForm({
       </div>
       {/*EDIT7: output msg when no workouts found w/ search category */}
       {noWorkoutsFound && (
-        <div style={{
-          marginTop: "20px",
-          color: "red",
-          fontSize: "16px",
-          fontWeight: "bold"
-        }}>
+        <div
+          style={{
+            marginTop: "20px",
+            color: "red",
+            fontSize: "16px",
+            fontWeight: "bold",
+          }}
+        >
           <p>No workout found matching your search criteria.</p>
         </div>
       )}

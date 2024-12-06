@@ -13,7 +13,7 @@ export const Week: string[] = [
   "Wednesday",
   "Thursday",
   "Friday",
-  "Saturday"
+  "Saturday",
 ];
 
 // export const recommendedExercises = {
@@ -35,8 +35,22 @@ export const dummyExercisesList = [
   { id: 5, name: "Pushup" },
 ];
 
+export const mapBackend: mapBackend = {
+  Monday: 1,
+  Tuesday: 2,
+  Wednesday: 3,
+  Thursday: 4,
+  Friday: 5,
+  Saturday: 6,
+  Sunday: 0,
+};
+
+export interface mapBackend {
+  [key: string]: number;
+}
+
 // Last time user worked out
-export const dummyLastWorkout = [11, 24, 2024];
+export const dummyLastWorkout = [1, 1, 1];
 
 export const dummyWorkoutPlans = [
   {
@@ -66,7 +80,7 @@ export const dummyWorkoutPlans = [
     ],
   },
   {
-    day: 1,
+    day: 2,
     time: "7:30",
     am: true,
     exercises: [
@@ -129,8 +143,8 @@ export const recommendedExercises = {
 };
 
 export const dummyProfileData = {
-  username: "John",
-  streak: 3,
+  username: "",
+  streak: 0,
 };
 
 export const dummyExerciseGoals = [
@@ -140,47 +154,47 @@ export const dummyExerciseGoals = [
 ];
 
 export const dummyWorkoutData = [
-  {
-    date: "2024-11-22",
-    goals: [
-      { id: "0", progressValue: 125 },
-      { id: "1", progressValue: 190 },
-      { id: "2", progressValue: 12 },
-    ],
-  },
-  {
-    date: "2024-10-19",
-    goals: [
-      { id: "0", progressValue: 115 },
-      { id: "1", progressValue: 170 },
-      { id: "2", progressValue: 17 },
-    ],
-  },
-  {
-    date: "2024-10-11",
-    goals: [
-      { id: "0", progressValue: 135 },
-      { id: "1", progressValue: 200 },
-      { id: "2", progressValue: 14 },
-    ],
-  },
+  // {
+  //   date: "2024-11-22",
+  //   goals: [
+  //     { _id: "0", value: 125 },
+  //     { _id: "1", value: 190 },
+  //     { _id: "2", value: 12 },
+  //   ],
+  // },
+  // {
+  //   date: "2024-10-19",
+  //   goals: [
+  //     { _id: "0", value: 115 },
+  //     { _id: "1", value: 170 },
+  //     { _id: "2", value: 17 },
+  //   ],
+  // },
+  // {
+  //   date: "2024-10-11",
+  //   goals: [
+  //     { _id: "0", value: 135 },
+  //     { _id: "1", value: 200 },
+  //     { _id: "2", value: 14 },
+  //   ],
+  // },
 ];
 
 export const dummySchedule = [
   {
     title: "Morning Cardio",
-    start: "2024-11-20T07:00:00",
-    end: "2024-11-20T08:00:00",
+    start: "2024-12-20T07:00:00",
+    end: "2024-12-20T08:00:00",
   },
   {
     title: "Strength Training",
-    start: "2024-11-21T17:00:00",
-    end: "2024-11-21T18:30:00",
+    start: "2024-12-21T17:00:00",
+    end: "2024-12-21T18:30:00",
   },
   {
     title: "Yoga Session",
-    start: "2024-11-22T06:30:00",
-    end: "2024-11-22T07:30:00",
+    start: "2024-12-22T06:30:00",
+    end: "2024-12-22T07:30:00",
   },
 ];
 
@@ -222,11 +236,18 @@ export const difficultyLevels: string[] = [
 ];
 
 export const state: ScheduledExercise[] = [
-    { day: "Monday", exercises: [], startTime: "00:00", endTime: "00:00" },
-    { day: "Tuesday", exercises: [], startTime: "00:00", endTime: "00:00" },
-    { day: "Wednesday", exercises: [], startTime: "00:00", endTime: "00:00" },
-    { day: "Thursday", exercises: [], startTime: "00:00", endTime: "00:00" },
-    { day: "Friday", exercises: [], startTime: "00:00", endTime: "00:00" },
-    { day: "Saturday", exercises: [], startTime: "00:00", endTime: "00:00" },
-    { day: "Sunday", exercises: [], startTime: "00:00", endTime: "00:00" },
+  { day: "Monday", exercises: [], startTime: "00:00", endTime: "00:00" },
+  { day: "Tuesday", exercises: [], startTime: "00:00", endTime: "00:00" },
+  { day: "Wednesday", exercises: [], startTime: "00:00", endTime: "00:00" },
+  { day: "Thursday", exercises: [], startTime: "00:00", endTime: "00:00" },
+  { day: "Friday", exercises: [], startTime: "00:00", endTime: "00:00" },
+  { day: "Saturday", exercises: [], startTime: "00:00", endTime: "00:00" },
+  { day: "Sunday", exercises: [], startTime: "00:00", endTime: "00:00" },
 ];
+
+export interface ExerciseInterface {
+  day: number;
+  time: string;
+  am: boolean;
+  exercises: any[];
+}

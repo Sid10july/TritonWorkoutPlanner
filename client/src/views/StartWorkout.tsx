@@ -1,46 +1,107 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import {
+  fetchUserData,
+  incrementStreak,
+  resetStreak,
+  addWorkoutProgress,
+  updateWorkoutDate,
+  deleteWorkoutProgress,
+} from "../utils/user-utils";
+import { fetchWeeklyWorkouts } from "../utils/workout-utils";
 import { InputField } from "../components/InputField";
 import ProgressBar from "@ramonak/react-progress-bar";
-import { WorkoutPlan, Goal } from "../types/types";
+import { WorkoutPlan, Goal, ScheduledExercise } from "../types/types";
 import {
   dummyLastWorkout,
   dummyWorkoutPlans,
   dummyProfileData,
   dummyExerciseGoals,
   daysOfWeekJS,
+  mapBackend,
+  ExerciseInterface,
 } from "../constants/constants";
 import "./StartWorkout.css";
 
-export const StartWorkout = (props: { userId: string }) => {
+export const StartWorkout = (StartProps: { userId: string }) => {
   // Use axios baseURL to define the port
   axios.defaults.baseURL = `http://localhost:${process.env.PORT || 8080}`;
 
   const [goals, setGoals] = useState(dummyExerciseGoals);
+  const [streak, setStreak] = useState(dummyProfileData.streak);
+  const [lastWorkout, setLastWorkout] = useState(dummyLastWorkout);
+  const [workoutPlans, setWorkoutPlans] = useState([] as ExerciseInterface[]);
+
   let progress = useRef([] as { _id: string; value: number }[]);
+
+  // Resetting date for debugging purposes
+  //updateWorkoutDate(StartProps.userId, [0, 0, 0]);
 
   // Fetch goals from the backend when the component mounts
   useEffect(() => {
-    axios
-      .get(`/api/goals/${props.userId}`)
-      .then((response) => {
-        setGoals(response.data);
-        // Set progress template
-        progress.current = response.data.map(
-          (e: { _id: string; goal: string; value: number }) => ({
-            _id: e._id,
-            value: 0,
-          })
-        );
-      })
-      .catch((error) => console.error("Error fetching goals:", error));
-  }, [props.userId]);
+    // Bypass this process if testing
+    if (StartProps.userId !== "1") {
+      fetchUserData(StartProps.userId)
+        .then((result) => {
+          setStreak(result.streak);
+          setGoals(result.goals);
+          // deleteWorkoutProgress(StartProps.userId);
+          setLastWorkout(result.lastWorkedOut);
+          progress.current = result.goals.map(
+            (e: { _id: string; goal: string; value: number }) => ({
+              _id: e._id,
+              value: 0,
+            })
+          );
+        })
+        .catch((error) => console.error("Error fetching goals:", error));
+
+      fetchWeeklyWorkouts(StartProps.userId)
+        .then((result: ScheduledExercise[]) => {
+          let plans = result.map((e) => {
+            const convertTimeStr = (str: string) => {
+              const split = str.split("");
+              let hours = split[0] + split[1];
+              let mins = split[3] + split[4];
+              let hr_num = Number(hours);
+
+              let am = true;
+              if (hr_num >= 12) {
+                am = false;
+                hr_num -= 12;
+              }
+
+              let new_hr_str = hr_num.toString();
+              if (new_hr_str.length == 1) new_hr_str = "0" + new_hr_str;
+
+              return [am, new_hr_str + ":" + mins];
+            };
+
+            const newTime = convertTimeStr(e.startTime);
+
+            if (e.exercises.length) {
+              return {
+                day: mapBackend[e.day],
+                time: newTime[1],
+                am: newTime[0],
+                exercises: e.exercises as any[],
+              };
+            } else {
+              return;
+            }
+          });
+          plans = plans.filter((e) => e !== undefined);
+          setWorkoutPlans(plans as ExerciseInterface[]);
+        })
+        .catch((error) => console.error("Error fetching plans:", error));
+    }
+  }, [StartProps.userId]);
 
   // Function for updating goals
-  const updateGoal = (goalId: string, value: number) => {
+  const updateGoals = (newGoals: Goal[]) => {
     // Send put request to the backend
     axios
-      .put(`/api/goals/${props.userId}/${goalId}`, { value: value })
+      .put(`/api/goals/${StartProps.userId}`, { newGoals: newGoals })
       .catch((error) => console.error("Error updating goals:", error));
   };
 
@@ -50,8 +111,6 @@ export const StartWorkout = (props: { userId: string }) => {
   // Log workout goals in the database
   // When finished working out, log current date as last workout time in database
 
-  const [lastWorkout, setLastWorkout] = useState(dummyLastWorkout);
-
   // Get current time (disregard hours/minutes/seconds)
   let currentTime = new Date();
   currentTime = new Date(
@@ -60,7 +119,7 @@ export const StartWorkout = (props: { userId: string }) => {
     currentTime.getDate()
   );
   // Dummy time for testing
-  // currentTime = new Date(2024, 11 - 1, 23);
+  // currentTime = new Date(2024, 12 - 1, 8);
 
   const day = currentTime.getDay();
 
@@ -72,8 +131,8 @@ export const StartWorkout = (props: { userId: string }) => {
     exercises: [],
   };
   let titleString = "No Workout Today";
-  if (dummyWorkoutPlans.length) {
-    workoutPlan = dummyWorkoutPlans.filter((e) => e["day"] === day)[0];
+  if (workoutPlans.length) {
+    workoutPlan = workoutPlans.filter((e) => e["day"] === day)[0];
     // If there is a workout planned for today
     if (workoutPlan) {
       titleString = `Today's Workout (${daysOfWeekJS[workoutPlan.day]} at ${
@@ -83,9 +142,9 @@ export const StartWorkout = (props: { userId: string }) => {
   }
   // Determine next workout
   let nextWorkoutPlan = workoutPlan;
-  if (dummyWorkoutPlans.length) {
+  if (workoutPlans.length) {
     for (let i = 1; i < 7; i++) {
-      const findNextPlan = dummyWorkoutPlans.filter(
+      const findNextPlan = workoutPlans.filter(
         (e) => e["day"] === (day + i) % 7
       )[0];
       if (findNextPlan) {
@@ -96,9 +155,9 @@ export const StartWorkout = (props: { userId: string }) => {
   }
   // Determine previous workout day
   let lastWorkoutDay = day;
-  if (dummyWorkoutPlans.length) {
+  if (workoutPlans.length) {
     for (let i = 1; i < 7; i++) {
-      const findPrevPlan = dummyWorkoutPlans.filter(
+      const findPrevPlan = workoutPlans.filter(
         // Handles negative modulo
         (e) => e["day"] === (((day - i) % 7) + 7) % 7
       )[0];
@@ -143,7 +202,10 @@ export const StartWorkout = (props: { userId: string }) => {
       setExerciseNum(exerciseNum);
     };
 
-    if (!dummyWorkoutPlans.length)
+    if (lastWorkout[2] === 1) {
+      return null;
+    }
+    if (!workoutPlans.length)
       return (
         <div>
           <p className="workoutIndicator-title">
@@ -152,7 +214,10 @@ export const StartWorkout = (props: { userId: string }) => {
         </div>
       );
     if (streakStatus === "broken") {
-      // BACKEND: Set streak value to 0
+      // Prevents page from resetting streak if data hasn't loaded yet
+      if (lastWorkout[2] !== 1) {
+        resetStreak(StartProps.userId);
+      }
       return (
         <div className="exercise-container">
           <p className="workoutIndicator-title mb-0">You broke your streak!</p>
@@ -258,9 +323,9 @@ export const StartWorkout = (props: { userId: string }) => {
       );
     }
     // Workout is finished
-    // BACKEND: Increment streak to database
+    // BACKEND: Increment streak to database and last workout
     else {
-      let newGoals: any[];
+      let newGoals: any[] = goals;
 
       const handleProgressChange = (id: string, value: number) => {
         if (isNaN(value)) value = 0;
@@ -272,8 +337,8 @@ export const StartWorkout = (props: { userId: string }) => {
 
       const handleGoalChange = (id: string, value: number) => {
         if (isNaN(value)) value = 0;
-        newGoals = goals.map((e: Goal) => {
-          if (id === e._id) return { _id: id, goal: e.goal, value: value };
+        newGoals = newGoals.map((e: Goal) => {
+          if (id === e._id) return { goal: e.goal, value: value, _id: id };
           else return { ...e };
         });
       };
@@ -283,9 +348,7 @@ export const StartWorkout = (props: { userId: string }) => {
         return (
           <div className="exercise-container">
             <p className="workoutIndicator-title mb-0">Workout finished!</p>
-            <p className="fs-4 mb-5">
-              New streak 🔥: {dummyProfileData.streak + 1}
-            </p>
+            <p className="fs-4 mb-5">New streak 🔥: {streak + 1}</p>
             <p className="fs-2 mb-5">Progress Tracker:</p>
             <form
               className="exercise-form"
@@ -331,9 +394,7 @@ export const StartWorkout = (props: { userId: string }) => {
         return (
           <div className="exercise-container">
             <p className="workoutIndicator-title mb-0">Workout finished!</p>
-            <p className="fs-4 mb-5">
-              New streak 🔥: {dummyProfileData.streak + 1}
-            </p>
+            <p className="fs-4 mb-5">New streak 🔥: {streak + 1}</p>
             <p className="fs-2 mb-5">
               {isGoalMet
                 ? "Progress Tracker (Goal(s) met! Set new goals?)"
@@ -348,18 +409,26 @@ export const StartWorkout = (props: { userId: string }) => {
             <form
               onSubmit={(e) => {
                 // BACKEND INTEGRATION NEEDED
-                // Update backend with last workout time
-                // Add "progress" variable as a new workout entry in database
-                // Replace user goals with "goals" in database
-                setLastWorkout([
+                const currentDate: number[] = [
                   currentTime.getMonth() + 1, // monthIndex maps 0-11 to January - December, so readjust by adding 1
                   currentTime.getDate(),
                   currentTime.getFullYear(),
-                ]);
+                ];
+                // Add "progress" variable as a new workout entry in database
+                addWorkoutProgress(
+                  StartProps.userId,
+                  currentDate[2] + "-" + currentDate[0] + "-" + currentDate[1],
+                  progress.current
+                );
+                // Increment streak
+                incrementStreak(StartProps.userId);
+                // Update last workout date
+                updateWorkoutDate(StartProps.userId, currentDate);
+                // Rerender UI
+                setLastWorkout(currentDate);
+                // Update goals
                 if (newGoals) {
-                  newGoals.forEach((g) => {
-                    updateGoal(g._id, g.value);
-                  });
+                  updateGoals(newGoals);
                 }
               }}
               className="exercise-form"
