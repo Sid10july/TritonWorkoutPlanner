@@ -144,7 +144,7 @@ const ChangePreferences: React.FC<ChangePreferencesProps> = ({ userId }) => {
   return (
     <div className="change-preferences">
       {/* Title Section with Separator */}
-      <h1 className="title-container">Change Preferences</h1>
+      <h1 className="title-container">Set Goals</h1>
 
       {/* Goals Section */}
       <div className="content-container">

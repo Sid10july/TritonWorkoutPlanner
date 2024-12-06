@@ -10,9 +10,9 @@ import "./Sidebar.css";
 const optionStrings = [
   { str: "Start Workout", path: "/" },
   { str: "My Workouts", path: "/workout-planner" },
-  { str: "Exercise Library", path: "/exercise-library" },
+  // { str: "Exercise Library", path: "/exercise-library" },
   { str: "Track Progress", path: "/track-progress" },
-  { str: "Change Preferences", path: "/change-preferences" },
+  { str: "Set Goals", path: "/set-goals" },
   { str: "Workout Calendar", path: "/workout-calendar" },
 ];
 

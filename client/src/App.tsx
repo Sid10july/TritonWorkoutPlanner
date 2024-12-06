@@ -149,15 +149,15 @@ const Layout = ({
 
   return (
     <WorkoutsProvider>
-        <div className="App">
+      <div className="App">
         <Sidebar
-            pageIndex={pageIndex}
-            sidebarClickHandler={handleSidebarClick}
-            setIsLoggedIn={setIsLoggedIn} // Pass the setIsLoggedIn prop
-            userId={userId}
+          pageIndex={pageIndex}
+          sidebarClickHandler={handleSidebarClick}
+          setIsLoggedIn={setIsLoggedIn} // Pass the setIsLoggedIn prop
+          userId={userId}
         />
         <div className="App-views">{children}</div>
-        </div>
+      </div>
     </WorkoutsProvider>
   );
 };
@@ -207,7 +207,7 @@ const App: React.FC<AppProps> = ({ debugId = "0" }) => {
             path="/workout-planner"
             element={
               <Layout setIsLoggedIn={setIsLoggedIn} userId={userId}>
-                <WeekPlan userId={userId}/>
+                <WeekPlan userId={userId} />
               </Layout>
             }
           />
@@ -244,7 +244,7 @@ const App: React.FC<AppProps> = ({ debugId = "0" }) => {
             }
           />
           <Route
-            path="/change-preferences"
+            path="/set-goals"
             element={
               <Layout setIsLoggedIn={setIsLoggedIn} userId={userId}>
                 <ChangePreferences userId={userId} />

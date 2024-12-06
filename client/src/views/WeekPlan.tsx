@@ -35,7 +35,7 @@ export function WeekPlan({ userId }: { userId: string }) {
   return (
     <div>
       <div className="title-container">
-        <h1>Weekly Workout Plan</h1>
+        <h1>My Workouts</h1>
       </div>
       {Week.map((day) => {
         return <WeekdayWorkout handleSave={handleSave} key={day} day={day} />;

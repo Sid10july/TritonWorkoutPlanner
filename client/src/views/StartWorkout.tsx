@@ -282,6 +282,9 @@ export const StartWorkout = (StartProps: { userId: string }) => {
       const eType = stringFormatter(exercise.type);
       const eMuscle = stringFormatter(exercise.muscle);
       const eEquipment = stringFormatter(exercise.equipment);
+      let eInstructions = exercise.instructions;
+
+      if (!eInstructions) eInstructions = "";
 
       return (
         <div className="exercise-container">
@@ -292,9 +295,7 @@ export const StartWorkout = (StartProps: { userId: string }) => {
           <p className="fs-4 mb-0">Muscle Group: {eMuscle}</p>
           <p className="fs-4 mb-5">Equipment: {eEquipment}</p>
           <p className="fs-2 exercise-instructions mb-0">Instructions:</p>
-          <p className="fs-3 exercise-instructions mb-5">
-            {exercise.instructions}
-          </p>
+          <p className="fs-3 exercise-instructions mb-5">{eInstructions}</p>
           <a
             href={`https://www.google.com/search?q=${exercise.name} exercise instructions`}
             target="_blank" //opens link in new tab
